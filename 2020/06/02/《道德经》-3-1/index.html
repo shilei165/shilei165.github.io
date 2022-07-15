@@ -20,7 +20,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"shilei165.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"shilei165.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="原文： 不尚贤，使民不争；不贵难得之货，使民不为盗；不见可欲，使民心不乱。">
@@ -31,7 +31,7 @@
 <meta property="og:description" content="原文： 不尚贤，使民不争；不贵难得之货，使民不为盗；不见可欲，使民心不乱。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-06-03T01:00:24.000Z">
-<meta property="article:modified_time" content="2022-07-13T23:15:00.944Z">
+<meta property="article:modified_time" content="2022-07-15T18:59:59.737Z">
 <meta property="article:author" content="石磊磊">
 <meta property="article:tag" content="道德经">
 <meta property="article:tag" content="道家">
@@ -108,6 +108,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -127,14 +128,14 @@
     <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
 
   </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
-
-  </li>
         <li class="menu-item menu-item-categories">
 
     <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
 
   </li>
         <li class="menu-item menu-item-archives">
@@ -142,11 +143,38 @@
     <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
     </header>
@@ -205,7 +233,7 @@
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%81%93%E5%BE%B7%E7%BB%8F/" itemprop="url" rel="index"><span itemprop="name">道德经</span></a>
+                  <a href="/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E9%81%93%E5%BE%B7%E7%BB%8F/" itemprop="url" rel="index"><span itemprop="name">道德经</span></a>
                 </span>
             </span>
 
@@ -244,7 +272,6 @@
 <p>社会不看重稀有难得之物，民众就不会绞尽脑汁去获取这些东西。俗话说物以稀为贵，但很多稀有的东西，对我们来说并没有什么用，不过人们就是想得到它。这些东西包括贵金属、珠宝、钻石、奢侈品牌的包、虎皮、熊掌等。人们想得到这些难得之货，很大一部分原因是社会抬高了这个物品的价值，拥有这些东西的人会有一种虚幻的高贵感。东西有了好坏贵贱之后，人们就会绞尽脑汁去得到这些不容易得到的“珍贵”东西，一旦正常途径得不到，歪主意就来了。所以只有不过分看重这些难得之货，人心就不会失衡，也就不会有成为盗贼的可能。</p>
 <p>人们看到美食佳肴，就有吃的欲望；听到婉转悠扬的歌曲，就有听的欲望；看到名车宝马，就有占有的欲望。现代都市社会，充斥着各种诱惑，几乎每一条广告都在劝你及时享乐。但中国有个成语叫“欲壑难填”，人这种生物，永远不会满足，好了还想更好。比如当年秦始皇以六合为家，崤函为宫，不可谓不极尽人间之奢华，但在得到了这一切之后，还想要长生不老、子孙万世继承帝业。欲望可怕的地方在于，在欲望面前，人最容易迷失自我。很多贪官的落马，都是被欲望诱惑，从而走上不归路的。三国人物我最佩服的是刘备，其中有一点就是因为他能把控住自己的欲望。他在吴国的那段时间，尽管面对各种美酒佳肴宫殿美女的诱惑，他仍然没有忘掉自己要匡扶汉室的志向。从种种细节可以看出他的志向不在小，所以曹操才会认为天下英雄，唯使君与操耳。</p>
 <hr>
-<p>如果你喜欢我的文章，可以点击右侧的订阅，您就可以第一时间收到文章发布的通知了。</p>
 
     </div>
 
@@ -489,6 +516,10 @@
   </script>
 
 
+
+
+  
+<script src="/js/local-search.js"></script>
 
 
 

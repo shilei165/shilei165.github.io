@@ -20,7 +20,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"shilei165.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"shilei165.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="原文： 澹兮其若海，飂兮若无止，衆人皆有以，而我独顽似鄙。我独异于人，而贵食母。">
@@ -31,7 +31,7 @@
 <meta property="og:description" content="原文： 澹兮其若海，飂兮若无止，衆人皆有以，而我独顽似鄙。我独异于人，而贵食母。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-07-01T23:40:30.000Z">
-<meta property="article:modified_time" content="2022-07-13T23:15:01.014Z">
+<meta property="article:modified_time" content="2022-07-15T18:59:51.571Z">
 <meta property="article:author" content="石磊磊">
 <meta property="article:tag" content="道德经">
 <meta property="article:tag" content="道家">
@@ -108,6 +108,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -127,14 +128,14 @@
     <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
 
   </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
-
-  </li>
         <li class="menu-item menu-item-categories">
 
     <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
 
   </li>
         <li class="menu-item menu-item-archives">
@@ -142,11 +143,38 @@
     <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
     </header>
@@ -205,7 +233,7 @@
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%81%93%E5%BE%B7%E7%BB%8F/" itemprop="url" rel="index"><span itemprop="name">道德经</span></a>
+                  <a href="/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E9%81%93%E5%BE%B7%E7%BB%8F/" itemprop="url" rel="index"><span itemprop="name">道德经</span></a>
                 </span>
             </span>
 
@@ -244,7 +272,6 @@
 <p>世人都有专长的技能，在社会中成为了一件具有特定功能的工具。而得道之人，似乎看起来非常愚笨，没有特定的专长。他们就像水一样，随物赋形，他们拥有的只是极好的学习能力和思考能力。这样的能力能让他们遇到无论什么样的困难都不会被吓到，他们对此会像小孩一样充满好奇，在研究问题和解决问题中自得其乐。</p>
 <p>得道之人唯一不同于常人的地方就是领悟了“道”的关键，而这个“道”的关键就是事物的根本规律。对于同一个事物，不同人看到的点是不一样的。对于生老病死，普通人沉浸在对生的欢乐或者对死的悲伤中不能自拔。而得道之人跳脱出了这个主观感受，他们感兴趣的是这个生老病死本身的规律。再举一个更通俗的例子，大部分普通人停留在对美食、游戏、艺术作品的享受之中。而有眼光的厨师会观察大众的饮食偏好，去改进自己的厨艺；有眼光的游戏爱好者，会在为玩家服务中找到自身价值；有眼光的艺术家，会通过观察其他艺术作品而提升自己；有眼光的投资人会观察大众喜好的趋势，从而找到商机。如果你想有所思考，有所不同，就要学会超脱事物本身，学会透过现象去观察本质。</p>
 <hr>
-<p>如果你喜欢我的文章，可以点击右侧的订阅，您就可以第一时间收到文章发布的通知了。</p>
 
     </div>
 
@@ -489,6 +516,10 @@
   </script>
 
 
+
+
+  
+<script src="/js/local-search.js"></script>
 
 
 

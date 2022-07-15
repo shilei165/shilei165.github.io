@@ -20,7 +20,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"shilei165.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"shilei165.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="原文： 天地不仁，以万物为刍狗；圣人不仁，以百姓为刍狗。天地之间，其犹橐龠乎？虚而不屈，动而愈出。多言数穷，不如守中。">
@@ -31,7 +31,7 @@
 <meta property="og:description" content="原文： 天地不仁，以万物为刍狗；圣人不仁，以百姓为刍狗。天地之间，其犹橐龠乎？虚而不屈，动而愈出。多言数穷，不如守中。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-06-06T01:26:01.000Z">
-<meta property="article:modified_time" content="2022-07-13T23:15:00.951Z">
+<meta property="article:modified_time" content="2022-07-15T19:00:13.556Z">
 <meta property="article:author" content="石磊磊">
 <meta property="article:tag" content="道德经">
 <meta property="article:tag" content="道家">
@@ -108,6 +108,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -127,14 +128,14 @@
     <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
 
   </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
-
-  </li>
         <li class="menu-item menu-item-categories">
 
     <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
 
   </li>
         <li class="menu-item menu-item-archives">
@@ -142,11 +143,38 @@
     <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
     </header>
@@ -205,7 +233,7 @@
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%81%93%E5%BE%B7%E7%BB%8F/" itemprop="url" rel="index"><span itemprop="name">道德经</span></a>
+                  <a href="/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E9%81%93%E5%BE%B7%E7%BB%8F/" itemprop="url" rel="index"><span itemprop="name">道德经</span></a>
                 </span>
             </span>
 
@@ -246,7 +274,6 @@
 <p>再次拿天地来做比喻来形容道。“橐龠”就是风箱的意思，如果见过风箱的可能都知道，风箱里面的气体永远鼓动不完，越是鼓动的厉害，跑出去的气越多，永远没有排尽的时候。风箱的特征就是无论人怎么鼓动，最后风箱里的气体还是那么多。所以说天地不去刻意施为，圣人也不去刻意仁恩。呼吁呐喊改革一通，社会还是会照着它本来的样子来运行。大炼钢铁并没有让钢铁产量真正增加，计划生育也并没有让人口问题彻底解决。社会自有其自己的发展规律，企图用人力政策来实现的跨越式发展并不现实。其实很多政策实施跟不实施的结果并没有什么两样。缩小到个人发展来说，我们就会发现同样的现象，是金子总能发光，不是金子就算被打磨光还是会自己暗淡掉。比如罗永浩也没上过大学，但这个人的性格就是敢闯敢做，有一股子不服输的精神，所以在社会中也闯出了自己的一片天地，找到了自己的位置。相反，某些人在父母或者老师的干预下，选择了某些令人羡慕专业或者工作，最后也不过是度日，不会做出什么突出的成绩。所以说，人成就的最根本来源是这个人内心的源动力，而不是外界的条件。对于个人修身养性来说，我们能够得到的启发是：多事害神，多言害身。多事多言，往往会使人自己陷入困境，然而对自身对他人其实并不会有什么改变。</p>
 <p>所以老子的结论是“不如守中”。对社会来说，不如以经济发展为中心，顺应时代社会的发展潮流，少一些政令，多一些顺应民心。对于个人发展来说，不如顺应自己内心的想法，少一些执念，做自己真正喜欢做的事情。对于个人修身来说，不如守德于中，育养精神，爱气希言。</p>
 <hr>
-<p>如果你喜欢我的文章，可以点击右侧的订阅，您就可以第一时间收到文章发布的通知了。</p>
 
     </div>
 
@@ -491,6 +518,10 @@
   </script>
 
 
+
+
+  
+<script src="/js/local-search.js"></script>
 
 
 

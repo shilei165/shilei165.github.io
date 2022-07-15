@@ -20,7 +20,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"shilei165.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"shilei165.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="原文： 以善先人者谓之教，以善和人者谓之顺；以不善先人者谓之谄，以不善和人者谓之谀。是是非非谓之智，非是是非谓之愚。伤良曰谗，害良曰贼。是谓是，非谓非曰直。窃货曰盗，匿行曰诈，易言曰诞。趣舍无定谓之无常。保利弃义谓之至贼。多闻曰博，少闻曰浅。多见曰闲，少见曰陋。难进曰偍，易忘曰漏。少而理曰治，多而乱曰秏。">
@@ -31,7 +31,7 @@
 <meta property="og:description" content="原文： 以善先人者谓之教，以善和人者谓之顺；以不善先人者谓之谄，以不善和人者谓之谀。是是非非谓之智，非是是非谓之愚。伤良曰谗，害良曰贼。是谓是，非谓非曰直。窃货曰盗，匿行曰诈，易言曰诞。趣舍无定谓之无常。保利弃义谓之至贼。多闻曰博，少闻曰浅。多见曰闲，少见曰陋。难进曰偍，易忘曰漏。少而理曰治，多而乱曰秏。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-05-20T20:22:49.000Z">
-<meta property="article:modified_time" content="2022-07-13T23:15:00.916Z">
+<meta property="article:modified_time" content="2022-07-15T18:59:35.730Z">
 <meta property="article:author" content="石磊磊">
 <meta property="article:tag" content="修身">
 <meta property="article:tag" content="儒家">
@@ -109,6 +109,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -128,14 +129,14 @@
     <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
 
   </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
-
-  </li>
         <li class="menu-item menu-item-categories">
 
     <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
 
   </li>
         <li class="menu-item menu-item-archives">
@@ -143,11 +144,38 @@
     <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
     </header>
@@ -206,7 +234,7 @@
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%8D%80%E5%AD%90%C2%B7%E4%BF%AE%E8%BA%AB/" itemprop="url" rel="index"><span itemprop="name">荀子·修身</span></a>
+                  <a href="/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E8%8D%80%E5%AD%90%C2%B7%E4%BF%AE%E8%BA%AB/" itemprop="url" rel="index"><span itemprop="name">荀子·修身</span></a>
                 </span>
             </span>
 
@@ -246,7 +274,6 @@
 <p><strong>窃取财物，就叫做偷窃，隐瞒自己的行为，就叫做欺骗，信口开河，就叫做虚妄，对取舍犹豫不决，就叫做无常，为了保住利益而背信弃义，就叫做大贼。听到的事情多叫做广博，听到的事情少叫做浅薄，见多识广叫做娴雅，见识少叫做孤陋寡闻。难于进取叫做废弛，学过的经常遗忘叫做遗漏。事情少但井井有条叫做治理、管理，事情多但繁多而杂乱无章叫做昏乱不明。</strong></p>
 <p>这里列举了生活中常见很多种行为。修身之人切记远离偷窃、欺骗、虚妄、无常、大贼、浅薄、孤陋寡闻等等的人性的缺点。做人信义两字尤为重要。信义之后才是多闻和进取。孔子也说，“益者三友：友直，友谅，友多闻”。也在劝我们要与正直、诚信、见多识广的人交朋友。另外，做事情的时候要少而理，少不是真的事情少，而是善于在繁杂的事务中，找到最重要的那个点，对于繁杂无益的活动不要浪费自己的精力。老子说：“吾有三宝：一曰慈，二曰俭，三曰不敢为天下先。” 这里面的俭就是少，不要浪费自己的精力在无意义的事情上，人生很短暂，要抓住重点，删繁就简，完成自己的人生意义。</p>
 <hr>
-<p>如果你喜欢我的文章，可以点击右侧的订阅，您就可以第一时间收到文章发布的通知了。</p>
 
     </div>
 
@@ -492,6 +519,10 @@
   </script>
 
 
+
+
+  
+<script src="/js/local-search.js"></script>
 
 
 

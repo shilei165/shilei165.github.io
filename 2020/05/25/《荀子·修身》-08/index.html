@@ -20,7 +20,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"shilei165.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"shilei165.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="原文： 夫骥一日而千里，驽马十驾，则亦及之矣。将以穷无穷，逐无极与？其折骨绝筋，终身不可以相及也。将有所止之，则千里虽远，亦或迟、或速、或先、或后，胡为乎其不可以相及也！不识步道者，将以穷无穷，逐无极与？意亦有所止之与？夫“坚白”、“同异”、“有厚无厚”之察，非不察也，然而君子不辩，止之也。倚魁之行，非不难也，然而君子不行，止之也。故学曰：”迟彼止而待我，我行而就之，则亦或迟、或速、或先、或后，胡">
@@ -31,7 +31,7 @@
 <meta property="og:description" content="原文： 夫骥一日而千里，驽马十驾，则亦及之矣。将以穷无穷，逐无极与？其折骨绝筋，终身不可以相及也。将有所止之，则千里虽远，亦或迟、或速、或先、或后，胡为乎其不可以相及也！不识步道者，将以穷无穷，逐无极与？意亦有所止之与？夫“坚白”、“同异”、“有厚无厚”之察，非不察也，然而君子不辩，止之也。倚魁之行，非不难也，然而君子不行，止之也。故学曰：”迟彼止而待我，我行而就之，则亦或迟、或速、或先、或后，胡">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-05-25T20:14:22.000Z">
-<meta property="article:modified_time" content="2022-07-13T23:15:00.927Z">
+<meta property="article:modified_time" content="2022-07-15T18:59:38.282Z">
 <meta property="article:author" content="石磊磊">
 <meta property="article:tag" content="修身">
 <meta property="article:tag" content="儒家">
@@ -109,6 +109,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -128,14 +129,14 @@
     <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
 
   </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
-
-  </li>
         <li class="menu-item menu-item-categories">
 
     <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
 
   </li>
         <li class="menu-item menu-item-archives">
@@ -143,11 +144,38 @@
     <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
     </header>
@@ -206,7 +234,7 @@
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%8D%80%E5%AD%90%C2%B7%E4%BF%AE%E8%BA%AB/" itemprop="url" rel="index"><span itemprop="name">荀子·修身</span></a>
+                  <a href="/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E8%8D%80%E5%AD%90%C2%B7%E4%BF%AE%E8%BA%AB/" itemprop="url" rel="index"><span itemprop="name">荀子·修身</span></a>
                 </span>
             </span>
 
@@ -248,7 +276,6 @@
 <p><strong>至于人的资质，即使相距悬殊，难道会像瘸了腿的甲鱼和六匹千里马那样悬殊吗？然而瘸了腿的甲鱼能够到达目的地，六匹千里马拉的车却不能到达，这并没有其他的原因，只不过是有的去做，有的不去做罢了！路程即使很近，但如果不走就不能到达；事情虽然很小，但不做就不能完成。那些无所事事的人，他们是不可能超过别人的。</strong></p>
 <p>人的生理必然会有一定差异，但一般不会大到足以绝对的影响结果。更多的差异来自于人性格中有没有韧性，做事坚持不懈，资质好与不好的人最终都会到达终点。我们周围不乏这样的人，目标和理想总是很不错，但从未见他真正行动起来。晚上想想千条路，早上醒来走原路。种一棵树最好的时间，除了十年前，就是现在。行动起来，才有可能把目标变为现实。</p>
 <hr>
-<p>如果你喜欢我的文章，可以点击右侧的订阅，您就可以第一时间收到文章发布的通知了。</p>
 
     </div>
 
@@ -494,6 +521,10 @@
   </script>
 
 
+
+
+  
+<script src="/js/local-search.js"></script>
 
 
 
