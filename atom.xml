@@ -6,7 +6,7 @@
   <link href="https://shilei165.github.io/atom.xml" rel="self"/>
   
   <link href="https://shilei165.github.io/"/>
-  <updated>2022-07-16T20:06:05.904Z</updated>
+  <updated>2022-07-19T18:27:37.642Z</updated>
   <id>https://shilei165.github.io/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>如何使用Taskkill命令来设置定时关闭任务或程序</title>
+    <link href="https://shilei165.github.io/2022/07/19/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Taskkill%E5%91%BD%E4%BB%A4%E6%9D%A5%E8%AE%BE%E7%BD%AE%E5%AE%9A%E6%97%B6%E5%85%B3%E9%97%AD%E4%BB%BB%E5%8A%A1%E6%88%96%E7%A8%8B%E5%BA%8F/"/>
+    <id>https://shilei165.github.io/2022/07/19/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Taskkill%E5%91%BD%E4%BB%A4%E6%9D%A5%E8%AE%BE%E7%BD%AE%E5%AE%9A%E6%97%B6%E5%85%B3%E9%97%AD%E4%BB%BB%E5%8A%A1%E6%88%96%E7%A8%8B%E5%BA%8F/</id>
+    <published>2022-07-19T17:22:12.000Z</published>
+    <updated>2022-07-19T18:27:37.642Z</updated>
+    
+    <content type="html"><![CDATA[<p>前面我们讲解了如何使用SCHTASK来定时执行Windows的特定程序，但是我们还无法做到定时关闭。比如我们希望每天晚上9点开始定时打开迅雷来下载东西，然后每天上午9点来关闭迅雷，以免在使用网络的时候对网速产生影响。于是，我们就需要用到Taskkill指令，并且结合我们之前学过的Schetask来定时执行程序关闭任务。这篇文章，我们就来一起学习一下如何使用这个指令吧</p><span id="more"></span><hr><h1 id="一、TASKKILL基本参数"><a href="#一、TASKKILL基本参数" class="headerlink" title="一、TASKKILL基本参数"></a><strong>一、TASKKILL基本参数</strong></h1><p>TASKKILL这个命令可以用来结束一个或多个进程。可以通过进程id或者进程图像名来结束进程。其常用参数如下：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">/S    system           指定要连接到的远程系统。</span><br><span class="line">/U    [domain\]user    指定应该在哪个用户上下文执行这个命令。</span><br><span class="line">/P    [password]       为提供的用户上下文指定密码。如果忽略，提示输入。</span><br><span class="line">/F                     指定要强行终止进程。</span><br><span class="line">/FI   filter           指定筛选进或筛选出查询的的任务。</span><br><span class="line">/PID  process id       指定要终止的进程的PID。</span><br><span class="line">/IM   image name       指定要终止的进程的影像名。通配符 &#x27;*&#x27;可用来指定所有图像名。</span><br><span class="line">/T                     Tree kill: 终止指定的进程和任何由此启动的子进程。</span><br><span class="line">/?                     显示帮助/用法。</span><br></pre></td></tr></table></figure><h1 id="二、程序image-name和PID"><a href="#二、程序image-name和PID" class="headerlink" title="二、程序image name和PID"></a><strong>二、程序image name和PID</strong></h1><p>首先我们来了解一下什么是程序的image name和PID。简单来说，他们都是程序或进程的身份代码。image name是这个程序的名称，而PID (process identifier) 是这个程序所运行的进程的特有名称。一个程序可以对应多条进程。<br>比如迅雷的image name为’thunder.exe’，记事本的image name为’notepad.exe’。我们也可以通过Ctrl + Alt + Delete 键组合或者使用命令taskmgr来打开进程管理器去查看正在运行的进程。我们就可以在Details一栏中找到我们需要关闭的程序以及对应的PID。<br><img src="C:\Users\shil\MyHexo\source\images\taskmgr.png" alt="Task Manager"><br>对于我们日常使用来说，使用image name和PID来对特定程序进行关闭已经完全足够。下面我列举出几个例子来说明如何使用image name和PID来关闭程序或进程：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">taskkill /f /im QQ.exe           # 关闭QQ</span><br><span class="line">taskkill /f /im thunder.exe /T   # 关闭迅雷和其所对应的所有子进程</span><br><span class="line">taskkill /f /pid 4256            # 关闭chromdriver所对应的4256进程</span><br></pre></td></tr></table></figure><h1 id="三、筛选器的使用"><a href="#三、筛选器的使用" class="headerlink" title="三、筛选器的使用"></a><strong>三、筛选器的使用</strong></h1><p>如果我们需要关闭多个进程，可以使用筛选器来提高筛选效率。具体参数如下：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">筛选器名      有效运算符                  有效值</span><br><span class="line">-----------   ---------------           --------------</span><br><span class="line">STATUS        eq, ne                    运行 | 没有响应</span><br><span class="line">IMAGENAME     eq, ne                    图像名</span><br><span class="line">PID           eq, ne, gt, lt, ge, le    PID 值</span><br><span class="line">SESSION       eq, ne, gt, lt, ge, le    会话编号</span><br><span class="line">CPUTIME       eq, ne, gt, lt, ge, le    CPU 时间，格式为hh:mm:ss。</span><br><span class="line">MEMUSAGE      eq, ne, gt, lt, ge, le    内存使用，单位为 KB</span><br><span class="line">USERNAME      eq, ne                    用户名，格式为[domain\]user</span><br><span class="line">MODULES       eq, ne                    DLL 名</span><br><span class="line">SERVICES      eq, ne                    服务名</span><br><span class="line">WINDOWTITLE   eq, ne                    窗口标题</span><br></pre></td></tr></table></figure><p>注意: 1. 只有带有筛选器的情况下，才能跟 &#x2F;IM 切换使用通配符 ‘*‘。<br>      2. 其中eq代表“equal”, ne代表”not equal”,gt代表”greater than”,lt代表”less than”, ge代表”greater than or equal to”,le代表”less than or equal to”。<br>      3. 注意: 远程进程总是要强行终止，不管是否指定了 &#x2F;F 选项。<br>举例如下：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">TASKKILL /F /FI &quot;PID ge 1000&quot; /FI &quot;WINDOWTITLE ne untitle*&quot;</span><br><span class="line">TASKKILL /F /FI &quot;USERNAME eq NT AUTHORITY\SYSTEM&quot; /IM notepad.exe</span><br><span class="line">TASKKILL /S system /U domain\username /FI &quot;USERNAME ne NT*&quot; /IM *</span><br><span class="line">TASKKILL /S system /U username /P password /FI &quot;IMAGENAME eq note*&quot;</span><br></pre></td></tr></table></figure><h1 id="四、结合SCHTASKS命令来定时关闭进程"><a href="#四、结合SCHTASKS命令来定时关闭进程" class="headerlink" title="四、结合SCHTASKS命令来定时关闭进程"></a><strong>四、结合SCHTASKS命令来定时关闭进程</strong></h1><p>在了解了TASKKILL的基本用法之后，我们就可以结合SCHTASKS命令来定时关闭进程。比如我们就可以使用一下命令来定时在每天的17：30来关闭Python程序。</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">schtasks /create /sc daily /mo 1 /tn &quot;STOP_Python&quot; /tr &quot;TASKKILL /F /IM py.exe /T&quot; /st 17:30 /f</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;前面我们讲解了如何使用SCHTASK来定时执行Windows的特定程序，但是我们还无法做到定时关闭。比如我们希望每天晚上9点开始定时打开迅雷来下载东西，然后每天上午9点来关闭迅雷，以免在使用网络的时候对网速产生影响。于是，我们就需要用到Taskkill指令，并且结合我们之前学过的Schetask来定时执行程序关闭任务。这篇文章，我们就来一起学习一下如何使用这个指令吧&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="技术杂谈" scheme="https://shilei165.github.io/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/"/>
+    
+    <category term="Raspberry Pi &amp; Arduino" scheme="https://shilei165.github.io/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Raspberry-Pi-Arduino/"/>
+    
+    
+    <category term="编程" scheme="https://shilei165.github.io/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+    <category term="定时任务" scheme="https://shilei165.github.io/tags/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/"/>
+    
+    <category term="Taskkill" scheme="https://shilei165.github.io/tags/Taskkill/"/>
+    
+    <category term="Windows" scheme="https://shilei165.github.io/tags/Windows/"/>
+    
+  </entry>
   
   <entry>
     <title>Hexo博客主题的选择和优化</title>
@@ -125,9 +154,9 @@
     <category term="道德经" scheme="https://shilei165.github.io/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
     
-    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
-    
     <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
+    
+    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
     
   </entry>
   
@@ -151,9 +180,9 @@
     <category term="道德经" scheme="https://shilei165.github.io/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
     
-    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
-    
     <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
+    
+    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
     
   </entry>
   
@@ -177,9 +206,9 @@
     <category term="道德经" scheme="https://shilei165.github.io/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
     
-    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
-    
     <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
+    
+    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
     
   </entry>
   
@@ -203,9 +232,9 @@
     <category term="道德经" scheme="https://shilei165.github.io/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
     
-    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
-    
     <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
+    
+    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
     
   </entry>
   
@@ -229,9 +258,9 @@
     <category term="道德经" scheme="https://shilei165.github.io/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
     
-    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
-    
     <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
+    
+    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
     
   </entry>
   
@@ -299,9 +328,9 @@
     <category term="道德经" scheme="https://shilei165.github.io/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
     
-    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
-    
     <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
+    
+    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
     
   </entry>
   
@@ -325,9 +354,9 @@
     <category term="道德经" scheme="https://shilei165.github.io/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
     
-    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
-    
     <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
+    
+    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
     
   </entry>
   
@@ -351,9 +380,9 @@
     <category term="道德经" scheme="https://shilei165.github.io/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
     
-    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
-    
     <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
+    
+    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
     
   </entry>
   
@@ -482,9 +511,9 @@
     <link href="https://shilei165.github.io/2021/01/14/python%E6%95%99%E7%A8%8B-%E5%88%87%E5%89%B2%E5%88%97%E8%A1%A8%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2/"/>
     <id>https://shilei165.github.io/2021/01/14/python%E6%95%99%E7%A8%8B-%E5%88%87%E5%89%B2%E5%88%97%E8%A1%A8%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2/</id>
     <published>2021-01-14T17:36:23.000Z</published>
-    <updated>2022-07-15T18:59:28.559Z</updated>
+    <updated>2022-07-19T16:51:58.520Z</updated>
     
-    <content type="html"><![CDATA[<p><strong>这篇文章中将会分享python中关于切割列表和字符串(slicing lists and string) 相关的一些知识。</strong></p><span id="more"></span><p>我们有时候不希望输出整个列表和字符串而只是希望输出其中某一部分，这时候应该怎么办呢？今天这篇文章，我们就来学习一下在python中应当怎样分割列表和字符串。</p><h1 id="一、切割列表"><a href="#一、切割列表" class="headerlink" title="一、切割列表"></a><strong>一、切割列表</strong></h1><p>切割列表的格式为：list[start:end:step]。start是输出开始的指针位置，end是输出结束的指针位置，step是输出的间隔数。如果只需要输出某个元素，则只需要在列表后面加上相应的指针位置。先看下面这个例子：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">my_list = [0,1,2,3,4,5,6,7,8,9]</span><br><span class="line">print (my_list[3])</span><br><span class="line">print (my_list[-1])</span><br><span class="line">print (my_list[0:4])</span><br><span class="line">print (my_list[0:5:2])</span><br><span class="line">print (my_list[2:-1:2])</span><br><span class="line">print (my_list[::-1])</span><br></pre></td></tr></table></figure><p>输出结果分别为：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">3</span><br><span class="line">9</span><br><span class="line">[0, 1, 2, 3]</span><br><span class="line">[0, 2, 4]</span><br><span class="line">[2, 4, 6, 8]</span><br><span class="line">[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]</span><br></pre></td></tr></table></figure><p>如果我们在start, end, step的位置不添加任何数值，则表示默认。他们的默认值分别为第一个指针位置(0)，最后一个指针位置(-1)，还有步数1。</p><h1 id="二、切割字符串"><a href="#二、切割字符串" class="headerlink" title="二、切割字符串"></a><strong>二、切割字符串</strong></h1><p>用同样的方法我们也可以来切割字符串，比如下面的字符串：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sample_url = &#x27;http://shileilei.com&#x27;</span><br><span class="line">print (sample_url)</span><br></pre></td></tr></table></figure><p>我们如果直接运行，就会把我们的<a href="http://shileilei.com的网站给输出出来。但我们怎么才能将它们倒着输出呢？我们可以用前面学到的知识，来这样做：">http://shileilei.com的网站给输出出来。但我们怎么才能将它们倒着输出呢？我们可以用前面学到的知识，来这样做：</a></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sample_url = &#x27;http://shileilei.com&#x27;</span><br><span class="line">print(sample_url[::-1])</span><br></pre></td></tr></table></figure><p>输出结果为：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">moc.ielielihs//:ptth</span><br></pre></td></tr></table></figure><p>同样的，如果我们想知道一级域名是什么，应该这样做：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sample_url = &#x27;http://shileilei.com&#x27;</span><br><span class="line">print(sample_url[-4::])</span><br></pre></td></tr></table></figure><p>如果只想输出不带http:&#x2F;&#x2F;的网址，应当这样做：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sample_url = &#x27;http://shileilei.com&#x27;</span><br><span class="line">print(sample_url[7:])</span><br></pre></td></tr></table></figure><hr>]]></content>
+    <content type="html"><![CDATA[<p><strong>这篇文章中将会分享python中关于切割列表和字符串(slicing lists and string) 相关的一些知识。</strong></p><span id="more"></span><p>我们有时候不希望输出整个列表和字符串而只是希望输出其中某一部分，这时候应该怎么办呢？今天这篇文章，我们就来学习一下在python中应当怎样分割列表和字符串。</p><h1 id="一、切割列表"><a href="#一、切割列表" class="headerlink" title="一、切割列表"></a><strong>一、切割列表</strong></h1><p>切割列表的格式为：list[start:end:step]。start是输出开始的指针位置，end是输出结束的指针位置，step是输出的间隔数。如果只需要输出某个元素，则只需要在列表后面加上相应的指针位置。先看下面这个例子：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">my_list = [0,1,2,3,4,5,6,7,8,9]</span><br><span class="line">print (my_list[3])</span><br><span class="line">print (my_list[-1])</span><br><span class="line">print (my_list[0:4])</span><br><span class="line">print (my_list[0:5:2])</span><br><span class="line">print (my_list[2:-1:2])</span><br><span class="line">print (my_list[::-1])</span><br></pre></td></tr></table></figure><p>输出结果分别为：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">3</span><br><span class="line">9</span><br><span class="line">[0, 1, 2, 3]</span><br><span class="line">[0, 2, 4]</span><br><span class="line">[2, 4, 6, 8]</span><br><span class="line">[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]</span><br></pre></td></tr></table></figure><p>如果我们在start, end, step的位置不添加任何数值，则表示默认。他们的默认值分别为第一个指针位置(0)，最后一个指针位置(-1)，还有步数1。</p><h1 id="二、切割字符串"><a href="#二、切割字符串" class="headerlink" title="二、切割字符串"></a><strong>二、切割字符串</strong></h1><p>用同样的方法我们也可以来切割字符串，比如下面的字符串：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sample_url = &#x27;http://shileilei.com&#x27;</span><br><span class="line">print (sample_url)</span><br></pre></td></tr></table></figure><p>我们如果直接运行，就会把我们的<a href="http://shileilei.com/">http://shileilei.com</a>的网站给输出出来。但我们怎么才能将它们倒着输出呢？我们可以用前面学到的知识，来这样做：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sample_url = &#x27;http://shileilei.com&#x27;</span><br><span class="line">print(sample_url[::-1])</span><br></pre></td></tr></table></figure><p>输出结果为：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">moc.ielielihs//:ptth</span><br></pre></td></tr></table></figure><p>同样的，如果我们想知道一级域名是什么，应该这样做：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sample_url = &#x27;http://shileilei.com&#x27;</span><br><span class="line">print(sample_url[-4::])</span><br></pre></td></tr></table></figure><p>如果只想输出不带http:&#x2F;&#x2F;的网址，应当这样做：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sample_url = &#x27;http://shileilei.com&#x27;</span><br><span class="line">print(sample_url[7:])</span><br></pre></td></tr></table></figure><hr>]]></content>
     
     
     <summary type="html">&lt;p&gt;&lt;strong&gt;这篇文章中将会分享python中关于切割列表和字符串(slicing lists and string) 相关的一些知识。&lt;/strong&gt;&lt;/p&gt;</summary>
@@ -534,35 +563,6 @@
     <category term="virtual environment" scheme="https://shilei165.github.io/tags/virtual-environment/"/>
     
     <category term="虚拟环境" scheme="https://shilei165.github.io/tags/%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Python教程--包管理器-pip</title>
-    <link href="https://shilei165.github.io/2021/01/13/python%E6%95%99%E7%A8%8B-%E5%8C%85%E7%AE%A1%E7%90%86%E5%99%A8-pip/"/>
-    <id>https://shilei165.github.io/2021/01/13/python%E6%95%99%E7%A8%8B-%E5%8C%85%E7%AE%A1%E7%90%86%E5%99%A8-pip/</id>
-    <published>2021-01-13T21:20:33.000Z</published>
-    <updated>2022-07-15T18:59:29.580Z</updated>
-    
-    <content type="html"><![CDATA[<p><strong>这篇文章中将会分享python中包管理器-pip相关的一些知识。</strong></p><span id="more"></span><p>pip 是 Python 包管理工具，该工具提供了对Python 包的查找、下载、安装、卸载的功能。如果你是从官方下载的python软件，那么已经自带了pip包管理器。另外，Python 2.7.9 + 或 Python 3.4+ 以上版本也都自带 pip 工具。</p><p>你可以通过以下命令来判断是否已安装：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip --version</span><br></pre></td></tr></table></figure><h1 id="一、pip-常用命令"><a href="#一、pip-常用命令" class="headerlink" title="一、pip 常用命令"></a><strong>一、pip 常用命令</strong></h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">pip install PackageName   #安装包 PackageName代指需要下载的包的名称</span><br><span class="line">pip uninstall PackageName    #卸载包</span><br><span class="line">pip list    #列出所有安装的包</span><br><span class="line">pip install --upgrade PackageName    #升级包</span><br><span class="line">pip show PackageName    #显示包的详细信息</span><br><span class="line">pip list -o 或者 pip list --outdated    #显示可升级的包</span><br><span class="line">pip freeze    #把已安装的包以requirements参数的格式输出</span><br></pre></td></tr></table></figure><h1 id="二、打包发送所依赖的安装包"><a href="#二、打包发送所依赖的安装包" class="headerlink" title="二、打包发送所依赖的安装包"></a><strong>二、打包发送所依赖的安装包</strong></h1><p>如果我们创建了一个python程序，想要在别人的电脑上运行。那么我们就需要把这个程序所依赖的所有包也要一同发送给对方，这样对方才能在同一个环境下运行我们所创建的程序。我们就可以把所需要的包用以下代码输出到一个txt文件中：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip freeze &gt; requirements.txt</span><br></pre></td></tr></table></figure><p>只要把这个requirements.txt文件发送给对方，然后在对方电脑输入以下指令，就可以安装所有所需的包：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -r requirements.txt</span><br></pre></td></tr></table></figure><h1 id="三、自动更新所有可升级的包"><a href="#三、自动更新所有可升级的包" class="headerlink" title="三、自动更新所有可升级的包"></a><strong>三、自动更新所有可升级的包</strong></h1><p>如果我们运行pip list -o 或者 pip list –outdated之后，我们发现需要更新的包太多，不想一个一个手动升级更新，我们可以运行以下代码完成一次性更新所有包：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">pip list --outdated --format=freeze  grep -v &#x27;^\-e&#x27;  cut -d = -f 1   xargs -n1 pip install -U</span><br></pre></td></tr></table></figure><hr>]]></content>
-    
-    
-    <summary type="html">&lt;p&gt;&lt;strong&gt;这篇文章中将会分享python中包管理器-pip相关的一些知识。&lt;/strong&gt;&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="技术杂谈" scheme="https://shilei165.github.io/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/"/>
-    
-    <category term="Python" scheme="https://shilei165.github.io/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Python/"/>
-    
-    
-    <category term="python" scheme="https://shilei165.github.io/tags/python/"/>
-    
-    <category term="教程" scheme="https://shilei165.github.io/tags/%E6%95%99%E7%A8%8B/"/>
-    
-    <category term="编程" scheme="https://shilei165.github.io/tags/%E7%BC%96%E7%A8%8B/"/>
-    
-    <category term="pip" scheme="https://shilei165.github.io/tags/pip/"/>
     
   </entry>
   
