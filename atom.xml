@@ -6,7 +6,7 @@
   <link href="https://shilei165.github.io/atom.xml" rel="self"/>
   
   <link href="https://shilei165.github.io/"/>
-  <updated>2022-07-20T16:57:40.321Z</updated>
+  <updated>2022-07-20T23:00:43.403Z</updated>
   <id>https://shilei165.github.io/</id>
   
   <author>
@@ -17,11 +17,40 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Python常用函数-isinstance()和type()</title>
-    <link href="https://shilei165.github.io/2022/07/20/Python%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0-isinstance()%E5%92%8Ctype()/"/>
-    <id>https://shilei165.github.io/2022/07/20/Python%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0-isinstance()%E5%92%8Ctype()/</id>
+    <title>Python网络爬虫--第三方库</title>
+    <link href="https://shilei165.github.io/2022/07/20/Python%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB--%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
+    <id>https://shilei165.github.io/2022/07/20/Python%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB--%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/</id>
+    <published>2022-07-20T22:41:35.000Z</published>
+    <updated>2022-07-20T23:00:43.403Z</updated>
+    
+    <content type="html"><![CDATA[<p>这篇文章将会分享总结Python网络爬虫所用到的一些常见的第三方库。</p><span id="more"></span><hr><h1 id="请求库"><a href="#请求库" class="headerlink" title="请求库"></a><strong>请求库</strong></h1><p>在Python中虽然有urllib这样自带原生网络请求库，但它的一些API对待开发者不怎么友好，所以就会用到一些更加方便、友好、功能强大的第三方库。</p><ul><li>requests: requrests是对Python内置的urllib的再次封装的请求库。由于它是阻塞式HTTP请求库，当我们发出请求之后，就会一直等待服务器响应，然后才会进行下一步处理。</li><li>aiohttp: 异步Web服务的库，可以在服务器响应过程中处理一些其他的事情，从而提高抓取效率。</li></ul><h1 id="解析库"><a href="#解析库" class="headerlink" title="解析库"></a><strong>解析库</strong></h1><p>解析库顾名思义就是用来解析我们所爬取的网页所用到的工具包。我们常用到的解析库如下：</p><ul><li>lxml：支持HTML和XML的解析，支持XPath解析方式。</li><li>Beautiful Soup：支持HTML和XML的解析，拥有强大的API和多样的解析方式。Beautiful Soup的HTML和XML解析器依赖于lxml库。</li><li>pyquery：同样是一个强大的网页解析工具，提供了jQuery类似的语法来解析HTML，支持CSS选择器。</li><li>tesserocr：tesserocr是Python的一个OCR识别库，可以处理爬取网页过程中遇到的图形验证码。这个库需要预先安装tesseract。</li><li>chaojiying：除了tesserocr之外，我们还可以选择识别度更高但需要付费库chaojiying来进行图片和验证码的识别。</li></ul><h1 id="自动化测试工具"><a href="#自动化测试工具" class="headerlink" title="自动化测试工具"></a><strong>自动化测试工具</strong></h1><ul><li>Selenium： Selenium是一个自动化测试工具，它可以模拟执行特定的浏览器动作，比如点击、下拉等操作。需要配合浏览引擎以及相应的驱动来操作。支持一般市面上见到的大部分浏览器，比如：<ul><li>Chrome，Firefox，IE，Opera，和Safari浏览器，需要下载安装浏览器（例如Chrome）以及相应的驱动（例如ChromeDriver）来进行操作。</li><li>Selenium还支持可脚本编程的PhantomJS浏览引擎来操作。PhantomJS运行效率很高，并且支持配置各种参数。</li></ul></li></ul><h1 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a><strong>数据库</strong></h1><ul><li>MySQL：MySQL是一个轻量级的关系型数据库。</li><li>MongoDB：MongoDB是由C++语言编写的非关系型数据库，基于分布式文件存储的开源数据系统。字段值可以包含文档、数组以及文档数组。</li><li>Redis：Redis是一个基于内存的搞笑的非关系型数据库。</li></ul><h1 id="存储库"><a href="#存储库" class="headerlink" title="存储库"></a><strong>存储库</strong></h1><p>数据库仅仅提供存储数据服务，想要和Python交互，还需要安装Python存储库。</p><ul><li>MySQL需要安装PyMySQL存储库。</li><li>MongoDB需要安装PyMongo存储库。</li><li>Redis需要安装redis-py存储库。</li></ul><h1 id="Web库"><a href="#Web库" class="headerlink" title="Web库"></a><strong>Web库</strong></h1><p>Web服务程序可以用来搭建一些API接口，方便我们爬虫使用。例如，我们可以通过Web服务提供一个API接口来获取代理的IP。</p><ul><li>Flask: 轻量级的Web服务程序，简单、灵活、易用。</li><li>Tornado：支持异步的Web框架，效率非常高。</li></ul><h1 id="APP爬取的相关库"><a href="#APP爬取的相关库" class="headerlink" title="APP爬取的相关库"></a><strong>APP爬取的相关库</strong></h1><p>除了爬取网页，Python爬虫也可以抓取APP的数据。这里需要用到抓包技术来抓取数据。</p><ul><li>Charles：一个强大的网络抓包工具，跨平台支持的很好。</li><li>mitmproxy：支持HTTP和HTTPS的抓包程序，跟Charles类似，但是是通过控制台的形式操作。mitmproxy有两个关联组件mitmdump和mitmweb。<ul><li>mitmdump是mitmproxy的命令行接口，利用它可以对接Python脚本，实现监听后的处理。</li><li>mitmweb是一个Web程序，通过它可以清楚地观察到mitmproxy捕获的请求。</li></ul></li><li>Appium：移动端的自动化测试工具，类似于Selenium。利用它可以驱动Android，iOS等设备完成自动化测试，比如点击、滑动、输入等操作。</li></ul><h1 id="爬虫框架"><a href="#爬虫框架" class="headerlink" title="爬虫框架"></a><strong>爬虫框架</strong></h1><p>如果爬取量不大，速度要求不高，直接用requests和Selenium等库写爬虫就可以完全满足我们的需求。但我们可以把这些组件抽取出来模块化形成爬虫框架，从而大大提高代码效率。这样做不仅可以简化代码，结构也会变得更加清晰。所以对于基础好的同学，使用框架会使一个很好的选择。</p><ul><li>Scrapy：一个十分强大的爬虫框架，主要依赖Twisted 14.0、lxml 3.4和pyOpenSSL 0.14。在不同平台下，所依赖的库也各部不相同。<ul><li>Scrapy-Splash：Scrapy中支持JavaScript渲染的工具。</li><li>Scrapy-Redis：Scrapy的分布式扩展模块，可以帮助实现Scrapy分布式爬虫的搭建。</li><li>Scrapyd: 用于部署和运行Scrapy项目的工具，可以把写好的Scrapy项目上传到云主机并通过API来控制它。</li></ul></li><li>pyspider：带有强大的WebUI、脚本编辑器、任务监控器、项目管理器以及结果处理器，同时支持多种数据库后端、多种消息队列，另外还支持JavaScript渲染页面的爬取。</li></ul><p></p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;这篇文章将会分享总结Python网络爬虫所用到的一些常见的第三方库。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="技术杂谈" scheme="https://shilei165.github.io/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/"/>
+    
+    <category term="Python" scheme="https://shilei165.github.io/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Python/"/>
+    
+    
+    <category term="Python" scheme="https://shilei165.github.io/tags/Python/"/>
+    
+    <category term="编程" scheme="https://shilei165.github.io/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+    <category term="网络" scheme="https://shilei165.github.io/tags/%E7%BD%91%E7%BB%9C/"/>
+    
+    <category term="爬虫" scheme="https://shilei165.github.io/tags/%E7%88%AC%E8%99%AB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Python常用函数--isinstance()和type()</title>
+    <link href="https://shilei165.github.io/2022/07/20/Python%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0--isinstance()%E5%92%8Ctype()/"/>
+    <id>https://shilei165.github.io/2022/07/20/Python%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0--isinstance()%E5%92%8Ctype()/</id>
     <published>2022-07-20T16:06:54.000Z</published>
-    <updated>2022-07-20T16:57:40.321Z</updated>
+    <updated>2022-07-20T23:01:32.583Z</updated>
     
     <content type="html"><![CDATA[<p>在这篇文章中，我将给大家分享如何使用isinstance()和type()两个Python常用函数，并且分析它们之间的区别。</p><span id="more"></span><hr><h1 id="isinstance-函数"><a href="#isinstance-函数" class="headerlink" title="isinstance()函数"></a><strong>isinstance()函数</strong></h1><p>isinstance()函数用来判断一个对象是否是一个已知类型。其语法如下：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">isinstance(object, classinfo)</span><br></pre></td></tr></table></figure><p>其中object为实例对象，也就是我们需要判断的对象。classinfo为类的名称，可以是直接类或间接类、基本类型或者由他们组成的元组。<br>如果对象的类型与classinfo的类型相同，则返回True，否则返回False。<br>具体举例如下：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; a = &#x27;good&#x27;</span><br><span class="line">&gt;&gt;&gt; isinstance (a, int)</span><br><span class="line">False</span><br><span class="line">&gt;&gt;&gt; isinstance (a, str)</span><br><span class="line">True</span><br><span class="line">&gt;&gt;&gt; isinstance (a,(str, int, list))</span><br><span class="line">True</span><br></pre></td></tr></table></figure><h1 id="type-函数"><a href="#type-函数" class="headerlink" title="type()函数"></a><strong>type()函数</strong></h1><p>type()函数可以返回对象的类型，具体语法如下：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">type(object)</span><br><span class="line">type(name, bases, dict)</span><br></pre></td></tr></table></figure><p>一个参数返回对象类型, 三个参数则返回新的类型对象。我们这里重点讨论一个参数的情况。举例如下：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; type(123)</span><br><span class="line">&lt;type &#x27;int&#x27;&gt;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; type(&#x27;good&#x27;)</span><br><span class="line">&lt;type &#x27;str&#x27;&gt;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; type([2])</span><br><span class="line">&lt;type &#x27;list&#x27;&gt;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; type(&#123;name:&#x27;Leo&#x27;&#125;)</span><br><span class="line">&lt;type &#x27;dict&#x27;&gt;</span><br></pre></td></tr></table></figure><p>我们会发现，type()函数与isinstance()函数类似，都可以返回对象的类型。但他们在是否考虑类的继承关系有很大区别，具体区别如下：</p><ul><li>type()不考虑继承关系，也就是说不会认为子类是一种父类类型。</li><li>isinstance()考虑继承关系，也就是说会认为子类是一种父类类型。</li></ul><p>比如：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class A:</span><br><span class="line">    pass</span><br><span class="line"> </span><br><span class="line">class B(A):</span><br><span class="line">    pass</span><br><span class="line"> </span><br><span class="line">isinstance(A(), A)    # returns True</span><br><span class="line">type(A()) == A        # returns True</span><br><span class="line">isinstance(B(), A)    # returns True</span><br><span class="line">type(B()) == A        # returns False</span><br></pre></td></tr></table></figure>]]></content>
     
@@ -530,35 +559,6 @@
     <category term="comperhension" scheme="https://shilei165.github.io/tags/comperhension/"/>
     
     <category term="推导式" scheme="https://shilei165.github.io/tags/%E6%8E%A8%E5%AF%BC%E5%BC%8F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Python教程--切割列表和字符串</title>
-    <link href="https://shilei165.github.io/2021/01/14/python%E6%95%99%E7%A8%8B-%E5%88%87%E5%89%B2%E5%88%97%E8%A1%A8%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2/"/>
-    <id>https://shilei165.github.io/2021/01/14/python%E6%95%99%E7%A8%8B-%E5%88%87%E5%89%B2%E5%88%97%E8%A1%A8%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2/</id>
-    <published>2021-01-14T17:36:23.000Z</published>
-    <updated>2022-07-19T16:51:58.520Z</updated>
-    
-    <content type="html"><![CDATA[<p><strong>这篇文章中将会分享python中关于切割列表和字符串(slicing lists and string) 相关的一些知识。</strong></p><span id="more"></span><p>我们有时候不希望输出整个列表和字符串而只是希望输出其中某一部分，这时候应该怎么办呢？今天这篇文章，我们就来学习一下在python中应当怎样分割列表和字符串。</p><h1 id="一、切割列表"><a href="#一、切割列表" class="headerlink" title="一、切割列表"></a><strong>一、切割列表</strong></h1><p>切割列表的格式为：list[start:end:step]。start是输出开始的指针位置，end是输出结束的指针位置，step是输出的间隔数。如果只需要输出某个元素，则只需要在列表后面加上相应的指针位置。先看下面这个例子：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">my_list = [0,1,2,3,4,5,6,7,8,9]</span><br><span class="line">print (my_list[3])</span><br><span class="line">print (my_list[-1])</span><br><span class="line">print (my_list[0:4])</span><br><span class="line">print (my_list[0:5:2])</span><br><span class="line">print (my_list[2:-1:2])</span><br><span class="line">print (my_list[::-1])</span><br></pre></td></tr></table></figure><p>输出结果分别为：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">3</span><br><span class="line">9</span><br><span class="line">[0, 1, 2, 3]</span><br><span class="line">[0, 2, 4]</span><br><span class="line">[2, 4, 6, 8]</span><br><span class="line">[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]</span><br></pre></td></tr></table></figure><p>如果我们在start, end, step的位置不添加任何数值，则表示默认。他们的默认值分别为第一个指针位置(0)，最后一个指针位置(-1)，还有步数1。</p><h1 id="二、切割字符串"><a href="#二、切割字符串" class="headerlink" title="二、切割字符串"></a><strong>二、切割字符串</strong></h1><p>用同样的方法我们也可以来切割字符串，比如下面的字符串：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sample_url = &#x27;http://shileilei.com&#x27;</span><br><span class="line">print (sample_url)</span><br></pre></td></tr></table></figure><p>我们如果直接运行，就会把我们的<a href="http://shileilei.com/">http://shileilei.com</a>的网站给输出出来。但我们怎么才能将它们倒着输出呢？我们可以用前面学到的知识，来这样做：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sample_url = &#x27;http://shileilei.com&#x27;</span><br><span class="line">print(sample_url[::-1])</span><br></pre></td></tr></table></figure><p>输出结果为：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">moc.ielielihs//:ptth</span><br></pre></td></tr></table></figure><p>同样的，如果我们想知道一级域名是什么，应该这样做：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sample_url = &#x27;http://shileilei.com&#x27;</span><br><span class="line">print(sample_url[-4::])</span><br></pre></td></tr></table></figure><p>如果只想输出不带http:&#x2F;&#x2F;的网址，应当这样做：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sample_url = &#x27;http://shileilei.com&#x27;</span><br><span class="line">print(sample_url[7:])</span><br></pre></td></tr></table></figure><hr>]]></content>
-    
-    
-    <summary type="html">&lt;p&gt;&lt;strong&gt;这篇文章中将会分享python中关于切割列表和字符串(slicing lists and string) 相关的一些知识。&lt;/strong&gt;&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="技术杂谈" scheme="https://shilei165.github.io/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/"/>
-    
-    <category term="Python" scheme="https://shilei165.github.io/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Python/"/>
-    
-    
-    <category term="编程" scheme="https://shilei165.github.io/tags/%E7%BC%96%E7%A8%8B/"/>
-    
-    <category term="python" scheme="https://shilei165.github.io/tags/python/"/>
-    
-    <category term="计算机" scheme="https://shilei165.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/"/>
-    
-    <category term="切割列表和字符串" scheme="https://shilei165.github.io/tags/%E5%88%87%E5%89%B2%E5%88%97%E8%A1%A8%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2/"/>
     
   </entry>
   

@@ -23,22 +23,15 @@
     var CONFIG = {"hostname":"shilei165.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta name="description" content="在这篇文章中，我将给大家分享如何使用isinstance()和type()两个Python常用函数，并且分析它们之间的区别。">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Python常用函数-isinstance()和type()">
-<meta property="og:url" content="https://shilei165.github.io/2022/07/20/Python%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0-isinstance()%E5%92%8Ctype()/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="石磊磊的个人站点">
+<meta property="og:url" content="https://shilei165.github.io/tags/%E7%BD%91%E7%BB%9C/index.html">
 <meta property="og:site_name" content="石磊磊的个人站点">
-<meta property="og:description" content="在这篇文章中，我将给大家分享如何使用isinstance()和type()两个Python常用函数，并且分析它们之间的区别。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-07-20T16:06:54.000Z">
-<meta property="article:modified_time" content="2022-07-20T16:57:40.321Z">
 <meta property="article:author" content="石磊磊">
-<meta property="article:tag" content="Python">
-<meta property="article:tag" content="常用函数">
-<meta property="article:tag" content="编程">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://shilei165.github.io/2022/07/20/Python%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0-isinstance()%E5%92%8Ctype()/">
+<link rel="canonical" href="https://shilei165.github.io/tags/%E7%BD%91%E7%BB%9C/">
 
 
 <script id="page-configurations">
@@ -46,12 +39,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : true,
+    isPost : false,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>Python常用函数-isinstance()和type() | 石磊磊的个人站点</title>
+  <title>标签: 网络 | 石磊磊的个人站点</title>
   
 
 
@@ -193,165 +186,57 @@
         <div class="content-wrap">
           
 
-          <div class="content post posts-expand">
+          <div class="content tag">
             
 
-    
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://shilei165.github.io/2022/07/20/Python%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0-isinstance()%E5%92%8Ctype()/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar-1.gif">
-      <meta itemprop="name" content="石磊磊">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="石磊磊的个人站点">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          Python常用函数-isinstance()和type()
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-07-20 12:06:54" itemprop="dateCreated datePublished" datetime="2022-07-20T12:06:54-04:00">2022-07-20</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
-                </span>
-            </span>
-
-          
-            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span id="busuanzi_value_page_pv"></span>
-            </span>
   
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2022/07/20/Python%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0-isinstance()%E5%92%8Ctype()/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/07/20/Python常用函数-isinstance()和type()/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-        <p>在这篇文章中，我将给大家分享如何使用isinstance()和type()两个Python常用函数，并且分析它们之间的区别。</p>
-<span id="more"></span>
-<hr>
-<h1 id="isinstance-函数"><a href="#isinstance-函数" class="headerlink" title="isinstance()函数"></a><strong>isinstance()函数</strong></h1><p>isinstance()函数用来判断一个对象是否是一个已知类型。其语法如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">isinstance(object, classinfo)</span><br></pre></td></tr></table></figure>
-<p>其中object为实例对象，也就是我们需要判断的对象。classinfo为类的名称，可以是直接类或间接类、基本类型或者由他们组成的元组。<br>如果对象的类型与classinfo的类型相同，则返回True，否则返回False。<br>具体举例如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; a = &#x27;good&#x27;</span><br><span class="line">&gt;&gt;&gt; isinstance (a, int)</span><br><span class="line">False</span><br><span class="line">&gt;&gt;&gt; isinstance (a, str)</span><br><span class="line">True</span><br><span class="line">&gt;&gt;&gt; isinstance (a,(str, int, list))</span><br><span class="line">True</span><br></pre></td></tr></table></figure>
-<h1 id="type-函数"><a href="#type-函数" class="headerlink" title="type()函数"></a><strong>type()函数</strong></h1><p>type()函数可以返回对象的类型，具体语法如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">type(object)</span><br><span class="line">type(name, bases, dict)</span><br></pre></td></tr></table></figure>
-<p>一个参数返回对象类型, 三个参数则返回新的类型对象。我们这里重点讨论一个参数的情况。举例如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; type(123)</span><br><span class="line">&lt;type &#x27;int&#x27;&gt;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; type(&#x27;good&#x27;)</span><br><span class="line">&lt;type &#x27;str&#x27;&gt;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; type([2])</span><br><span class="line">&lt;type &#x27;list&#x27;&gt;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; type(&#123;name:&#x27;Leo&#x27;&#125;)</span><br><span class="line">&lt;type &#x27;dict&#x27;&gt;</span><br></pre></td></tr></table></figure>
-<p>我们会发现，type()函数与isinstance()函数类似，都可以返回对象的类型。但他们在是否考虑类的继承关系有很大区别，具体区别如下：</p>
-<ul>
-<li>type()不考虑继承关系，也就是说不会认为子类是一种父类类型。</li>
-<li>isinstance()考虑继承关系，也就是说会认为子类是一种父类类型。</li>
-</ul>
-<p>比如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class A:</span><br><span class="line">    pass</span><br><span class="line"> </span><br><span class="line">class B(A):</span><br><span class="line">    pass</span><br><span class="line"> </span><br><span class="line">isinstance(A(), A)    # returns True</span><br><span class="line">type(A()) == A        # returns True</span><br><span class="line">isinstance(B(), A)    # returns True</span><br><span class="line">type(B()) == A        # returns False</span><br></pre></td></tr></table></figure>
-
-    </div>
-
-    
-    
-    
-        <div class="reward-container">
-  <div>您的支持将鼓励我继续创作</div>
-  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
-    打赏
-  </button>
-  <div id="qr" style="display: none;">
-      
-      <div style="display: inline-block;">
-        <img src="/images/wechatpay.png" alt="石磊磊 微信支付">
-        <p>微信支付</p>
-      </div>
-      
-      <div style="display: inline-block;">
-        <img src="/images/alipay.png" alt="石磊磊 支付宝">
-        <p>支付宝</p>
+  <div class="post-block">
+    <div class="posts-collapse">
+      <div class="collection-title">
+        <h2 class="collection-header">网络
+          <small>标签</small>
+        </h2>
       </div>
 
-  </div>
-</div>
-
-
-      <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/Python/" rel="tag"># Python</a>
-              <a href="/tags/%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/" rel="tag"># 常用函数</a>
-              <a href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag"># 编程</a>
-          </div>
-
-        
-
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2022/07/19/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Taskkill%E5%91%BD%E4%BB%A4%E6%9D%A5%E5%AE%9A%E6%97%B6%E5%85%B3%E9%97%AD%E4%BB%BB%E5%8A%A1%E6%88%96%E7%A8%8B%E5%BA%8F/" rel="prev" title="如何使用Taskkill命令来定时关闭任务或程序">
-      <i class="fa fa-chevron-left"></i> 如何使用Taskkill命令来定时关闭任务或程序
-    </a></div>
-      <div class="post-nav-item"></div>
+      
+    <div class="collection-year">
+      <span class="collection-header">2022</span>
     </div>
-      </footer>
-    
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2022-07-20T18:41:35-04:00"
+              content="2022-07-20">
+          07-20
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2022/07/20/Python%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB--%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url">
+            <span itemprop="name">Python网络爬虫--第三方库</span>
+          </a>
+      </div>
+
+    </header>
   </article>
+
+    </div>
+  </div>
   
   
+  
+
   
 
 
 
           </div>
           
-    
-  <div class="comments">
-    <div id="disqus_thread">
-      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
-    </div>
-  </div>
-  
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -398,7 +283,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#isinstance-%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">isinstance()函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#type-%E5%87%BD%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">type()函数</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -414,7 +298,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">167</span>
+          <span class="site-state-item-count">168</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -427,7 +311,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">95</span>
+        <span class="site-state-item-count">97</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -582,26 +466,6 @@
   }
   // defer loading until the whole page loading is completed
   window.addEventListener('load', loadCount, false);
-</script>
-<script>
-  var disqus_config = function() {
-    this.page.url = "https://shilei165.github.io/2022/07/20/Python%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0-isinstance()%E5%92%8Ctype()/";
-    this.page.identifier = "2022/07/20/Python常用函数-isinstance()和type()/";
-    this.page.title = "Python常用函数-isinstance()和type()";
-    };
-  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
-    if (window.DISQUS) {
-      DISQUS.reset({
-        reload: true,
-        config: disqus_config
-      });
-    } else {
-      var d = document, s = d.createElement('script');
-      s.src = 'https://https-shilei165-github-io.disqus.com/embed.js';
-      s.setAttribute('data-timestamp', '' + +new Date());
-      (d.head || d.body).appendChild(s);
-    }
-  });
 </script>
 
 </body>
