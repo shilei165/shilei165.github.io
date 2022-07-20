@@ -25,14 +25,14 @@
 
   <meta name="description" content="前面我们讲解了如何使用SCHTASK来定时执行Windows的特定程序，但是我们还无法做到定时关闭。比如我们希望每天晚上9点开始定时打开迅雷来下载东西，然后每天上午9点来关闭迅雷，以免在使用网络的时候对网速产生影响。于是，我们就需要用到Taskkill指令，并且结合我们之前学过的Schetask来定时执行程序关闭任务。这篇文章，我们就来一起学习一下如何使用这个指令吧">
 <meta property="og:type" content="article">
-<meta property="og:title" content="如何使用Taskkill命令来设置定时关闭任务或程序">
-<meta property="og:url" content="https://shilei165.github.io/2022/07/19/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Taskkill%E5%91%BD%E4%BB%A4%E6%9D%A5%E8%AE%BE%E7%BD%AE%E5%AE%9A%E6%97%B6%E5%85%B3%E9%97%AD%E4%BB%BB%E5%8A%A1%E6%88%96%E7%A8%8B%E5%BA%8F/index.html">
+<meta property="og:title" content="如何使用Taskkill命令来定时关闭任务或程序">
+<meta property="og:url" content="https://shilei165.github.io/2022/07/19/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Taskkill%E5%91%BD%E4%BB%A4%E6%9D%A5%E5%AE%9A%E6%97%B6%E5%85%B3%E9%97%AD%E4%BB%BB%E5%8A%A1%E6%88%96%E7%A8%8B%E5%BA%8F/index.html">
 <meta property="og:site_name" content="石磊磊的个人站点">
 <meta property="og:description" content="前面我们讲解了如何使用SCHTASK来定时执行Windows的特定程序，但是我们还无法做到定时关闭。比如我们希望每天晚上9点开始定时打开迅雷来下载东西，然后每天上午9点来关闭迅雷，以免在使用网络的时候对网速产生影响。于是，我们就需要用到Taskkill指令，并且结合我们之前学过的Schetask来定时执行程序关闭任务。这篇文章，我们就来一起学习一下如何使用这个指令吧">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://shilei165.github.io/images/taskmgr.png">
 <meta property="article:published_time" content="2022-07-19T17:22:12.000Z">
-<meta property="article:modified_time" content="2022-07-19T18:40:39.290Z">
+<meta property="article:modified_time" content="2022-07-19T18:52:35.587Z">
 <meta property="article:author" content="石磊磊">
 <meta property="article:tag" content="编程">
 <meta property="article:tag" content="定时任务">
@@ -41,7 +41,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://shilei165.github.io/images/taskmgr.png">
 
-<link rel="canonical" href="https://shilei165.github.io/2022/07/19/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Taskkill%E5%91%BD%E4%BB%A4%E6%9D%A5%E8%AE%BE%E7%BD%AE%E5%AE%9A%E6%97%B6%E5%85%B3%E9%97%AD%E4%BB%BB%E5%8A%A1%E6%88%96%E7%A8%8B%E5%BA%8F/">
+<link rel="canonical" href="https://shilei165.github.io/2022/07/19/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Taskkill%E5%91%BD%E4%BB%A4%E6%9D%A5%E5%AE%9A%E6%97%B6%E5%85%B3%E9%97%AD%E4%BB%BB%E5%8A%A1%E6%88%96%E7%A8%8B%E5%BA%8F/">
 
 
 <script id="page-configurations">
@@ -54,7 +54,7 @@
   };
 </script>
 
-  <title>如何使用Taskkill命令来设置定时关闭任务或程序 | 石磊磊的个人站点</title>
+  <title>如何使用Taskkill命令来定时关闭任务或程序 | 石磊磊的个人站点</title>
   
 
 
@@ -203,7 +203,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://shilei165.github.io/2022/07/19/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Taskkill%E5%91%BD%E4%BB%A4%E6%9D%A5%E8%AE%BE%E7%BD%AE%E5%AE%9A%E6%97%B6%E5%85%B3%E9%97%AD%E4%BB%BB%E5%8A%A1%E6%88%96%E7%A8%8B%E5%BA%8F/">
+    <link itemprop="mainEntityOfPage" href="https://shilei165.github.io/2022/07/19/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Taskkill%E5%91%BD%E4%BB%A4%E6%9D%A5%E5%AE%9A%E6%97%B6%E5%85%B3%E9%97%AD%E4%BB%BB%E5%8A%A1%E6%88%96%E7%A8%8B%E5%BA%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar-1.gif">
@@ -216,7 +216,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          如何使用Taskkill命令来设置定时关闭任务或程序
+          如何使用Taskkill命令来定时关闭任务或程序
         </h1>
 
         <div class="post-meta">
@@ -258,8 +258,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2022/07/19/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Taskkill%E5%91%BD%E4%BB%A4%E6%9D%A5%E8%AE%BE%E7%BD%AE%E5%AE%9A%E6%97%B6%E5%85%B3%E9%97%AD%E4%BB%BB%E5%8A%A1%E6%88%96%E7%A8%8B%E5%BA%8F/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/07/19/如何使用Taskkill命令来设置定时关闭任务或程序/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2022/07/19/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Taskkill%E5%91%BD%E4%BB%A4%E6%9D%A5%E5%AE%9A%E6%97%B6%E5%85%B3%E9%97%AD%E4%BB%BB%E5%8A%A1%E6%88%96%E7%A8%8B%E5%BA%8F/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/07/19/如何使用Taskkill命令来定时关闭任务或程序/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -331,7 +331,10 @@
     <a href="/2022/07/15/Hexo%E5%8D%9A%E5%AE%A2%E4%B8%BB%E9%A2%98%E7%9A%84%E9%80%89%E6%8B%A9%E5%92%8C%E4%BC%98%E5%8C%96/" rel="prev" title="Hexo博客主题的选择和优化">
       <i class="fa fa-chevron-left"></i> Hexo博客主题的选择和优化
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2022/07/20/Python%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0-isinstance()%E5%92%8Ctype()/" rel="next" title="Python常用函数-isinstance()和type()">
+      Python常用函数-isinstance()和type() <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -413,7 +416,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">166</span>
+          <span class="site-state-item-count">167</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -426,7 +429,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">93</span>
+        <span class="site-state-item-count">95</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -584,9 +587,9 @@
 </script>
 <script>
   var disqus_config = function() {
-    this.page.url = "https://shilei165.github.io/2022/07/19/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Taskkill%E5%91%BD%E4%BB%A4%E6%9D%A5%E8%AE%BE%E7%BD%AE%E5%AE%9A%E6%97%B6%E5%85%B3%E9%97%AD%E4%BB%BB%E5%8A%A1%E6%88%96%E7%A8%8B%E5%BA%8F/";
-    this.page.identifier = "2022/07/19/如何使用Taskkill命令来设置定时关闭任务或程序/";
-    this.page.title = "如何使用Taskkill命令来设置定时关闭任务或程序";
+    this.page.url = "https://shilei165.github.io/2022/07/19/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Taskkill%E5%91%BD%E4%BB%A4%E6%9D%A5%E5%AE%9A%E6%97%B6%E5%85%B3%E9%97%AD%E4%BB%BB%E5%8A%A1%E6%88%96%E7%A8%8B%E5%BA%8F/";
+    this.page.identifier = "2022/07/19/如何使用Taskkill命令来定时关闭任务或程序/";
+    this.page.title = "如何使用Taskkill命令来定时关闭任务或程序";
     };
   NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
     if (window.DISQUS) {
