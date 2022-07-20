@@ -6,7 +6,7 @@
   <link href="https://shilei165.github.io/atom.xml" rel="self"/>
   
   <link href="https://shilei165.github.io/"/>
-  <updated>2022-07-20T16:46:52.450Z</updated>
+  <updated>2022-07-20T16:57:40.321Z</updated>
   <id>https://shilei165.github.io/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="https://shilei165.github.io/2022/07/20/Python%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0-isinstance()%E5%92%8Ctype()/"/>
     <id>https://shilei165.github.io/2022/07/20/Python%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0-isinstance()%E5%92%8Ctype()/</id>
     <published>2022-07-20T16:06:54.000Z</published>
-    <updated>2022-07-20T16:46:52.450Z</updated>
+    <updated>2022-07-20T16:57:40.321Z</updated>
     
-    <content type="html"><![CDATA[<p>在这篇文章中，我将给大家分享如何使用isinstance()和type()两个Python常用函数，并且分析它们之间的区别。</p><span id="more"></span><hr><h1 id="isinstance-函数"><a href="#isinstance-函数" class="headerlink" title="isinstance()函数"></a><strong>isinstance()函数</strong></h1><p>isinstance()函数用来判断一个对象是否是一个已知类型。其语法如下：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">isinstance(object, classinfo)</span><br></pre></td></tr></table></figure><p>其中object为实例对象，也就是我们需要判断的对象。classinfo为类的名称，可以是直接类或间接类、基本类型或者由他们组成的元组。<br>如果对象的类型与classinfo的类型相同，则返回True，否则返回False。<br>具体举例如下：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; a = &#x27;good&#x27;</span><br><span class="line">&gt;&gt;&gt; isinstance (a, int)</span><br><span class="line">False</span><br><span class="line">&gt;&gt;&gt; isinstance (a, str)</span><br><span class="line">True</span><br><span class="line">&gt;&gt;&gt; isinstance (a,(str, int, list))</span><br><span class="line">True</span><br></pre></td></tr></table></figure><h1 id="type-函数"><a href="#type-函数" class="headerlink" title="type()函数"></a><strong>type()函数</strong></h1><p>type()函数可以返回对象的类型，具体语法如下：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">type(object)</span><br><span class="line">type(name, bases, dict)</span><br></pre></td></tr></table></figure><p>一个参数返回对象类型, 三个参数则返回新的类型对象。我们这里重点讨论一个参数的情况。举例如下：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; type(123)</span><br><span class="line">&lt;type &#x27;int&#x27;&gt;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; type(&#x27;good&#x27;)</span><br><span class="line">&lt;type &#x27;str&#x27;&gt;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; type([2])</span><br><span class="line">&lt;type &#x27;list&#x27;&gt;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; type(&#123;name:&#x27;Leo&#x27;&#125;)</span><br><span class="line">&lt;type &#x27;dict&#x27;&gt;</span><br></pre></td></tr></table></figure><p>我们会发现，type()函数与isinstance()函数类似，都可以返回对象的类型。但他们在是否考虑类的继承关系有很大区别，具体区别如下：</p><ul><li>type()不考虑继承关系，也就是说不会认为子类是一种父类类型。</li><li>isinstance()考虑继承关系，也就是说会认为子类是一种父类类型。<br>比如：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class A:</span><br><span class="line">    pass</span><br><span class="line"> </span><br><span class="line">class B(A):</span><br><span class="line">    pass</span><br><span class="line"> </span><br><span class="line">isinstance(A(), A)    # returns True</span><br><span class="line">type(A()) == A        # returns True</span><br><span class="line">isinstance(B(), A)    # returns True</span><br><span class="line">type(B()) == A        # returns False</span><br></pre></td></tr></table></figure></li></ul>]]></content>
+    <content type="html"><![CDATA[<p>在这篇文章中，我将给大家分享如何使用isinstance()和type()两个Python常用函数，并且分析它们之间的区别。</p><span id="more"></span><hr><h1 id="isinstance-函数"><a href="#isinstance-函数" class="headerlink" title="isinstance()函数"></a><strong>isinstance()函数</strong></h1><p>isinstance()函数用来判断一个对象是否是一个已知类型。其语法如下：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">isinstance(object, classinfo)</span><br></pre></td></tr></table></figure><p>其中object为实例对象，也就是我们需要判断的对象。classinfo为类的名称，可以是直接类或间接类、基本类型或者由他们组成的元组。<br>如果对象的类型与classinfo的类型相同，则返回True，否则返回False。<br>具体举例如下：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; a = &#x27;good&#x27;</span><br><span class="line">&gt;&gt;&gt; isinstance (a, int)</span><br><span class="line">False</span><br><span class="line">&gt;&gt;&gt; isinstance (a, str)</span><br><span class="line">True</span><br><span class="line">&gt;&gt;&gt; isinstance (a,(str, int, list))</span><br><span class="line">True</span><br></pre></td></tr></table></figure><h1 id="type-函数"><a href="#type-函数" class="headerlink" title="type()函数"></a><strong>type()函数</strong></h1><p>type()函数可以返回对象的类型，具体语法如下：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">type(object)</span><br><span class="line">type(name, bases, dict)</span><br></pre></td></tr></table></figure><p>一个参数返回对象类型, 三个参数则返回新的类型对象。我们这里重点讨论一个参数的情况。举例如下：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; type(123)</span><br><span class="line">&lt;type &#x27;int&#x27;&gt;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; type(&#x27;good&#x27;)</span><br><span class="line">&lt;type &#x27;str&#x27;&gt;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; type([2])</span><br><span class="line">&lt;type &#x27;list&#x27;&gt;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; type(&#123;name:&#x27;Leo&#x27;&#125;)</span><br><span class="line">&lt;type &#x27;dict&#x27;&gt;</span><br></pre></td></tr></table></figure><p>我们会发现，type()函数与isinstance()函数类似，都可以返回对象的类型。但他们在是否考虑类的继承关系有很大区别，具体区别如下：</p><ul><li>type()不考虑继承关系，也就是说不会认为子类是一种父类类型。</li><li>isinstance()考虑继承关系，也就是说会认为子类是一种父类类型。</li></ul><p>比如：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class A:</span><br><span class="line">    pass</span><br><span class="line"> </span><br><span class="line">class B(A):</span><br><span class="line">    pass</span><br><span class="line"> </span><br><span class="line">isinstance(A(), A)    # returns True</span><br><span class="line">type(A()) == A        # returns True</span><br><span class="line">isinstance(B(), A)    # returns True</span><br><span class="line">type(B()) == A        # returns False</span><br></pre></td></tr></table></figure>]]></content>
     
     
     <summary type="html">&lt;p&gt;在这篇文章中，我将给大家分享如何使用isinstance()和type()两个Python常用函数，并且分析它们之间的区别。&lt;/p&gt;</summary>
@@ -64,9 +64,9 @@
     
     <category term="编程" scheme="https://shilei165.github.io/tags/%E7%BC%96%E7%A8%8B/"/>
     
-    <category term="定时任务" scheme="https://shilei165.github.io/tags/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/"/>
-    
     <category term="Taskkill" scheme="https://shilei165.github.io/tags/Taskkill/"/>
+    
+    <category term="定时任务" scheme="https://shilei165.github.io/tags/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/"/>
     
     <category term="Windows" scheme="https://shilei165.github.io/tags/Windows/"/>
     
@@ -153,11 +153,11 @@
     <category term="Windows" scheme="https://shilei165.github.io/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Windows/"/>
     
     
+    <category term="定时任务" scheme="https://shilei165.github.io/tags/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/"/>
+    
     <category term="SCHTASKS" scheme="https://shilei165.github.io/tags/SCHTASKS/"/>
     
     <category term="windows" scheme="https://shilei165.github.io/tags/windows/"/>
-    
-    <category term="定时任务" scheme="https://shilei165.github.io/tags/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/"/>
     
   </entry>
   
@@ -181,9 +181,9 @@
     <category term="道德经" scheme="https://shilei165.github.io/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
     
-    <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
-    
     <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
+    
+    <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
   </entry>
   
@@ -207,9 +207,9 @@
     <category term="道德经" scheme="https://shilei165.github.io/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
     
-    <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
-    
     <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
+    
+    <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
   </entry>
   
@@ -233,9 +233,9 @@
     <category term="道德经" scheme="https://shilei165.github.io/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
     
-    <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
-    
     <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
+    
+    <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
   </entry>
   
@@ -259,9 +259,9 @@
     <category term="道德经" scheme="https://shilei165.github.io/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
     
-    <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
-    
     <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
+    
+    <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
   </entry>
   
@@ -285,9 +285,9 @@
     <category term="道德经" scheme="https://shilei165.github.io/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
     
-    <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
-    
     <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
+    
+    <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
   </entry>
   
@@ -355,9 +355,9 @@
     <category term="道德经" scheme="https://shilei165.github.io/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
     
-    <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
-    
     <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
+    
+    <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
   </entry>
   
@@ -381,9 +381,9 @@
     <category term="道德经" scheme="https://shilei165.github.io/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
     
-    <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
-    
     <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
+    
+    <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
   </entry>
   
@@ -407,9 +407,9 @@
     <category term="道德经" scheme="https://shilei165.github.io/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
     
-    <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
-    
     <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
+    
+    <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
   </entry>
   
@@ -556,9 +556,9 @@
     
     <category term="python" scheme="https://shilei165.github.io/tags/python/"/>
     
-    <category term="切割列表和字符串" scheme="https://shilei165.github.io/tags/%E5%88%87%E5%89%B2%E5%88%97%E8%A1%A8%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2/"/>
-    
     <category term="计算机" scheme="https://shilei165.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/"/>
+    
+    <category term="切割列表和字符串" scheme="https://shilei165.github.io/tags/%E5%88%87%E5%89%B2%E5%88%97%E8%A1%A8%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2/"/>
     
   </entry>
   

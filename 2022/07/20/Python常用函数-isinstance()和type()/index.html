@@ -31,7 +31,7 @@
 <meta property="og:description" content="在这篇文章中，我将给大家分享如何使用isinstance()和type()两个Python常用函数，并且分析它们之间的区别。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-07-20T16:06:54.000Z">
-<meta property="article:modified_time" content="2022-07-20T16:46:52.450Z">
+<meta property="article:modified_time" content="2022-07-20T16:57:40.321Z">
 <meta property="article:author" content="石磊磊">
 <meta property="article:tag" content="Python">
 <meta property="article:tag" content="常用函数">
@@ -285,8 +285,10 @@
 <p>我们会发现，type()函数与isinstance()函数类似，都可以返回对象的类型。但他们在是否考虑类的继承关系有很大区别，具体区别如下：</p>
 <ul>
 <li>type()不考虑继承关系，也就是说不会认为子类是一种父类类型。</li>
-<li>isinstance()考虑继承关系，也就是说会认为子类是一种父类类型。<br>比如：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class A:</span><br><span class="line">    pass</span><br><span class="line"> </span><br><span class="line">class B(A):</span><br><span class="line">    pass</span><br><span class="line"> </span><br><span class="line">isinstance(A(), A)    # returns True</span><br><span class="line">type(A()) == A        # returns True</span><br><span class="line">isinstance(B(), A)    # returns True</span><br><span class="line">type(B()) == A        # returns False</span><br></pre></td></tr></table></figure></li>
+<li>isinstance()考虑继承关系，也就是说会认为子类是一种父类类型。</li>
 </ul>
+<p>比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class A:</span><br><span class="line">    pass</span><br><span class="line"> </span><br><span class="line">class B(A):</span><br><span class="line">    pass</span><br><span class="line"> </span><br><span class="line">isinstance(A(), A)    # returns True</span><br><span class="line">type(A()) == A        # returns True</span><br><span class="line">isinstance(B(), A)    # returns True</span><br><span class="line">type(B()) == A        # returns False</span><br></pre></td></tr></table></figure>
 
     </div>
 
