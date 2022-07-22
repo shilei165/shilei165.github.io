@@ -6,7 +6,7 @@
   <link href="https://shilei165.github.io/atom.xml" rel="self"/>
   
   <link href="https://shilei165.github.io/"/>
-  <updated>2022-07-20T23:00:43.403Z</updated>
+  <updated>2022-07-22T18:06:20.281Z</updated>
   <id>https://shilei165.github.io/</id>
   
   <author>
@@ -17,13 +17,42 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Python网络爬虫--第三方库</title>
-    <link href="https://shilei165.github.io/2022/07/20/Python%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB--%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
-    <id>https://shilei165.github.io/2022/07/20/Python%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB--%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/</id>
-    <published>2022-07-20T22:41:35.000Z</published>
-    <updated>2022-07-20T23:00:43.403Z</updated>
+    <title>Python网络爬虫--urllib</title>
+    <link href="https://shilei165.github.io/2022/07/22/Python%E7%88%AC%E8%99%AB--urllib/"/>
+    <id>https://shilei165.github.io/2022/07/22/Python%E7%88%AC%E8%99%AB--urllib/</id>
+    <published>2022-07-22T17:49:43.000Z</published>
+    <updated>2022-07-22T18:06:20.281Z</updated>
     
-    <content type="html"><![CDATA[<p>这篇文章将会分享总结Python网络爬虫所用到的一些常见的第三方库。</p><span id="more"></span><hr><h1 id="请求库"><a href="#请求库" class="headerlink" title="请求库"></a><strong>请求库</strong></h1><p>在Python中虽然有urllib这样自带原生网络请求库，但它的一些API对待开发者不怎么友好，所以就会用到一些更加方便、友好、功能强大的第三方库。</p><ul><li>requests: requrests是对Python内置的urllib的再次封装的请求库。由于它是阻塞式HTTP请求库，当我们发出请求之后，就会一直等待服务器响应，然后才会进行下一步处理。</li><li>aiohttp: 异步Web服务的库，可以在服务器响应过程中处理一些其他的事情，从而提高抓取效率。</li></ul><h1 id="解析库"><a href="#解析库" class="headerlink" title="解析库"></a><strong>解析库</strong></h1><p>解析库顾名思义就是用来解析我们所爬取的网页所用到的工具包。我们常用到的解析库如下：</p><ul><li>lxml：支持HTML和XML的解析，支持XPath解析方式。</li><li>Beautiful Soup：支持HTML和XML的解析，拥有强大的API和多样的解析方式。Beautiful Soup的HTML和XML解析器依赖于lxml库。</li><li>pyquery：同样是一个强大的网页解析工具，提供了jQuery类似的语法来解析HTML，支持CSS选择器。</li><li>tesserocr：tesserocr是Python的一个OCR识别库，可以处理爬取网页过程中遇到的图形验证码。这个库需要预先安装tesseract。</li><li>chaojiying：除了tesserocr之外，我们还可以选择识别度更高但需要付费库chaojiying来进行图片和验证码的识别。</li></ul><h1 id="自动化测试工具"><a href="#自动化测试工具" class="headerlink" title="自动化测试工具"></a><strong>自动化测试工具</strong></h1><ul><li>Selenium： Selenium是一个自动化测试工具，它可以模拟执行特定的浏览器动作，比如点击、下拉等操作。需要配合浏览引擎以及相应的驱动来操作。支持一般市面上见到的大部分浏览器，比如：<ul><li>Chrome，Firefox，IE，Opera，和Safari浏览器，需要下载安装浏览器（例如Chrome）以及相应的驱动（例如ChromeDriver）来进行操作。</li><li>Selenium还支持可脚本编程的PhantomJS浏览引擎来操作。PhantomJS运行效率很高，并且支持配置各种参数。</li></ul></li></ul><h1 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a><strong>数据库</strong></h1><ul><li>MySQL：MySQL是一个轻量级的关系型数据库。</li><li>MongoDB：MongoDB是由C++语言编写的非关系型数据库，基于分布式文件存储的开源数据系统。字段值可以包含文档、数组以及文档数组。</li><li>Redis：Redis是一个基于内存的搞笑的非关系型数据库。</li></ul><h1 id="存储库"><a href="#存储库" class="headerlink" title="存储库"></a><strong>存储库</strong></h1><p>数据库仅仅提供存储数据服务，想要和Python交互，还需要安装Python存储库。</p><ul><li>MySQL需要安装PyMySQL存储库。</li><li>MongoDB需要安装PyMongo存储库。</li><li>Redis需要安装redis-py存储库。</li></ul><h1 id="Web库"><a href="#Web库" class="headerlink" title="Web库"></a><strong>Web库</strong></h1><p>Web服务程序可以用来搭建一些API接口，方便我们爬虫使用。例如，我们可以通过Web服务提供一个API接口来获取代理的IP。</p><ul><li>Flask: 轻量级的Web服务程序，简单、灵活、易用。</li><li>Tornado：支持异步的Web框架，效率非常高。</li></ul><h1 id="APP爬取的相关库"><a href="#APP爬取的相关库" class="headerlink" title="APP爬取的相关库"></a><strong>APP爬取的相关库</strong></h1><p>除了爬取网页，Python爬虫也可以抓取APP的数据。这里需要用到抓包技术来抓取数据。</p><ul><li>Charles：一个强大的网络抓包工具，跨平台支持的很好。</li><li>mitmproxy：支持HTTP和HTTPS的抓包程序，跟Charles类似，但是是通过控制台的形式操作。mitmproxy有两个关联组件mitmdump和mitmweb。<ul><li>mitmdump是mitmproxy的命令行接口，利用它可以对接Python脚本，实现监听后的处理。</li><li>mitmweb是一个Web程序，通过它可以清楚地观察到mitmproxy捕获的请求。</li></ul></li><li>Appium：移动端的自动化测试工具，类似于Selenium。利用它可以驱动Android，iOS等设备完成自动化测试，比如点击、滑动、输入等操作。</li></ul><h1 id="爬虫框架"><a href="#爬虫框架" class="headerlink" title="爬虫框架"></a><strong>爬虫框架</strong></h1><p>如果爬取量不大，速度要求不高，直接用requests和Selenium等库写爬虫就可以完全满足我们的需求。但我们可以把这些组件抽取出来模块化形成爬虫框架，从而大大提高代码效率。这样做不仅可以简化代码，结构也会变得更加清晰。所以对于基础好的同学，使用框架会使一个很好的选择。</p><ul><li>Scrapy：一个十分强大的爬虫框架，主要依赖Twisted 14.0、lxml 3.4和pyOpenSSL 0.14。在不同平台下，所依赖的库也各部不相同。<ul><li>Scrapy-Splash：Scrapy中支持JavaScript渲染的工具。</li><li>Scrapy-Redis：Scrapy的分布式扩展模块，可以帮助实现Scrapy分布式爬虫的搭建。</li><li>Scrapyd: 用于部署和运行Scrapy项目的工具，可以把写好的Scrapy项目上传到云主机并通过API来控制它。</li></ul></li><li>pyspider：带有强大的WebUI、脚本编辑器、任务监控器、项目管理器以及结果处理器，同时支持多种数据库后端、多种消息队列，另外还支持JavaScript渲染页面的爬取。</li></ul><p></p>]]></content>
+    <content type="html"><![CDATA[<p>这篇文章将跟大家分享Python网络爬虫中经常会用到的网页请求库–urllib的一些用法。</p><span id="more"></span><hr><h1 id="urllib库包含的模块"><a href="#urllib库包含的模块" class="headerlink" title="urllib库包含的模块"></a><strong>urllib库包含的模块</strong></h1><ul><li><strong>request</strong>: HTTP请求模块</li><li><strong>error</strong>：异常处理模块</li><li><strong>parse</strong>：工具模块，提供拆分、解析、合并URL等操作</li><li>robotparser：识别网站的robots.txt文件，来判断是否可以爬取（很少用到）。</li></ul><h1 id="request模块"><a href="#request模块" class="headerlink" title="request模块"></a><strong>request模块</strong></h1><p><strong>该模块包含如下的主要的functions：</strong></p><ol><li>urlopen(<em>url, data &#x3D; None, [timeout,]*,cafile &#x3D; None, capath &#x3D; None, cadefault &#x3D; False, context &#x3D; None</em>)<ul><li>用于构建最基本的网页请求</li></ul></li><li>install_opener(<em>opener</em>)<ul><li>加载一个OpenerDirector实例作为默认的全局opener。</li></ul></li><li>build_opener(<em>[handler,…]</em>) <ul><li>构建一个由不同handler连接而成的opener。</li></ul></li><li>pathname2url(<em>path</em>) <ul><li>将pathname转换为URL。</li></ul></li><li>url2pathname(<em>path</em>)<ul><li>将URL转换为pathname。</li></ul></li></ol><p><strong>以及如下的classes:</strong></p><ol><li><p>BaseHandler – 所有其他Handler的父类，可以用于一些更高级的操作（比如处理Cookies，设置代理等）</p><ul><li>HTTPDefaultErrorHandler – 用于处理HTTP相应错误</li><li>HTTPRedirectHandler – 用于重定向</li><li>HTTPCookieProcessor(<em>cookiejar&#x3D;None</em>) – 用于处理Cookies</li><li>ProxyHanlder(<em>proxies&#x3D;None</em>) – 用于设置代理</li><li>HTTPPasswordMgr – 用于管理密码</li><li>HTTPBasicAuthHandler – 用于管理认证</li></ul></li><li><p>OpenerDirector – 利用Hanlder来构建Opener。</p></li><li><p>Request(<em>url, data&#x3D;None, headers&#x3D;{}, origin_req_host&#x3D;None, unverifiable&#x3D;False, method&#x3D;None</em>) – 如果需要在请求中加入Header等信息，可以通过Request类来构建一个请求。</p></li></ol><h1 id="error：异常处理模块"><a href="#error：异常处理模块" class="headerlink" title="error：异常处理模块"></a><strong>error：异常处理模块</strong></h1><ol><li>URLError<ul><li>有reason属性，可以返回错误原因 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from urllib import request, error</span><br><span class="line">try:</span><br><span class="line">response = request.urlopen(&#x27;https://shileilei.com&#x27;)</span><br><span class="line">except error.URLError as e:</span><br><span class="line">print(e.reason)</span><br></pre></td></tr></table></figure></li></ul></li><li>HTTPError – URLError的子类，专门用来处理HTTP请求错误，比如认证失败等。有三个属性：<ul><li>code：返回HTTP状态码</li><li>reason： 同其父类URLError一样，返回错误原因</li><li>headers: 返回请求头</li></ul></li></ol><h1 id="parse：工具模块，提供拆分、解析、合并URL等操作"><a href="#parse：工具模块，提供拆分、解析、合并URL等操作" class="headerlink" title="parse：工具模块，提供拆分、解析、合并URL等操作"></a><strong>parse：工具模块，提供拆分、解析、合并URL等操作</strong></h1><ol><li>urlparse() – 可以实现URL的识别和分段。其API用法为：urllib.parse.urlparse(urlstring, scheme&#x3D;’’,allow_fragments&#x3D;True)<ul><li>urlstring – 待解析的URL</li><li>scheme – 默认协议，比如http或者https</li><li>allow_fragments – 是否忽略fragment</li></ul></li><li>urlunparse() – 将不同参数组合在一起构造URL。</li><li>urlsplit() – 跟urlparse()类似，不过不单独解析params这一部分。</li><li>urlunsplit() – 跟urlunparse()类似，传入参数可以是列表、元组等可迭代对象。</li><li>urljoint() – 可以实现链接的解析、拼合与生成。</li><li>urlencode() – 可以将字典类型转化为GET请求的URL参数。</li><li>parse_qs() – 与urlencode()相反，可以将GET请求参数转化为字典。</li><li>parse_qsl() – 可以将GET请求参数转化为元组组成的列表。</li><li>quote() – 可以将内容转化为URL编码的格式。尤其是带有中文参数时，可以避免乱码问题。</li><li>unquote() – –与quote()相反，可以对URL进行解码。</li></ol><h1 id="实战演练–使用urllib请求豆瓣电影排行榜"><a href="#实战演练–使用urllib请求豆瓣电影排行榜" class="headerlink" title="实战演练–使用urllib请求豆瓣电影排行榜"></a><strong>实战演练–使用urllib请求豆瓣电影排行榜</strong></h1><p>说了这么多，我们来请求豆瓣电影排行榜来实战演练一下。</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">import urllib</span><br><span class="line">from urllib import request</span><br><span class="line">from urllib.error import URLError, HTTPError</span><br><span class="line">import ssl  #如果出现了认证错误，需要引入ssl模块</span><br><span class="line"></span><br><span class="line">ssl._create_default_https_context = ssl._create_unverified_context</span><br><span class="line"></span><br><span class="line">url = &#x27;https://movie.douban.com/chart&#x27;</span><br><span class="line">opener = request.build_opener(request.HTTPCookieProcessor())</span><br><span class="line">headers = &#123;</span><br><span class="line">&#x27;User-Agent&#x27;:&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36&#x27;</span><br><span class="line">&#125;</span><br><span class="line">req = request.Request(url=url, data=None, headers = headers, unverifiable=True, method = &#x27;GET&#x27;)</span><br><span class="line">try:</span><br><span class="line">response = opener.open(req)</span><br><span class="line">print(response.read().decode(&#x27;utf-8&#x27;))</span><br><span class="line">except URLError as e:</span><br><span class="line">print(e.reason)</span><br></pre></td></tr></table></figure><p>运行之后，不出意外的话，输出结果应该如下：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;zh-CN&quot; class=&quot;ua-windows ua-webkit&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot;&gt;</span><br><span class="line">    &lt;meta name=&quot;renderer&quot; content=&quot;webkit&quot;&gt;</span><br><span class="line">    &lt;meta name=&quot;referrer&quot; content=&quot;always&quot;&gt;</span><br><span class="line">    &lt;meta name=&quot;google-site-verification&quot; content=&quot;ok0wCgT20tBBgo9_zat2iAcimtN4Ftf5ccsh092Xeyw&quot; /&gt;</span><br><span class="line">    &lt;title&gt;</span><br><span class="line">豆瓣电影排行榜</span><br><span class="line">&lt;/title&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;meta name=&quot;baidu-site-verification&quot; content=&quot;cZdR4xxR7RxmM4zE&quot; /&gt;</span><br><span class="line">    &lt;meta http-equiv=&quot;Pragma&quot; content=&quot;no-cache&quot;&gt;</span><br><span class="line">    &lt;meta http-equiv=&quot;Expires&quot; content=&quot;Sun, 6 Mar 2005 01:00:00 GMT&quot;&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;meta name=&quot;keywords&quot; content=&quot;电影排行榜、新片排行榜、豆瓣电影250&quot;/&gt;</span><br><span class="line">    &lt;meta name=&quot;description&quot; content=&quot;豆瓣电影排行榜,提供最新电影排行榜、本周电影口碑榜和豆瓣电影TOP250&quot; /&gt;</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line">...</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;这篇文章将跟大家分享Python网络爬虫中经常会用到的网页请求库–urllib的一些用法。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="技术杂谈" scheme="https://shilei165.github.io/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/"/>
+    
+    <category term="Python" scheme="https://shilei165.github.io/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Python/"/>
+    
+    
+    <category term="Python" scheme="https://shilei165.github.io/tags/Python/"/>
+    
+    <category term="编程" scheme="https://shilei165.github.io/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+    <category term="网络" scheme="https://shilei165.github.io/tags/%E7%BD%91%E7%BB%9C/"/>
+    
+    <category term="爬虫" scheme="https://shilei165.github.io/tags/%E7%88%AC%E8%99%AB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Python网络爬虫--第三方库</title>
+    <link href="https://shilei165.github.io/2022/07/20/Python%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB--%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93%E6%80%BB%E7%BB%93/"/>
+    <id>https://shilei165.github.io/2022/07/20/Python%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB--%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93%E6%80%BB%E7%BB%93/</id>
+    <published>2022-07-20T22:41:35.000Z</published>
+    <updated>2022-07-22T18:06:17.237Z</updated>
+    
+    <content type="html"><![CDATA[<p>这篇文章将会分享总结Python网络爬虫所用到的一些常见的第三方库。</p><span id="more"></span><hr><h1 id="请求库"><a href="#请求库" class="headerlink" title="请求库"></a><strong>请求库</strong></h1><p>请求库顾名思义是用来对网络资源发出请求，从而获得服务器的相应。</p><ul><li>urllib: urllib是Python自带的原生网络请求库，功能强大，但用起来不如requests方便、友好。</li><li>requests: requrests是对Python内置的urllib的再次封装的请求库。由于它是阻塞式HTTP请求库，当我们发出请求之后，就会一直等待服务器响应，然后才会进行下一步处理。</li><li>aiohttp: 异步Web服务的库，可以在服务器响应过程中处理一些其他的事情，从而提高抓取效率。</li></ul><h1 id="解析库"><a href="#解析库" class="headerlink" title="解析库"></a><strong>解析库</strong></h1><p>解析库顾名思义就是用来解析我们所爬取的网页所用到的工具包。我们常用到的解析库如下：</p><ul><li>lxml：支持HTML和XML的解析，支持XPath解析方式。</li><li>Beautiful Soup：支持HTML和XML的解析，拥有强大的API和多样的解析方式。Beautiful Soup的HTML和XML解析器依赖于lxml库。</li><li>pyquery：同样是一个强大的网页解析工具，提供了jQuery类似的语法来解析HTML，支持CSS选择器。</li><li>tesserocr：tesserocr是Python的一个OCR识别库，可以处理爬取网页过程中遇到的图形验证码。这个库需要预先安装tesseract。</li><li>chaojiying：除了tesserocr之外，我们还可以选择识别度更高但需要付费库chaojiying来进行图片和验证码的识别。</li></ul><h1 id="自动化测试工具"><a href="#自动化测试工具" class="headerlink" title="自动化测试工具"></a><strong>自动化测试工具</strong></h1><ul><li>Selenium： Selenium是一个自动化测试工具，它可以模拟执行特定的浏览器动作，比如点击、下拉等操作。需要配合浏览引擎以及相应的驱动来操作。支持一般市面上见到的大部分浏览器，比如：<ul><li>Chrome，Firefox，IE，Opera，和Safari浏览器，需要下载安装浏览器（例如Chrome）以及相应的驱动（例如ChromeDriver）来进行操作。</li><li>Selenium还支持可脚本编程的PhantomJS浏览引擎来操作。PhantomJS运行效率很高，并且支持配置各种参数。</li></ul></li></ul><h1 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a><strong>数据库</strong></h1><ul><li>MySQL：MySQL是一个轻量级的关系型数据库。</li><li>MongoDB：MongoDB是由C++语言编写的非关系型数据库，基于分布式文件存储的开源数据系统。字段值可以包含文档、数组以及文档数组。</li><li>Redis：Redis是一个基于内存的搞笑的非关系型数据库。</li></ul><h1 id="存储库"><a href="#存储库" class="headerlink" title="存储库"></a><strong>存储库</strong></h1><p>数据库仅仅提供存储数据服务，想要和Python交互，还需要安装Python存储库。</p><ul><li>MySQL需要安装PyMySQL存储库。</li><li>MongoDB需要安装PyMongo存储库。</li><li>Redis需要安装redis-py存储库。</li></ul><h1 id="Web库"><a href="#Web库" class="headerlink" title="Web库"></a><strong>Web库</strong></h1><p>Web服务程序可以用来搭建一些API接口，方便我们爬虫使用。例如，我们可以通过Web服务提供一个API接口来获取代理的IP。</p><ul><li>Flask: 轻量级的Web服务程序，简单、灵活、易用。</li><li>Tornado：支持异步的Web框架，效率非常高。</li></ul><h1 id="APP爬取的相关库"><a href="#APP爬取的相关库" class="headerlink" title="APP爬取的相关库"></a><strong>APP爬取的相关库</strong></h1><p>除了爬取网页，Python爬虫也可以抓取APP的数据。这里需要用到抓包技术来抓取数据。</p><ul><li>Charles：一个强大的网络抓包工具，跨平台支持的很好。</li><li>mitmproxy：支持HTTP和HTTPS的抓包程序，跟Charles类似，但是是通过控制台的形式操作。mitmproxy有两个关联组件mitmdump和mitmweb。<ul><li>mitmdump是mitmproxy的命令行接口，利用它可以对接Python脚本，实现监听后的处理。</li><li>mitmweb是一个Web程序，通过它可以清楚地观察到mitmproxy捕获的请求。</li></ul></li><li>Appium：移动端的自动化测试工具，类似于Selenium。利用它可以驱动Android，iOS等设备完成自动化测试，比如点击、滑动、输入等操作。</li></ul><h1 id="爬虫框架"><a href="#爬虫框架" class="headerlink" title="爬虫框架"></a><strong>爬虫框架</strong></h1><p>如果爬取量不大，速度要求不高，直接用requests和Selenium等库写爬虫就可以完全满足我们的需求。但我们可以把这些组件抽取出来模块化形成爬虫框架，从而大大提高代码效率。这样做不仅可以简化代码，结构也会变得更加清晰。所以对于基础好的同学，使用框架会使一个很好的选择。</p><ul><li>Scrapy：一个十分强大的爬虫框架，主要依赖Twisted 14.0、lxml 3.4和pyOpenSSL 0.14。在不同平台下，所依赖的库也各部不相同。<ul><li>Scrapy-Splash：Scrapy中支持JavaScript渲染的工具。</li><li>Scrapy-Redis：Scrapy的分布式扩展模块，可以帮助实现Scrapy分布式爬虫的搭建。</li><li>Scrapyd: 用于部署和运行Scrapy项目的工具，可以把写好的Scrapy项目上传到云主机并通过API来控制它。</li></ul></li><li>pyspider：带有强大的WebUI、脚本编辑器、任务监控器、项目管理器以及结果处理器，同时支持多种数据库后端、多种消息队列，另外还支持JavaScript渲染页面的爬取。</li></ul><p></p>]]></content>
     
     
     <summary type="html">&lt;p&gt;这篇文章将会分享总结Python网络爬虫所用到的一些常见的第三方库。&lt;/p&gt;</summary>
@@ -93,9 +122,9 @@
     
     <category term="编程" scheme="https://shilei165.github.io/tags/%E7%BC%96%E7%A8%8B/"/>
     
-    <category term="定时任务" scheme="https://shilei165.github.io/tags/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/"/>
-    
     <category term="Taskkill" scheme="https://shilei165.github.io/tags/Taskkill/"/>
+    
+    <category term="定时任务" scheme="https://shilei165.github.io/tags/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/"/>
     
     <category term="Windows" scheme="https://shilei165.github.io/tags/Windows/"/>
     
@@ -182,11 +211,11 @@
     <category term="Windows" scheme="https://shilei165.github.io/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Windows/"/>
     
     
+    <category term="定时任务" scheme="https://shilei165.github.io/tags/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/"/>
+    
     <category term="SCHTASKS" scheme="https://shilei165.github.io/tags/SCHTASKS/"/>
     
     <category term="windows" scheme="https://shilei165.github.io/tags/windows/"/>
-    
-    <category term="定时任务" scheme="https://shilei165.github.io/tags/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/"/>
     
   </entry>
   
@@ -210,9 +239,9 @@
     <category term="道德经" scheme="https://shilei165.github.io/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
     
-    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
-    
     <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
+    
+    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
     
   </entry>
   
@@ -236,9 +265,9 @@
     <category term="道德经" scheme="https://shilei165.github.io/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
     
-    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
-    
     <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
+    
+    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
     
   </entry>
   
@@ -262,9 +291,9 @@
     <category term="道德经" scheme="https://shilei165.github.io/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
     
-    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
-    
     <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
+    
+    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
     
   </entry>
   
@@ -288,9 +317,9 @@
     <category term="道德经" scheme="https://shilei165.github.io/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
     
-    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
-    
     <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
+    
+    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
     
   </entry>
   
@@ -314,9 +343,9 @@
     <category term="道德经" scheme="https://shilei165.github.io/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
     
-    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
-    
     <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
+    
+    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
     
   </entry>
   
@@ -384,9 +413,9 @@
     <category term="道德经" scheme="https://shilei165.github.io/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
     
-    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
-    
     <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
+    
+    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
     
   </entry>
   
@@ -410,9 +439,9 @@
     <category term="道德经" scheme="https://shilei165.github.io/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
     
-    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
-    
     <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
+    
+    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
     
   </entry>
   
@@ -436,9 +465,9 @@
     <category term="道德经" scheme="https://shilei165.github.io/categories/%E5%93%B2%E5%AD%A6%E6%80%9D%E8%80%83/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
     
     
-    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
-    
     <category term="道德经" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%BE%B7%E7%BB%8F/"/>
+    
+    <category term="道家" scheme="https://shilei165.github.io/tags/%E9%81%93%E5%AE%B6/"/>
     
   </entry>
   
@@ -528,37 +557,6 @@
     <category term="python" scheme="https://shilei165.github.io/tags/python/"/>
     
     <category term="教程" scheme="https://shilei165.github.io/tags/%E6%95%99%E7%A8%8B/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Python教程--推导式(Comperhension)</title>
-    <link href="https://shilei165.github.io/2021/01/14/python%E6%95%99%E7%A8%8B-%E6%8E%A8%E5%AF%BC%E5%BC%8Fcomperhension/"/>
-    <id>https://shilei165.github.io/2021/01/14/python%E6%95%99%E7%A8%8B-%E6%8E%A8%E5%AF%BC%E5%BC%8Fcomperhension/</id>
-    <published>2021-01-14T18:29:30.000Z</published>
-    <updated>2022-07-15T18:59:32.673Z</updated>
-    
-    <content type="html"><![CDATA[<p><strong>这篇文章中将会分享python中关于推导式(comperhension)相关的一些知识。</strong></p><span id="more"></span><p>Comprehension是Python语言的一个特性，有些略微不太好翻译。Comprehension字面翻译过来，是“理解，包容”的含义，有人翻译为生成器，解析器，或者推导式。我们可以理解为 Comprehension是用来生产列表、元组、集合以及字典的工具。</p><h1 id="一、列表推导式-List-Comperhension"><a href="#一、列表推导式-List-Comperhension" class="headerlink" title="一、列表推导式 (List Comperhension)"></a><strong>一、列表推导式 (List Comperhension)</strong></h1><p>我们先看一个例子，如果我们想要输出列表中的每一个元素，我们首先想到的可能是写出一个如下的for循环代码：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">nums = [1,2,3,4,5,6,7,8,9,10]</span><br><span class="line">my_list = []</span><br><span class="line">for n in nums:</span><br><span class="line">my_list.append(n)</span><br><span class="line">print (my_list)</span><br></pre></td></tr></table></figure><p>这么做没有问题，但可能有一点太复杂。我们再来看看List Comperhension是怎么做的：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nums = [1,2,3,4,5,6,7,8,9,10]</span><br><span class="line">my_list = [n for n in nums]</span><br><span class="line">print(my_list)</span><br></pre></td></tr></table></figure><p>我们会发现，它们运行之后会得到同样的结果。但是，list comperhension就要明显简洁的多。再来举一个稍微复杂一点的例子，如果我们想要输出列表中的每一个元素的平方，我们如果用for循环会写出如下代码：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">nums = [1,2,3,4,5,6,7,8,9,10]</span><br><span class="line">my_list = []</span><br><span class="line">for n in nums:</span><br><span class="line">my_list.append(n*n)</span><br><span class="line">print (my_list)</span><br></pre></td></tr></table></figure><p>如果用List Comperhension的方法呢？代码如下：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nums = [1,2,3,4,5,6,7,8,9,10]</span><br><span class="line">my_list = [n*n for n in nums]</span><br><span class="line">print(my_list)</span><br></pre></td></tr></table></figure><p>有没有很简洁？接着，我们想要只输出偶数，如果用for循环，将会是如下代码：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">nums = [1,2,3,4,5,6,7,8,9,10]</span><br><span class="line">my_list = []</span><br><span class="line">for n in nums:</span><br><span class="line">if n%2 == 0:</span><br><span class="line">my_list.append(n)</span><br><span class="line">print(my_list)</span><br></pre></td></tr></table></figure><p>如果用List Comperhension的方法，则会非常简洁：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nums = [1,2,3,4,5,6,7,8,9,10]</span><br><span class="line">my_list = [n for n in nums if n%2 == 0]</span><br><span class="line">print(my_list)</span><br></pre></td></tr></table></figure><p>接下来，我们想要输出一个嵌套的循环。输出字母’abcd’和数字’0123’的所有组合，用for循环，将会是如下代码：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">my_list = []</span><br><span class="line">for letter in &#x27;abcd&#x27;:</span><br><span class="line">for num in &#x27;0123&#x27;:</span><br><span class="line">my_list.append((letter,num))</span><br><span class="line">print(my_list)</span><br></pre></td></tr></table></figure><p>用List Comperhension的方法也可以同样完成这个任务：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">my_list = [(letter,num) for letter in &#x27;abcd&#x27; for num in range(4)]</span><br><span class="line">print(my_list)</span><br></pre></td></tr></table></figure><h1 id="二、字典推导式-Dictionary-Comperhension"><a href="#二、字典推导式-Dictionary-Comperhension" class="headerlink" title="二、字典推导式 (Dictionary Comperhension)"></a><strong>二、字典推导式 (Dictionary Comperhension)</strong></h1><p>字典也同样可以有推导式。举一个例子，我们有如下两个列表，一个是名字(names)，一个是英雄名字(heros)，我们希望得到一个{‘name’:’hero’}样式的字典。用for 循环需要如下代码：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">names = [&#x27;Bruce&#x27;,&#x27;Clark&#x27;,&#x27;Peter&#x27;,&#x27;Logan&#x27;,&#x27;Wade&#x27;]</span><br><span class="line">heros = [&#x27;Batman&#x27;,&#x27;Superman&#x27;,&#x27;Spiderman&#x27;,&#x27;Wolverine&#x27;,&#x27;Deadpool&#x27;]</span><br><span class="line">my_dict = &#123;&#125;</span><br><span class="line">for name, hero in zip(names, heros):</span><br><span class="line">my_dict[name] = hero</span><br><span class="line">print(my_dict)</span><br></pre></td></tr></table></figure><p>这里的zip是用于将对象中对应的元素打包成一个个元组，然后返回由这些元组组成的列表。运行以上程序结果如下：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#x27;Bruce&#x27;: &#x27;Batman&#x27;, &#x27;Clark&#x27;: &#x27;Superman&#x27;, &#x27;Peter&#x27;: &#x27;Spiderman&#x27;, &#x27;Logan&#x27;: &#x27;Wolverine&#x27;, &#x27;Wade&#x27;: &#x27;Deadpool&#x27;&#125;</span><br></pre></td></tr></table></figure><p>如果用Dictionary Comperhension的方法，我们可以用如下代码得到同样的结果：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">my_dict = &#123;name: hero for name, hero in zip(names, heros)&#125;</span><br><span class="line">print(my_dict)</span><br></pre></td></tr></table></figure><p>如果我们想要添加某个筛选条件，也可以同样的在后面加上if判断语句。比如运行如下代码，将会把 ‘Peter’: ‘Spiderman’ 从结果中去除出去。</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">my_dict = &#123;name: hero for name, hero in zip(names, heros) if name != &#x27;Peter&#x27;&#125;</span><br><span class="line">print(my_dict)</span><br></pre></td></tr></table></figure><h1 id="三、集合推导式-Set-Comperhension"><a href="#三、集合推导式-Set-Comperhension" class="headerlink" title="三、集合推导式 (Set Comperhension)"></a><strong>三、集合推导式 (Set Comperhension)</strong></h1><p>同样的，集合也可以用同样的推导式来使得代码更加简洁。因为集合中的元素不可以重复，我们可以利用这个特性来去除列表中的重复元素。用我们前面学过的for循环将会是如下代码：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">nums = [1,1,2,1,3,4,3,4,5,5,6,7,8,7,9,9]</span><br><span class="line">my_set = set()</span><br><span class="line">for n in nums:</span><br><span class="line">my_set.add(n)</span><br><span class="line">print(my_set)</span><br></pre></td></tr></table></figure><p>运行结果如下：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;1, 2, 3, 4, 5, 6, 7, 8, 9&#125;</span><br></pre></td></tr></table></figure><p>如果用Set Comperhension的方法，我们可以用如下代码得到同样的结果：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nums = [1,1,2,1,3,4,3,4,5,5,6,7,8,7,9,9]</span><br><span class="line">my_set = set(n for n in nums)</span><br><span class="line">print(my_set)</span><br></pre></td></tr></table></figure><hr>]]></content>
-    
-    
-    <summary type="html">&lt;p&gt;&lt;strong&gt;这篇文章中将会分享python中关于推导式(comperhension)相关的一些知识。&lt;/strong&gt;&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="技术杂谈" scheme="https://shilei165.github.io/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/"/>
-    
-    <category term="Python" scheme="https://shilei165.github.io/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Python/"/>
-    
-    
-    <category term="编程" scheme="https://shilei165.github.io/tags/%E7%BC%96%E7%A8%8B/"/>
-    
-    <category term="python" scheme="https://shilei165.github.io/tags/python/"/>
-    
-    <category term="教程" scheme="https://shilei165.github.io/tags/%E6%95%99%E7%A8%8B/"/>
-    
-    <category term="comperhension" scheme="https://shilei165.github.io/tags/comperhension/"/>
-    
-    <category term="推导式" scheme="https://shilei165.github.io/tags/%E6%8E%A8%E5%AF%BC%E5%BC%8F/"/>
     
   </entry>
   
