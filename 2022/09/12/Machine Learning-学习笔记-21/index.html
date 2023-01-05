@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+  <meta name="google-site-verification" content="meta name="google-site-verification" content="OFztbMGk5mHL-nB9dNplx2RVd3ZFbn7Dj5q939MulL0"">
+  <meta name="msvalidate.01" content="meta name="msvalidate.01" content="E3EF3FEE5F8DAD15F7062E99869A0067"">
+  <meta name="baidu-site-verification" content="meta name="baidu-site-verification" content="code-OTfzuo5G1O"">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"shilei165.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="这篇文章跟大家分享一下Machine Learning的学习笔记: 21-execrise 8 summary。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Machine Learning-学习笔记-21-execrise 8 summary">
+<meta property="og:url" content="https://shilei165.github.io/2022/09/12/Machine%20Learning-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-21/index.html">
+<meta property="og:site_name" content="石磊磊的个人站点">
+<meta property="og:description" content="这篇文章跟大家分享一下Machine Learning的学习笔记: 21-execrise 8 summary。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-09-12T20:35:23.000Z">
+<meta property="article:modified_time" content="2022-09-14T15:31:47.574Z">
+<meta property="article:author" content="石磊磊">
+<meta property="article:tag" content="计算机">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="人工智能">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://shilei165.github.io/2022/09/12/Machine%20Learning-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-21/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Machine Learning-学习笔记-21-execrise 8 summary | 石磊磊的个人站点</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="石磊磊的个人站点" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">石磊磊的个人站点</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://shilei165.github.io/2022/09/12/Machine%20Learning-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-21/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="石磊磊">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="石磊磊的个人站点">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Machine Learning-学习笔记-21-execrise 8 summary
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-12 16:35:23" itemprop="dateCreated datePublished" datetime="2022-09-12T16:35:23-04:00">2022-09-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2022/09/12/Machine%20Learning-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-21/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/09/12/Machine Learning-学习笔记-21/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>这篇文章跟大家分享一下Machine Learning的学习笔记: 21-execrise 8 summary。</p>
+<span id="more"></span>
+<p><strong>Programming Exercise 8: Anomaly Detection and Recommender Systems</strong></p>
+<p>In this exercise, you will implement the anomaly detection algorithm and<br>apply it to detect failing servers on a network. In the second part, you will<br>use collaborative filtering to build a recommender system for movies.</p>
+<h1 id="exe8-m"><a href="#exe8-m" class="headerlink" title="exe8.m"></a>exe8.m</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br></pre></td><td class="code"><pre><span class="line">%% Machine Learning Online Class</span><br><span class="line">%  Exercise 8 | Anomaly Detection and Collaborative Filtering</span><br><span class="line">%</span><br><span class="line">%  Instructions</span><br><span class="line">%  ------------</span><br><span class="line">%</span><br><span class="line">%  This file contains code that helps you get started on the</span><br><span class="line">%  exercise. You will need to complete the following functions:</span><br><span class="line">%</span><br><span class="line">%     estimateGaussian.m</span><br><span class="line">%     selectThreshold.m</span><br><span class="line">%     cofiCostFunc.m</span><br><span class="line">%</span><br><span class="line">%  For this exercise, you will not need to change any code in this file,</span><br><span class="line">%  or any other files other than those mentioned above.</span><br><span class="line">%</span><br><span class="line"></span><br><span class="line">%% Initialization</span><br><span class="line">clear ; close all; clc</span><br><span class="line"></span><br><span class="line">%% ================== Part 1: Load Example Dataset  ===================</span><br><span class="line">%  We start this exercise by using a small dataset that is easy to</span><br><span class="line">%  visualize.</span><br><span class="line">%</span><br><span class="line">%  Our example case consists of 2 network server statistics across</span><br><span class="line">%  several machines: the latency and throughput of each machine.</span><br><span class="line">%  This exercise will help us find possibly faulty (or very fast) machines.</span><br><span class="line">%</span><br><span class="line"></span><br><span class="line">fprintf(&#x27;Visualizing example dataset for outlier detection.\n\n&#x27;);</span><br><span class="line"></span><br><span class="line">%  The following command loads the dataset. You should now have the</span><br><span class="line">%  variables X, Xval, yval in your environment</span><br><span class="line">load(&#x27;ex8data1.mat&#x27;);</span><br><span class="line"></span><br><span class="line">%  Visualize the example dataset</span><br><span class="line">plot(X(:, 1), X(:, 2), &#x27;bx&#x27;);</span><br><span class="line">axis([0 30 0 30]);</span><br><span class="line">xlabel(&#x27;Latency (ms)&#x27;);</span><br><span class="line">ylabel(&#x27;Throughput (mb/s)&#x27;);</span><br><span class="line"></span><br><span class="line">fprintf(&#x27;Program paused. Press enter to continue.\n&#x27;);</span><br><span class="line">pause</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">%% ================== Part 2: Estimate the dataset statistics ===================</span><br><span class="line">%  For this exercise, we assume a Gaussian distribution for the dataset.</span><br><span class="line">%</span><br><span class="line">%  We first estimate the parameters of our assumed Gaussian distribution, </span><br><span class="line">%  then compute the probabilities for each of the points and then visualize </span><br><span class="line">%  both the overall distribution and where each of the points falls in </span><br><span class="line">%  terms of that distribution.</span><br><span class="line">%</span><br><span class="line">fprintf(&#x27;Visualizing Gaussian fit.\n\n&#x27;);</span><br><span class="line"></span><br><span class="line">%  Estimate my and sigma2</span><br><span class="line">[mu sigma2] = estimateGaussian(X);</span><br><span class="line"></span><br><span class="line">%  Returns the density of the multivariate normal at each data point (row) </span><br><span class="line">%  of X</span><br><span class="line">p = multivariateGaussian(X, mu, sigma2);</span><br><span class="line"></span><br><span class="line">%  Visualize the fit</span><br><span class="line">visualizeFit(X,  mu, sigma2);</span><br><span class="line">xlabel(&#x27;Latency (ms)&#x27;);</span><br><span class="line">ylabel(&#x27;Throughput (mb/s)&#x27;);</span><br><span class="line"></span><br><span class="line">fprintf(&#x27;Program paused. Press enter to continue.\n&#x27;);</span><br><span class="line">pause;</span><br><span class="line"></span><br><span class="line">%% ================== Part 3: Find Outliers ===================</span><br><span class="line">%  Now you will find a good epsilon threshold using a cross-validation set</span><br><span class="line">%  probabilities given the estimated Gaussian distribution</span><br><span class="line">% </span><br><span class="line"></span><br><span class="line">pval = multivariateGaussian(Xval, mu, sigma2);</span><br><span class="line"></span><br><span class="line">[epsilon F1] = selectThreshold(yval, pval);</span><br><span class="line">fprintf(&#x27;Best epsilon found using cross-validation: %e\n&#x27;, epsilon);</span><br><span class="line">fprintf(&#x27;Best F1 on Cross Validation Set:  %f\n&#x27;, F1);</span><br><span class="line">fprintf(&#x27;   (you should see a value epsilon of about 8.99e-05)\n&#x27;);</span><br><span class="line">fprintf(&#x27;   (you should see a Best F1 value of  0.875000)\n\n&#x27;);</span><br><span class="line"></span><br><span class="line">%  Find the outliers in the training set and plot the</span><br><span class="line">outliers = find(p &lt; epsilon);</span><br><span class="line"></span><br><span class="line">%  Draw a red circle around those outliers</span><br><span class="line">hold on</span><br><span class="line">plot(X(outliers, 1), X(outliers, 2), &#x27;ro&#x27;, &#x27;LineWidth&#x27;, 2, &#x27;MarkerSize&#x27;, 10);</span><br><span class="line">hold off</span><br><span class="line"></span><br><span class="line">fprintf(&#x27;Program paused. Press enter to continue.\n&#x27;);</span><br><span class="line">pause;</span><br><span class="line"></span><br><span class="line">%% ================== Part 4: Multidimensional Outliers ===================</span><br><span class="line">%  We will now use the code from the previous part and apply it to a </span><br><span class="line">%  harder problem in which more features describe each datapoint and only </span><br><span class="line">%  some features indicate whether a point is an outlier.</span><br><span class="line">%</span><br><span class="line"></span><br><span class="line">%  Loads the second dataset. You should now have the</span><br><span class="line">%  variables X, Xval, yval in your environment</span><br><span class="line">load(&#x27;ex8data2.mat&#x27;);</span><br><span class="line"></span><br><span class="line">%  Apply the same steps to the larger dataset</span><br><span class="line">[mu sigma2] = estimateGaussian(X);</span><br><span class="line"></span><br><span class="line">%  Training set </span><br><span class="line">p = multivariateGaussian(X, mu, sigma2);</span><br><span class="line"></span><br><span class="line">%  Cross-validation set</span><br><span class="line">pval = multivariateGaussian(Xval, mu, sigma2);</span><br><span class="line"></span><br><span class="line">%  Find the best threshold</span><br><span class="line">[epsilon F1] = selectThreshold(yval, pval);</span><br><span class="line"></span><br><span class="line">fprintf(&#x27;Best epsilon found using cross-validation: %e\n&#x27;, epsilon);</span><br><span class="line">fprintf(&#x27;Best F1 on Cross Validation Set:  %f\n&#x27;, F1);</span><br><span class="line">fprintf(&#x27;   (you should see a value epsilon of about 1.38e-18)\n&#x27;);</span><br><span class="line">fprintf(&#x27;   (you should see a Best F1 value of 0.615385)\n&#x27;);</span><br><span class="line">fprintf(&#x27;# Outliers found: %d\n\n&#x27;, sum(p &lt; epsilon));</span><br></pre></td></tr></table></figure>
+
+<h1 id="estimateGaussian-m"><a href="#estimateGaussian-m" class="headerlink" title="estimateGaussian.m"></a>estimateGaussian.m</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">function [mu sigma2] = estimateGaussian(X)</span><br><span class="line">%ESTIMATEGAUSSIAN This function estimates the parameters of a </span><br><span class="line">%Gaussian distribution using the data in X</span><br><span class="line">%   [mu sigma2] = estimateGaussian(X), </span><br><span class="line">%   The input X is the dataset with each n-dimensional data point in one row</span><br><span class="line">%   The output is an n-dimensional vector mu, the mean of the data set</span><br><span class="line">%   and the variances sigma^2, an n x 1 vector</span><br><span class="line">% </span><br><span class="line"></span><br><span class="line">% Useful variables</span><br><span class="line">[m, n] = size(X);</span><br><span class="line"></span><br><span class="line">% You should return these values correctly</span><br><span class="line">mu = zeros(n, 1);</span><br><span class="line">sigma2 = zeros(n, 1);</span><br><span class="line"></span><br><span class="line">% ====================== YOUR CODE HERE ======================</span><br><span class="line">% Instructions: Compute the mean of the data and the variances</span><br><span class="line">%               In particular, mu(i) should contain the mean of</span><br><span class="line">%               the data for the i-th feature and sigma2(i)</span><br><span class="line">%               should contain variance of the i-th feature.</span><br><span class="line">%</span><br><span class="line"></span><br><span class="line">mu = sum(X,1)/m;</span><br><span class="line"></span><br><span class="line">sigma2 = sum((X-mu).^2,1)/m;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">% =============================================================</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<h1 id="multivariateGaussian-m"><a href="#multivariateGaussian-m" class="headerlink" title="multivariateGaussian.m"></a>multivariateGaussian.m</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">function p = multivariateGaussian(X, mu, Sigma2)</span><br><span class="line">%MULTIVARIATEGAUSSIAN Computes the probability density function of the</span><br><span class="line">%multivariate gaussian distribution.</span><br><span class="line">%    p = MULTIVARIATEGAUSSIAN(X, mu, Sigma2) Computes the probability </span><br><span class="line">%    density function of the examples X under the multivariate gaussian </span><br><span class="line">%    distribution with parameters mu and Sigma2. If Sigma2 is a matrix, it is</span><br><span class="line">%    treated as the covariance matrix. If Sigma2 is a vector, it is treated</span><br><span class="line">%    as the \sigma^2 values of the variances in each dimension (a diagonal</span><br><span class="line">%    covariance matrix)</span><br><span class="line">%</span><br><span class="line"></span><br><span class="line">k = length(mu);</span><br><span class="line"></span><br><span class="line">if (size(Sigma2, 2) == 1) || (size(Sigma2, 1) == 1)</span><br><span class="line">    Sigma2 = diag(Sigma2);</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">X = bsxfun(@minus, X, mu(:)&#x27;);</span><br><span class="line">p = (2 * pi) ^ (- k / 2) * det(Sigma2) ^ (-0.5) * ...</span><br><span class="line">    exp(-0.5 * sum(bsxfun(@times, X * pinv(Sigma2), X), 2));</span><br><span class="line"></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<h1 id="selectThreshold-m"><a href="#selectThreshold-m" class="headerlink" title="selectThreshold.m"></a>selectThreshold.m</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">function [bestEpsilon bestF1] = selectThreshold(yval, pval)</span><br><span class="line">%SELECTTHRESHOLD Find the best threshold (epsilon) to use for selecting</span><br><span class="line">%outliers</span><br><span class="line">%   [bestEpsilon bestF1] = SELECTTHRESHOLD(yval, pval) finds the best</span><br><span class="line">%   threshold to use for selecting outliers based on the results from a</span><br><span class="line">%   validation set (pval) and the ground truth (yval).</span><br><span class="line">%</span><br><span class="line"></span><br><span class="line">bestEpsilon = 0;</span><br><span class="line">bestF1 = 0;</span><br><span class="line">F1 = 0;</span><br><span class="line"></span><br><span class="line">stepsize = (max(pval) - min(pval)) / 1000;</span><br><span class="line">for epsilon = min(pval):stepsize:max(pval)</span><br><span class="line">    </span><br><span class="line">    % ====================== YOUR CODE HERE ======================</span><br><span class="line">    % Instructions: Compute the F1 score of choosing epsilon as the</span><br><span class="line">    %               threshold and place the value in F1. The code at the</span><br><span class="line">    %               end of the loop will compare the F1 score for this</span><br><span class="line">    %               choice of epsilon and set it to be the best epsilon if</span><br><span class="line">    %               it is better than the current choice of epsilon.</span><br><span class="line">    %               </span><br><span class="line">    % Note: You can use predictions = (pval &lt; epsilon) to get a binary vector</span><br><span class="line">    %       of 0&#x27;s and 1&#x27;s of the outlier predictions</span><br><span class="line"></span><br><span class="line">    predictions = (pval &lt; epsilon);</span><br><span class="line"></span><br><span class="line">    fp = sum((predictions ==1) &amp; (yval == 0));</span><br><span class="line">    tp = sum((predictions ==1) &amp; (yval == 1));</span><br><span class="line">    fn = sum((predictions ==0) &amp; (yval == 1));</span><br><span class="line"></span><br><span class="line">    prec = tp/(tp+fp);</span><br><span class="line">    rec = tp/(tp+fn);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    F1 = 2*(prec*rec)/(prec+rec);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    % =============================================================</span><br><span class="line"></span><br><span class="line">    if F1 &gt; bestF1</span><br><span class="line">       bestF1 = F1;</span><br><span class="line">       bestEpsilon = epsilon;</span><br><span class="line">    end</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<h1 id="visualizeFit-m"><a href="#visualizeFit-m" class="headerlink" title="visualizeFit.m"></a>visualizeFit.m</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">function visualizeFit(X, mu, sigma2)</span><br><span class="line">%VISUALIZEFIT Visualize the dataset and its estimated distribution.</span><br><span class="line">%   VISUALIZEFIT(X, p, mu, sigma2) This visualization shows you the </span><br><span class="line">%   probability density function of the Gaussian distribution. Each example</span><br><span class="line">%   has a location (x1, x2) that depends on its feature values.</span><br><span class="line">%</span><br><span class="line"></span><br><span class="line">[X1,X2] = meshgrid(0:.5:35); </span><br><span class="line">Z = multivariateGaussian([X1(:) X2(:)],mu,sigma2);</span><br><span class="line">Z = reshape(Z,size(X1));</span><br><span class="line"></span><br><span class="line">plot(X(:, 1), X(:, 2),&#x27;bx&#x27;);</span><br><span class="line">hold on;</span><br><span class="line">% Do not plot if there are infinities</span><br><span class="line">if (sum(isinf(Z)) == 0)</span><br><span class="line">    contour(X1, X2, Z, 10.^(-20:3:0)&#x27;);</span><br><span class="line">end</span><br><span class="line">hold off;</span><br><span class="line"></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<h1 id="ex8-cofi-m"><a href="#ex8-cofi-m" class="headerlink" title="ex8_cofi.m"></a>ex8_cofi.m</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br></pre></td><td class="code"><pre><span class="line">%% Machine Learning Online Class</span><br><span class="line">%  Exercise 8 | Anomaly Detection and Collaborative Filtering</span><br><span class="line">%</span><br><span class="line">%  Instructions</span><br><span class="line">%  ------------</span><br><span class="line">%</span><br><span class="line">%  This file contains code that helps you get started on the</span><br><span class="line">%  exercise. You will need to complete the following functions:</span><br><span class="line">%</span><br><span class="line">%     estimateGaussian.m</span><br><span class="line">%     selectThreshold.m</span><br><span class="line">%     cofiCostFunc.m</span><br><span class="line">%</span><br><span class="line">%  For this exercise, you will not need to change any code in this file,</span><br><span class="line">%  or any other files other than those mentioned above.</span><br><span class="line">%</span><br><span class="line"></span><br><span class="line">%% =============== Part 1: Loading movie ratings dataset ================</span><br><span class="line">%  You will start by loading the movie ratings dataset to understand the</span><br><span class="line">%  structure of the data.</span><br><span class="line">%  </span><br><span class="line">fprintf(&#x27;Loading movie ratings dataset.\n\n&#x27;);</span><br><span class="line"></span><br><span class="line">%  Load data</span><br><span class="line">load (&#x27;ex8_movies.mat&#x27;);</span><br><span class="line"></span><br><span class="line">%  Y is a 1682x943 matrix, containing ratings (1-5) of 1682 movies on </span><br><span class="line">%  943 users</span><br><span class="line">%</span><br><span class="line">%  R is a 1682x943 matrix, where R(i,j) = 1 if and only if user j gave a</span><br><span class="line">%  rating to movie i</span><br><span class="line"></span><br><span class="line">%  From the matrix, we can compute statistics like average rating.</span><br><span class="line">fprintf(&#x27;Average rating for movie 1 (Toy Story): %f / 5\n\n&#x27;, ...</span><br><span class="line">        mean(Y(1, R(1, :))));</span><br><span class="line"></span><br><span class="line">%  We can &quot;visualize&quot; the ratings matrix by plotting it with imagesc</span><br><span class="line">imagesc(Y);</span><br><span class="line">ylabel(&#x27;Movies&#x27;);</span><br><span class="line">xlabel(&#x27;Users&#x27;);</span><br><span class="line"></span><br><span class="line">fprintf(&#x27;\nProgram paused. Press enter to continue.\n&#x27;);</span><br><span class="line">pause;</span><br><span class="line"></span><br><span class="line">%% ============ Part 2: Collaborative Filtering Cost Function ===========</span><br><span class="line">%  You will now implement the cost function for collaborative filtering.</span><br><span class="line">%  To help you debug your cost function, we have included set of weights</span><br><span class="line">%  that we trained on that. Specifically, you should complete the code in </span><br><span class="line">%  cofiCostFunc.m to return J.</span><br><span class="line"></span><br><span class="line">%  Load pre-trained weights (X, Theta, num_users, num_movies, num_features)</span><br><span class="line">load (&#x27;ex8_movieParams.mat&#x27;);</span><br><span class="line"></span><br><span class="line">%  Reduce the data set size so that this runs faster</span><br><span class="line">num_users = 4; num_movies = 5; num_features = 3;</span><br><span class="line">X = X(1:num_movies, 1:num_features);</span><br><span class="line">Theta = Theta(1:num_users, 1:num_features);</span><br><span class="line">Y = Y(1:num_movies, 1:num_users);</span><br><span class="line">R = R(1:num_movies, 1:num_users);</span><br><span class="line"></span><br><span class="line">%  Evaluate cost function</span><br><span class="line">J = cofiCostFunc([X(:) ; Theta(:)], Y, R, num_users, num_movies, ...</span><br><span class="line">               num_features, 0);</span><br><span class="line">           </span><br><span class="line">fprintf([&#x27;Cost at loaded parameters: %f &#x27;...</span><br><span class="line">         &#x27;\n(this value should be about 22.22)\n&#x27;], J);</span><br><span class="line"></span><br><span class="line">fprintf(&#x27;\nProgram paused. Press enter to continue.\n&#x27;);</span><br><span class="line">pause;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">%% ============== Part 3: Collaborative Filtering Gradient ==============</span><br><span class="line">%  Once your cost function matches up with ours, you should now implement </span><br><span class="line">%  the collaborative filtering gradient function. Specifically, you should </span><br><span class="line">%  complete the code in cofiCostFunc.m to return the grad argument.</span><br><span class="line">%  </span><br><span class="line">fprintf(&#x27;\nChecking Gradients (without regularization) ... \n&#x27;);</span><br><span class="line"></span><br><span class="line">%  Check gradients by running checkNNGradients</span><br><span class="line">checkCostFunction;</span><br><span class="line"></span><br><span class="line">fprintf(&#x27;\nProgram paused. Press enter to continue.\n&#x27;);</span><br><span class="line">pause;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">%% ========= Part 4: Collaborative Filtering Cost Regularization ========</span><br><span class="line">%  Now, you should implement regularization for the cost function for </span><br><span class="line">%  collaborative filtering. You can implement it by adding the cost of</span><br><span class="line">%  regularization to the original cost computation.</span><br><span class="line">%  </span><br><span class="line"></span><br><span class="line">%  Evaluate cost function</span><br><span class="line">J = cofiCostFunc([X(:) ; Theta(:)], Y, R, num_users, num_movies, ...</span><br><span class="line">               num_features, 1.5);</span><br><span class="line">           </span><br><span class="line">fprintf([&#x27;Cost at loaded parameters (lambda = 1.5): %f &#x27;...</span><br><span class="line">         &#x27;\n(this value should be about 31.34)\n&#x27;], J);</span><br><span class="line"></span><br><span class="line">fprintf(&#x27;\nProgram paused. Press enter to continue.\n&#x27;);</span><br><span class="line">pause;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">%% ======= Part 5: Collaborative Filtering Gradient Regularization ======</span><br><span class="line">%  Once your cost matches up with ours, you should proceed to implement </span><br><span class="line">%  regularization for the gradient. </span><br><span class="line">%</span><br><span class="line"></span><br><span class="line">%  </span><br><span class="line">fprintf(&#x27;\nChecking Gradients (with regularization) ... \n&#x27;);</span><br><span class="line"></span><br><span class="line">%  Check gradients by running checkNNGradients</span><br><span class="line">checkCostFunction(1.5);</span><br><span class="line"></span><br><span class="line">fprintf(&#x27;\nProgram paused. Press enter to continue.\n&#x27;);</span><br><span class="line">pause;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">%% ============== Part 6: Entering ratings for a new user ===============</span><br><span class="line">%  Before we will train the collaborative filtering model, we will first</span><br><span class="line">%  add ratings that correspond to a new user that we just observed. This</span><br><span class="line">%  part of the code will also allow you to put in your own ratings for the</span><br><span class="line">%  movies in our dataset!</span><br><span class="line">%</span><br><span class="line">movieList = loadMovieList();</span><br><span class="line"></span><br><span class="line">%  Initialize my ratings</span><br><span class="line">my_ratings = zeros(1682, 1);</span><br><span class="line"></span><br><span class="line">% Check the file movie_idx.txt for id of each movie in our dataset</span><br><span class="line">% For example, Toy Story (1995) has ID 1, so to rate it &quot;4&quot;, you can set</span><br><span class="line">my_ratings(1) = 4;</span><br><span class="line"></span><br><span class="line">% Or suppose did not enjoy Silence of the Lambs (1991), you can set</span><br><span class="line">my_ratings(98) = 2;</span><br><span class="line"></span><br><span class="line">% We have selected a few movies we liked / did not like and the ratings we</span><br><span class="line">% gave are as follows:</span><br><span class="line">my_ratings(7) = 3;</span><br><span class="line">my_ratings(12)= 5;</span><br><span class="line">my_ratings(54) = 4;</span><br><span class="line">my_ratings(64)= 5;</span><br><span class="line">my_ratings(66)= 3;</span><br><span class="line">my_ratings(69) = 5;</span><br><span class="line">my_ratings(183) = 4;</span><br><span class="line">my_ratings(226) = 5;</span><br><span class="line">my_ratings(355)= 5;</span><br><span class="line"></span><br><span class="line">fprintf(&#x27;\n\nNew user ratings:\n&#x27;);</span><br><span class="line">for i = 1:length(my_ratings)</span><br><span class="line">    if my_ratings(i) &gt; 0 </span><br><span class="line">        fprintf(&#x27;Rated %d for %s\n&#x27;, my_ratings(i), ...</span><br><span class="line">                 movieList&#123;i&#125;);</span><br><span class="line">    end</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">fprintf(&#x27;\nProgram paused. Press enter to continue.\n&#x27;);</span><br><span class="line">pause;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">%% ================== Part 7: Learning Movie Ratings ====================</span><br><span class="line">%  Now, you will train the collaborative filtering model on a movie rating </span><br><span class="line">%  dataset of 1682 movies and 943 users</span><br><span class="line">%</span><br><span class="line"></span><br><span class="line">fprintf(&#x27;\nTraining collaborative filtering...\n&#x27;);</span><br><span class="line"></span><br><span class="line">%  Load data</span><br><span class="line">load(&#x27;ex8_movies.mat&#x27;);</span><br><span class="line"></span><br><span class="line">%  Y is a 1682x943 matrix, containing ratings (1-5) of 1682 movies by </span><br><span class="line">%  943 users</span><br><span class="line">%</span><br><span class="line">%  R is a 1682x943 matrix, where R(i,j) = 1 if and only if user j gave a</span><br><span class="line">%  rating to movie i</span><br><span class="line"></span><br><span class="line">%  Add our own ratings to the data matrix</span><br><span class="line">Y = [my_ratings Y];</span><br><span class="line">R = [(my_ratings ~= 0) R];</span><br><span class="line"></span><br><span class="line">%  Normalize Ratings</span><br><span class="line">[Ynorm, Ymean] = normalizeRatings(Y, R);</span><br><span class="line"></span><br><span class="line">%  Useful Values</span><br><span class="line">num_users = size(Y, 2);</span><br><span class="line">num_movies = size(Y, 1);</span><br><span class="line">num_features = 10;</span><br><span class="line"></span><br><span class="line">% Set Initial Parameters (Theta, X)</span><br><span class="line">X = randn(num_movies, num_features);</span><br><span class="line">Theta = randn(num_users, num_features);</span><br><span class="line"></span><br><span class="line">initial_parameters = [X(:); Theta(:)];</span><br><span class="line"></span><br><span class="line">% Set options for fmincg</span><br><span class="line">options = optimset(&#x27;GradObj&#x27;, &#x27;on&#x27;, &#x27;MaxIter&#x27;, 100);</span><br><span class="line"></span><br><span class="line">% Set Regularization</span><br><span class="line">lambda = 10;</span><br><span class="line">theta = fmincg (@(t)(cofiCostFunc(t, Ynorm, R, num_users, num_movies, ...</span><br><span class="line">                                num_features, lambda)), ...</span><br><span class="line">                initial_parameters, options);</span><br><span class="line"></span><br><span class="line">% Unfold the returned theta back into U and W</span><br><span class="line">X = reshape(theta(1:num_movies*num_features), num_movies, num_features);</span><br><span class="line">Theta = reshape(theta(num_movies*num_features+1:end), ...</span><br><span class="line">                num_users, num_features);</span><br><span class="line"></span><br><span class="line">fprintf(&#x27;Recommender system learning completed.\n&#x27;);</span><br><span class="line"></span><br><span class="line">fprintf(&#x27;\nProgram paused. Press enter to continue.\n&#x27;);</span><br><span class="line">pause;</span><br><span class="line"></span><br><span class="line">%% ================== Part 8: Recommendation for you ====================</span><br><span class="line">%  After training the model, you can now make recommendations by computing</span><br><span class="line">%  the predictions matrix.</span><br><span class="line">%</span><br><span class="line"></span><br><span class="line">p = X * Theta&#x27;;</span><br><span class="line">my_predictions = p(:,1) + Ymean;</span><br><span class="line"></span><br><span class="line">movieList = loadMovieList();</span><br><span class="line"></span><br><span class="line">[r, ix] = sort(my_predictions, &#x27;descend&#x27;);</span><br><span class="line">fprintf(&#x27;\nTop recommendations for you:\n&#x27;);</span><br><span class="line">for i=1:10</span><br><span class="line">    j = ix(i);</span><br><span class="line">    fprintf(&#x27;Predicting rating %.1f for movie %s\n&#x27;, my_predictions(j), ...</span><br><span class="line">            movieList&#123;j&#125;);</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">fprintf(&#x27;\n\nOriginal ratings provided:\n&#x27;);</span><br><span class="line">for i = 1:length(my_ratings)</span><br><span class="line">    if my_ratings(i) &gt; 0 </span><br><span class="line">        fprintf(&#x27;Rated %d for %s\n&#x27;, my_ratings(i), ...</span><br><span class="line">                 movieList&#123;i&#125;);</span><br><span class="line">    end</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<h1 id="cofiCostFunc-m"><a href="#cofiCostFunc-m" class="headerlink" title="cofiCostFunc.m"></a>cofiCostFunc.m</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">function [J, grad] = cofiCostFunc(params, Y, R, num_users, num_movies, ...</span><br><span class="line">                                  num_features, lambda)</span><br><span class="line">%COFICOSTFUNC Collaborative filtering cost function</span><br><span class="line">%   [J, grad] = COFICOSTFUNC(params, Y, R, num_users, num_movies, ...</span><br><span class="line">%   num_features, lambda) returns the cost and gradient for the</span><br><span class="line">%   collaborative filtering problem.</span><br><span class="line">%</span><br><span class="line"></span><br><span class="line">% Unfold the U and W matrices from params</span><br><span class="line">X = reshape(params(1:num_movies*num_features), num_movies, num_features);</span><br><span class="line">Theta = reshape(params(num_movies*num_features+1:end), ...</span><br><span class="line">                num_users, num_features);</span><br><span class="line"></span><br><span class="line">            </span><br><span class="line">% You need to return the following values correctly</span><br><span class="line">J = 0;</span><br><span class="line">X_grad = zeros(size(X));</span><br><span class="line">Theta_grad = zeros(size(Theta));</span><br><span class="line"></span><br><span class="line">% ====================== YOUR CODE HERE ======================</span><br><span class="line">% Instructions: Compute the cost function and gradient for collaborative</span><br><span class="line">%               filtering. Concretely, you should first implement the cost</span><br><span class="line">%               function (without regularization) and make sure it is</span><br><span class="line">%               matches our costs. After that, you should implement the </span><br><span class="line">%               gradient and use the checkCostFunction routine to check</span><br><span class="line">%               that the gradient is correct. Finally, you should implement</span><br><span class="line">%               regularization.</span><br><span class="line">%</span><br><span class="line">% Notes: X - num_movies  x num_features matrix of movie features</span><br><span class="line">%        Theta - num_users  x num_features matrix of user features</span><br><span class="line">%        Y - num_movies x num_users matrix of user ratings of movies</span><br><span class="line">%        R - num_movies x num_users matrix, where R(i, j) = 1 if the </span><br><span class="line">%            i-th movie was rated by the j-th user</span><br><span class="line">%</span><br><span class="line">% You should set the following variables correctly:</span><br><span class="line">%</span><br><span class="line">%        X_grad - num_movies x num_features matrix, containing the </span><br><span class="line">%                 partial derivatives w.r.t. to each element of X</span><br><span class="line">%        Theta_grad - num_users x num_features matrix, containing the </span><br><span class="line">%                     partial derivatives w.r.t. to each element of Theta</span><br><span class="line">%</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">J = 1/2*sum(sum((X*Theta&#x27;-Y).^2.*R));</span><br><span class="line"></span><br><span class="line">c_regular = 0;</span><br><span class="line">c_regular = (lambda/2)*sum(sum(Theta.^2)) + (lambda/2)*sum(sum(X.^2));</span><br><span class="line"></span><br><span class="line">J = J + c_regular;</span><br><span class="line"></span><br><span class="line">X_grad = ((X*Theta&#x27;-Y).*R)*Theta;</span><br><span class="line">Theta_grad = ((X*Theta&#x27;-Y).*R)&#x27;*X;</span><br><span class="line"></span><br><span class="line">X_grad_regular = lambda*X;</span><br><span class="line">Theta_grad_regular = lambda*Theta;</span><br><span class="line"></span><br><span class="line">X_grad = X_grad + X_grad_regular;</span><br><span class="line">Theta_grad = Theta_grad + Theta_grad_regular;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">% =============================================================</span><br><span class="line"></span><br><span class="line">grad = [X_grad(:); Theta_grad(:)];</span><br><span class="line"></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<h1 id="checkCostFunction-m"><a href="#checkCostFunction-m" class="headerlink" title="checkCostFunction.m"></a>checkCostFunction.m</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">function checkCostFunction(lambda)</span><br><span class="line">%CHECKCOSTFUNCTION Creates a collaborative filering problem </span><br><span class="line">%to check your cost function and gradients</span><br><span class="line">%   CHECKCOSTFUNCTION(lambda) Creates a collaborative filering problem </span><br><span class="line">%   to check your cost function and gradients, it will output the </span><br><span class="line">%   analytical gradients produced by your code and the numerical gradients </span><br><span class="line">%   (computed using computeNumericalGradient). These two gradient </span><br><span class="line">%   computations should result in very similar values.</span><br><span class="line"></span><br><span class="line">% Set lambda</span><br><span class="line">if ~exist(&#x27;lambda&#x27;, &#x27;var&#x27;) || isempty(lambda)</span><br><span class="line">    lambda = 0;</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">%% Create small problem</span><br><span class="line">X_t = rand(4, 3);</span><br><span class="line">Theta_t = rand(5, 3);</span><br><span class="line"></span><br><span class="line">% Zap out most entries</span><br><span class="line">Y = X_t * Theta_t&#x27;;</span><br><span class="line">Y(rand(size(Y)) &gt; 0.5) = 0;</span><br><span class="line">R = zeros(size(Y));</span><br><span class="line">R(Y ~= 0) = 1;</span><br><span class="line"></span><br><span class="line">%% Run Gradient Checking</span><br><span class="line">X = randn(size(X_t));</span><br><span class="line">Theta = randn(size(Theta_t));</span><br><span class="line">num_users = size(Y, 2);</span><br><span class="line">num_movies = size(Y, 1);</span><br><span class="line">num_features = size(Theta_t, 2);</span><br><span class="line"></span><br><span class="line">numgrad = computeNumericalGradient( ...</span><br><span class="line">                @(t) cofiCostFunc(t, Y, R, num_users, num_movies, ...</span><br><span class="line">                                num_features, lambda), [X(:); Theta(:)]);</span><br><span class="line"></span><br><span class="line">[cost, grad] = cofiCostFunc([X(:); Theta(:)],  Y, R, num_users, ...</span><br><span class="line">                          num_movies, num_features, lambda);</span><br><span class="line"></span><br><span class="line">disp([numgrad grad]);</span><br><span class="line">fprintf([&#x27;The above two columns you get should be very similar.\n&#x27; ...</span><br><span class="line">         &#x27;(Left-Your Numerical Gradient, Right-Analytical Gradient)\n\n&#x27;]);</span><br><span class="line"></span><br><span class="line">diff = norm(numgrad-grad)/norm(numgrad+grad);</span><br><span class="line">fprintf([&#x27;If your cost function implementation is correct, then \n&#x27; ...</span><br><span class="line">         &#x27;the relative difference will be small (less than 1e-9). \n&#x27; ...</span><br><span class="line">         &#x27;\nRelative Difference: %g\n&#x27;], diff);</span><br><span class="line"></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<h1 id="computeNumericalGradient-m"><a href="#computeNumericalGradient-m" class="headerlink" title="computeNumericalGradient.m"></a>computeNumericalGradient.m</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">function numgrad = computeNumericalGradient(J, theta)</span><br><span class="line">%COMPUTENUMERICALGRADIENT Computes the gradient using &quot;finite differences&quot;</span><br><span class="line">%and gives us a numerical estimate of the gradient.</span><br><span class="line">%   numgrad = COMPUTENUMERICALGRADIENT(J, theta) computes the numerical</span><br><span class="line">%   gradient of the function J around theta. Calling y = J(theta) should</span><br><span class="line">%   return the function value at theta.</span><br><span class="line"></span><br><span class="line">% Notes: The following code implements numerical gradient checking, and </span><br><span class="line">%        returns the numerical gradient.It sets numgrad(i) to (a numerical </span><br><span class="line">%        approximation of) the partial derivative of J with respect to the </span><br><span class="line">%        i-th input argument, evaluated at theta. (i.e., numgrad(i) should </span><br><span class="line">%        be the (approximately) the partial derivative of J with respect </span><br><span class="line">%        to theta(i).)</span><br><span class="line">%                </span><br><span class="line"></span><br><span class="line">numgrad = zeros(size(theta));</span><br><span class="line">perturb = zeros(size(theta));</span><br><span class="line">e = 1e-4;</span><br><span class="line">for p = 1:numel(theta)</span><br><span class="line">    % Set perturbation vector</span><br><span class="line">    perturb(p) = e;</span><br><span class="line">    loss1 = J(theta - perturb);</span><br><span class="line">    loss2 = J(theta + perturb);</span><br><span class="line">    % Compute Numerical Gradient</span><br><span class="line">    numgrad(p) = (loss2 - loss1) / (2*e);</span><br><span class="line">    perturb(p) = 0;</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<h1 id="loadMovieList-m"><a href="#loadMovieList-m" class="headerlink" title="loadMovieList.m"></a>loadMovieList.m</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">function movieList = loadMovieList()</span><br><span class="line">%GETMOVIELIST reads the fixed movie list in movie.txt and returns a</span><br><span class="line">%cell array of the words</span><br><span class="line">%   movieList = GETMOVIELIST() reads the fixed movie list in movie.txt </span><br><span class="line">%   and returns a cell array of the words in movieList.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">%% Read the fixed movieulary list</span><br><span class="line">fid = fopen(&#x27;movie_ids.txt&#x27;);</span><br><span class="line"></span><br><span class="line">% Store all movies in cell array movie&#123;&#125;</span><br><span class="line">n = 1682;  % Total number of movies </span><br><span class="line"></span><br><span class="line">movieList = cell(n, 1);</span><br><span class="line">for i = 1:n</span><br><span class="line">    % Read line</span><br><span class="line">    line = fgets(fid);</span><br><span class="line">    % Word Index (can ignore since it will be = i)</span><br><span class="line">    [idx, movieName] = strtok(line, &#x27; &#x27;);</span><br><span class="line">    % Actual Word</span><br><span class="line">    movieList&#123;i&#125; = strtrim(movieName);</span><br><span class="line">end</span><br><span class="line">fclose(fid);</span><br><span class="line"></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<h1 id="normalizeRatings-m"><a href="#normalizeRatings-m" class="headerlink" title="normalizeRatings.m"></a>normalizeRatings.m</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">function [Ynorm, Ymean] = normalizeRatings(Y, R)</span><br><span class="line">%NORMALIZERATINGS Preprocess data by subtracting mean rating for every </span><br><span class="line">%movie (every row)</span><br><span class="line">%   [Ynorm, Ymean] = NORMALIZERATINGS(Y, R) normalized Y so that each movie</span><br><span class="line">%   has a rating of 0 on average, and returns the mean rating in Ymean.</span><br><span class="line">%</span><br><span class="line"></span><br><span class="line">[m, n] = size(Y);</span><br><span class="line">Ymean = zeros(m, 1);</span><br><span class="line">Ynorm = zeros(size(Y));</span><br><span class="line">for i = 1:m</span><br><span class="line">    idx = find(R(i, :) == 1);</span><br><span class="line">    Ymean(i) = mean(Y(i, idx));</span><br><span class="line">    Ynorm(i, idx) = Y(i, idx) - Ymean(i);</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">end</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="fmincg-m"><a href="#fmincg-m" class="headerlink" title="fmincg.m"></a>fmincg.m</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br></pre></td><td class="code"><pre><span class="line">function [X, fX, i] = fmincg(f, X, options, P1, P2, P3, P4, P5)</span><br><span class="line">% Minimize a continuous differentialble multivariate function. Starting point</span><br><span class="line">% is given by &quot;X&quot; (D by 1), and the function named in the string &quot;f&quot;, must</span><br><span class="line">% return a function value and a vector of partial derivatives. The Polack-</span><br><span class="line">% Ribiere flavour of conjugate gradients is used to compute search directions,</span><br><span class="line">% and a line search using quadratic and cubic polynomial approximations and the</span><br><span class="line">% Wolfe-Powell stopping criteria is used together with the slope ratio method</span><br><span class="line">% for guessing initial step sizes. Additionally a bunch of checks are made to</span><br><span class="line">% make sure that exploration is taking place and that extrapolation will not</span><br><span class="line">% be unboundedly large. The &quot;length&quot; gives the length of the run: if it is</span><br><span class="line">% positive, it gives the maximum number of line searches, if negative its</span><br><span class="line">% absolute gives the maximum allowed number of function evaluations. You can</span><br><span class="line">% (optionally) give &quot;length&quot; a second component, which will indicate the</span><br><span class="line">% reduction in function value to be expected in the first line-search (defaults</span><br><span class="line">% to 1.0). The function returns when either its length is up, or if no further</span><br><span class="line">% progress can be made (ie, we are at a minimum, or so close that due to</span><br><span class="line">% numerical problems, we cannot get any closer). If the function terminates</span><br><span class="line">% within a few iterations, it could be an indication that the function value</span><br><span class="line">% and derivatives are not consistent (ie, there may be a bug in the</span><br><span class="line">% implementation of your &quot;f&quot; function). The function returns the found</span><br><span class="line">% solution &quot;X&quot;, a vector of function values &quot;fX&quot; indicating the progress made</span><br><span class="line">% and &quot;i&quot; the number of iterations (line searches or function evaluations,</span><br><span class="line">% depending on the sign of &quot;length&quot;) used.</span><br><span class="line">%</span><br><span class="line">% Usage: [X, fX, i] = fmincg(f, X, options, P1, P2, P3, P4, P5)</span><br><span class="line">%</span><br><span class="line">% See also: checkgrad </span><br><span class="line">%</span><br><span class="line">% Copyright (C) 2001 and 2002 by Carl Edward Rasmussen. Date 2002-02-13</span><br><span class="line">%</span><br><span class="line">%</span><br><span class="line">% (C) Copyright 1999, 2000 &amp; 2001, Carl Edward Rasmussen</span><br><span class="line">% </span><br><span class="line">% Permission is granted for anyone to copy, use, or modify these</span><br><span class="line">% programs and accompanying documents for purposes of research or</span><br><span class="line">% education, provided this copyright notice is retained, and note is</span><br><span class="line">% made of any changes that have been made.</span><br><span class="line">% </span><br><span class="line">% These programs and documents are distributed without any warranty,</span><br><span class="line">% express or implied.  As the programs were written for research</span><br><span class="line">% purposes only, they have not been tested to the degree that would be</span><br><span class="line">% advisable in any important application.  All use of these programs is</span><br><span class="line">% entirely at the user&#x27;s own risk.</span><br><span class="line">%</span><br><span class="line">% [ml-class] Changes Made:</span><br><span class="line">% 1) Function name and argument specifications</span><br><span class="line">% 2) Output display</span><br><span class="line">%</span><br><span class="line"></span><br><span class="line">% Read options</span><br><span class="line">if exist(&#x27;options&#x27;, &#x27;var&#x27;) &amp;&amp; ~isempty(options) &amp;&amp; isfield(options, &#x27;MaxIter&#x27;)</span><br><span class="line">    length = options.MaxIter;</span><br><span class="line">else</span><br><span class="line">    length = 100;</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RHO = 0.01;                            % a bunch of constants for line searches</span><br><span class="line">SIG = 0.5;       % RHO and SIG are the constants in the Wolfe-Powell conditions</span><br><span class="line">INT = 0.1;    % don&#x27;t reevaluate within 0.1 of the limit of the current bracket</span><br><span class="line">EXT = 3.0;                    % extrapolate maximum 3 times the current bracket</span><br><span class="line">MAX = 20;                         % max 20 function evaluations per line search</span><br><span class="line">RATIO = 100;                                      % maximum allowed slope ratio</span><br><span class="line"></span><br><span class="line">argstr = [&#x27;feval(f, X&#x27;];                      % compose string used to call function</span><br><span class="line">for i = 1:(nargin - 3)</span><br><span class="line">  argstr = [argstr, &#x27;,P&#x27;, int2str(i)];</span><br><span class="line">end</span><br><span class="line">argstr = [argstr, &#x27;)&#x27;];</span><br><span class="line"></span><br><span class="line">if max(size(length)) == 2, red=length(2); length=length(1); else red=1; end</span><br><span class="line">S=[&#x27;Iteration &#x27;];</span><br><span class="line"></span><br><span class="line">i = 0;                                            % zero the run length counter</span><br><span class="line">ls_failed = 0;                             % no previous line search has failed</span><br><span class="line">fX = [];</span><br><span class="line">[f1 df1] = eval(argstr);                      % get function value and gradient</span><br><span class="line">i = i + (length&lt;0);                                            % count epochs?!</span><br><span class="line">s = -df1;                                        % search direction is steepest</span><br><span class="line">d1 = -s&#x27;*s;                                                 % this is the slope</span><br><span class="line">z1 = red/(1-d1);                                  % initial step is red/(|s|+1)</span><br><span class="line"></span><br><span class="line">while i &lt; abs(length)                                      % while not finished</span><br><span class="line">  i = i + (length&gt;0);                                      % count iterations?!</span><br><span class="line"></span><br><span class="line">  X0 = X; f0 = f1; df0 = df1;                   % make a copy of current values</span><br><span class="line">  X = X + z1*s;                                             % begin line search</span><br><span class="line">  [f2 df2] = eval(argstr);</span><br><span class="line">  i = i + (length&lt;0);                                          % count epochs?!</span><br><span class="line">  d2 = df2&#x27;*s;</span><br><span class="line">  f3 = f1; d3 = d1; z3 = -z1;             % initialize point 3 equal to point 1</span><br><span class="line">  if length&gt;0, M = MAX; else M = min(MAX, -length-i); end</span><br><span class="line">  success = 0; limit = -1;                     % initialize quanteties</span><br><span class="line">  while 1</span><br><span class="line">    while ((f2 &gt; f1+z1*RHO*d1) || (d2 &gt; -SIG*d1)) &amp;&amp; (M &gt; 0) </span><br><span class="line">      limit = z1;                                         % tighten the bracket</span><br><span class="line">      if f2 &gt; f1</span><br><span class="line">        z2 = z3 - (0.5*d3*z3*z3)/(d3*z3+f2-f3);                 % quadratic fit</span><br><span class="line">      else</span><br><span class="line">        A = 6*(f2-f3)/z3+3*(d2+d3);                                 % cubic fit</span><br><span class="line">        B = 3*(f3-f2)-z3*(d3+2*d2);</span><br><span class="line">        z2 = (sqrt(B*B-A*d2*z3*z3)-B)/A;       % numerical error possible - ok!</span><br><span class="line">      end</span><br><span class="line">      if isnan(z2) || isinf(z2)</span><br><span class="line">        z2 = z3/2;                  % if we had a numerical problem then bisect</span><br><span class="line">      end</span><br><span class="line">      z2 = max(min(z2, INT*z3),(1-INT)*z3);  % don&#x27;t accept too close to limits</span><br><span class="line">      z1 = z1 + z2;                                           % update the step</span><br><span class="line">      X = X + z2*s;</span><br><span class="line">      [f2 df2] = eval(argstr);</span><br><span class="line">      M = M - 1; i = i + (length&lt;0);                           % count epochs?!</span><br><span class="line">      d2 = df2&#x27;*s;</span><br><span class="line">      z3 = z3-z2;                    % z3 is now relative to the location of z2</span><br><span class="line">    end</span><br><span class="line">    if f2 &gt; f1+z1*RHO*d1 || d2 &gt; -SIG*d1</span><br><span class="line">      break;                                                % this is a failure</span><br><span class="line">    elseif d2 &gt; SIG*d1</span><br><span class="line">      success = 1; break;                                             % success</span><br><span class="line">    elseif M == 0</span><br><span class="line">      break;                                                          % failure</span><br><span class="line">    end</span><br><span class="line">    A = 6*(f2-f3)/z3+3*(d2+d3);                      % make cubic extrapolation</span><br><span class="line">    B = 3*(f3-f2)-z3*(d3+2*d2);</span><br><span class="line">    z2 = -d2*z3*z3/(B+sqrt(B*B-A*d2*z3*z3));        % num. error possible - ok!</span><br><span class="line">    if ~isreal(z2) || isnan(z2) || isinf(z2) || z2 &lt; 0 % num prob or wrong sign?</span><br><span class="line">      if limit &lt; -0.5                               % if we have no upper limit</span><br><span class="line">        z2 = z1 * (EXT-1);                 % the extrapolate the maximum amount</span><br><span class="line">      else</span><br><span class="line">        z2 = (limit-z1)/2;                                   % otherwise bisect</span><br><span class="line">      end</span><br><span class="line">    elseif (limit &gt; -0.5) &amp;&amp; (z2+z1 &gt; limit)         % extraplation beyond max?</span><br><span class="line">      z2 = (limit-z1)/2;                                               % bisect</span><br><span class="line">    elseif (limit &lt; -0.5) &amp;&amp; (z2+z1 &gt; z1*EXT)       % extrapolation beyond limit</span><br><span class="line">      z2 = z1*(EXT-1.0);                           % set to extrapolation limit</span><br><span class="line">    elseif z2 &lt; -z3*INT</span><br><span class="line">      z2 = -z3*INT;</span><br><span class="line">    elseif (limit &gt; -0.5) &amp;&amp; (z2 &lt; (limit-z1)*(1.0-INT))  % too close to limit?</span><br><span class="line">      z2 = (limit-z1)*(1.0-INT);</span><br><span class="line">    end</span><br><span class="line">    f3 = f2; d3 = d2; z3 = -z2;                  % set point 3 equal to point 2</span><br><span class="line">    z1 = z1 + z2; X = X + z2*s;                      % update current estimates</span><br><span class="line">    [f2 df2] = eval(argstr);</span><br><span class="line">    M = M - 1; i = i + (length&lt;0);                             % count epochs?!</span><br><span class="line">    d2 = df2&#x27;*s;</span><br><span class="line">  end                                                      % end of line search</span><br><span class="line"></span><br><span class="line">  if success                                         % if line search succeeded</span><br><span class="line">    f1 = f2; fX = [fX&#x27; f1]&#x27;;</span><br><span class="line">    fprintf(&#x27;%s %4i | Cost: %4.6e\r&#x27;, S, i, f1);</span><br><span class="line">    s = (df2&#x27;*df2-df1&#x27;*df2)/(df1&#x27;*df1)*s - df2;      % Polack-Ribiere direction</span><br><span class="line">    tmp = df1; df1 = df2; df2 = tmp;                         % swap derivatives</span><br><span class="line">    d2 = df1&#x27;*s;</span><br><span class="line">    if d2 &gt; 0                                      % new slope must be negative</span><br><span class="line">      s = -df1;                              % otherwise use steepest direction</span><br><span class="line">      d2 = -s&#x27;*s;    </span><br><span class="line">    end</span><br><span class="line">    z1 = z1 * min(RATIO, d1/(d2-realmin));          % slope ratio but max RATIO</span><br><span class="line">    d1 = d2;</span><br><span class="line">    ls_failed = 0;                              % this line search did not fail</span><br><span class="line">  else</span><br><span class="line">    X = X0; f1 = f0; df1 = df0;  % restore point from before failed line search</span><br><span class="line">    if ls_failed || i &gt; abs(length)          % line search failed twice in a row</span><br><span class="line">      break;                             % or we ran out of time, so we give up</span><br><span class="line">    end</span><br><span class="line">    tmp = df1; df1 = df2; df2 = tmp;                         % swap derivatives</span><br><span class="line">    s = -df1;                                                    % try steepest</span><br><span class="line">    d1 = -s&#x27;*s;</span><br><span class="line">    z1 = 1/(1-d1);                     </span><br><span class="line">    ls_failed = 1;                                    % this line search failed</span><br><span class="line">  end</span><br><span class="line">  if exist(&#x27;OCTAVE_VERSION&#x27;)</span><br><span class="line">    fflush(stdout);</span><br><span class="line">  end</span><br><span class="line">end</span><br><span class="line">fprintf(&#x27;\n&#x27;);</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="石磊磊 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="石磊磊 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" rel="tag"># 计算机</a>
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" rel="tag"># 人工智能</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/09/11/Machine%20Learning-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-20/" rel="prev" title="Machine Learning-学习笔记-20-Recommender Systems">
+      <i class="fa fa-chevron-left"></i> Machine Learning-学习笔记-20-Recommender Systems
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/09/13/Machine%20Learning-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-22/" rel="next" title="Machine Learning-学习笔记-22-Large Scale Machine Learning">
+      Machine Learning-学习笔记-22-Large Scale Machine Learning <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#exe8-m"><span class="nav-number">1.</span> <span class="nav-text">exe8.m</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#estimateGaussian-m"><span class="nav-number">2.</span> <span class="nav-text">estimateGaussian.m</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#multivariateGaussian-m"><span class="nav-number">3.</span> <span class="nav-text">multivariateGaussian.m</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#selectThreshold-m"><span class="nav-number">4.</span> <span class="nav-text">selectThreshold.m</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#visualizeFit-m"><span class="nav-number">5.</span> <span class="nav-text">visualizeFit.m</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ex8-cofi-m"><span class="nav-number">6.</span> <span class="nav-text">ex8_cofi.m</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cofiCostFunc-m"><span class="nav-number">7.</span> <span class="nav-text">cofiCostFunc.m</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#checkCostFunction-m"><span class="nav-number">8.</span> <span class="nav-text">checkCostFunction.m</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#computeNumericalGradient-m"><span class="nav-number">9.</span> <span class="nav-text">computeNumericalGradient.m</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#loadMovieList-m"><span class="nav-number">10.</span> <span class="nav-text">loadMovieList.m</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#normalizeRatings-m"><span class="nav-number">11.</span> <span class="nav-text">normalizeRatings.m</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#fmincg-m"><span class="nav-number">12.</span> <span class="nav-text">fmincg.m</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="石磊磊"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">石磊磊</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">199</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">105</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://shileilei.com/" title="https:&#x2F;&#x2F;shileilei.com" rel="noopener" target="_blank">石磊磊的个人站点</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">石磊磊</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://https-shilei165-github-io.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://shilei165.github.io/2022/09/12/Machine%20Learning-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-21/";
+    this.page.identifier = "2022/09/12/Machine Learning-学习笔记-21/";
+    this.page.title = "Machine Learning-学习笔记-21-execrise 8 summary";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-shilei165-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+  <meta name="google-site-verification" content="meta name="google-site-verification" content="OFztbMGk5mHL-nB9dNplx2RVd3ZFbn7Dj5q939MulL0"">
+  <meta name="msvalidate.01" content="meta name="msvalidate.01" content="E3EF3FEE5F8DAD15F7062E99869A0067"">
+  <meta name="baidu-site-verification" content="meta name="baidu-site-verification" content="code-OTfzuo5G1O"">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"shilei165.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="这篇文章跟大家分享一下Machine Learning的学习笔记: 20-推荐系统(Recommender Systems)。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Machine Learning-学习笔记-20-Recommender Systems">
+<meta property="og:url" content="https://shilei165.github.io/2022/09/11/Machine%20Learning-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-20/index.html">
+<meta property="og:site_name" content="石磊磊的个人站点">
+<meta property="og:description" content="这篇文章跟大家分享一下Machine Learning的学习笔记: 20-推荐系统(Recommender Systems)。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shilei165.github.io/images/recommenderSys_1.png">
+<meta property="og:image" content="https://shilei165.github.io/images/recommenderSys_2.png">
+<meta property="og:image" content="https://shilei165.github.io/images/recommenderSys_3.png">
+<meta property="og:image" content="https://shilei165.github.io/images/recommenderSys_4.png">
+<meta property="og:image" content="https://shilei165.github.io/images/recommenderSys_5.png">
+<meta property="og:image" content="https://shilei165.github.io/images/recommenderSys_6.png">
+<meta property="og:image" content="https://shilei165.github.io/images/recommenderSys_7.png">
+<meta property="og:image" content="https://shilei165.github.io/images/recommenderSys_8.png">
+<meta property="article:published_time" content="2022-09-11T18:33:23.000Z">
+<meta property="article:modified_time" content="2022-09-13T17:26:49.286Z">
+<meta property="article:author" content="石磊磊">
+<meta property="article:tag" content="计算机">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="人工智能">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shilei165.github.io/images/recommenderSys_1.png">
+
+<link rel="canonical" href="https://shilei165.github.io/2022/09/11/Machine%20Learning-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-20/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Machine Learning-学习笔记-20-Recommender Systems | 石磊磊的个人站点</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="石磊磊的个人站点" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">石磊磊的个人站点</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://shilei165.github.io/2022/09/11/Machine%20Learning-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-20/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="石磊磊">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="石磊磊的个人站点">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Machine Learning-学习笔记-20-Recommender Systems
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-11 14:33:23" itemprop="dateCreated datePublished" datetime="2022-09-11T14:33:23-04:00">2022-09-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2022/09/11/Machine%20Learning-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-20/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/09/11/Machine Learning-学习笔记-20/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>这篇文章跟大家分享一下Machine Learning的学习笔记: 20-推荐系统(Recommender Systems)。</p>
+<span id="more"></span>
+
+<h1 id="为什么学习推荐系统"><a href="#为什么学习推荐系统" class="headerlink" title="为什么学习推荐系统"></a>为什么学习推荐系统</h1><ol>
+<li>推荐系统是机器学习中的一个重要的应用。如果你考虑网站像亚马逊，或网飞公司或易趣，或iTunes Genius，有很多的网站或系统试图推荐新产品给用户。如，亚马逊推荐新书给你，网飞公司试图推荐新电影给你，等等。这些推荐系统，根据浏览你过去买过什么书，或过去评价过什么电影来判断。这些系统会带来很大一部分收入，比如为亚马逊和像网飞这样的公司。因此，对推荐系统性能的改善，将对这些企业的有实质性和直接的影响。</li>
+<li>通过推荐系统，我们将领略一小部分特征学习的思想。对机器学习来说，特征是很重要的，你所选择的特征，将对你学习算法的性能有很大的影响。因此，在机器学习中有一种大思想，它针对一些问题(可能并不是所有的问题)，有些现有的算法可以为你自动学习一套好的特征。</li>
+</ol>
+<h1 id="问题形式化"><a href="#问题形式化" class="headerlink" title="问题形式化"></a>问题形式化</h1><p>我们从一个例子开始定义推荐系统的问题。</p>
+<p>假使我们是一个电影供应商，我们有 5 部电影和 4 个用户，我们要求用户为电影打分。</p>
+<p><img src="/../images/recommenderSys_1.png" alt="recommenderSys_1"></p>
+<p>前三部电影是爱情片，后两部则是动作片，我们可以看出Alice和Bob似乎更倾向与爱情片， 而 Carol 和 Dave 似乎更倾向与动作片。并且没有一个用户给所有的电影都打过分。我们希望构建一个算法来预测他们每个人可能会给他们没看过的电影打多少分，并以此作为推荐的依据。</p>
+<p>下面引入一些标记：</p>
+<ul>
+<li>\(n_u\)代表用户的数量</li>
+<li>\(n_m\)代表电影的数量</li>
+<li>\(r(i,j)\) 如果用户\(j\)给电影\(i\)评过分则\(r(i,j)&#x3D;1\)</li>
+<li>\(y^{(i,j)}\)代表用户\(j\)给电影\(i\)的评分</li>
+<li>\(m_j\)代表用户\(j\)评过分的电影的总数</li>
+</ul>
+<h1 id="基于内容的推荐系统"><a href="#基于内容的推荐系统" class="headerlink" title="基于内容的推荐系统"></a>基于内容的推荐系统</h1><p>在我们的例子中，我们可以假设每部电影都有两个特征，如\(x_1\)代表电影的浪漫程度，\(x_2\)代表电影的动作程度。</p>
+<p><img src="/../images/recommenderSys_2.png" alt="recommenderSys_2"></p>
+<p>则每部电影都有一个特征向量，如\(x^{(1)}\)是第一部电影的特征向量为[0.9 0]。</p>
+<p>下面我们要基于这些特征来构建一个推荐系统算法。 假设我们采用线性回归模型，我们可以针对每一个用户都训练一个线性回归模型，如\(\theta^{(1)}\)是第一个用户的模型的参数。 于是我们有：</p>
+<ul>
+<li>\(\theta^{(j)}\)：用户\(j\)的参数向量</li>
+<li>\(x^{(i)}\)：电影\(i\)的特征向量</li>
+<li>对于用户\(j\)和电影\(i\)，我们的预测评分为\((\theta^{(j)})^Tx^{(i)}\)</li>
+</ul>
+<p><strong>代价函数</strong><br>$$<br>J(\theta^{(j)})&#x3D;\frac{1}{2}\sum_{i:r(i,j)&#x3D;1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})^2+\frac{\lambda}{2}\sum_{k&#x3D;1}^n(\theta_k^{(j)})^2<br>$$<br>其中\(i:r(i,j)&#x3D;1\)表示我们只计算那些用户\(j\)评过分的电影。在一般的线性回归模型中，误差项和正则项应该都是乘以\(\frac{1}{2m}\)，在这里我们将m去掉。并且我们不对方差项\(\theta_0\)进行正则化处理。</p>
+<p>上面的代价函数只是针对一个用户的，为了学习所有用户，我们将所有用户的代价函数求和：<br>$$<br>J(\theta^{(1)},…,\theta^{(n_u)})&#x3D;\frac{1}{2}\sum_{j&#x3D;1}^{n_u}\sum_{i:r(i,j)&#x3D;1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})^2+\frac{\lambda}{2}\sum_{j&#x3D;1}^{n_u}\sum_{k&#x3D;1}^n(\theta_k^{(j)})^2<br>$$</p>
+<p><strong>梯度下降求解公式</strong></p>
+<p>如果我们要用梯度下降法来求解最优解，我们计算代价函数的偏导数后得到梯度下降的更新公式如下：</p>
+<p>for \(k&#x3D;0\):<br>$$<br>\theta_k^{(j)}:&#x3D;\theta_k^{(j)}-\alpha\sum_{i:r(i,j)&#x3D;1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})x_k^{(i)}<br>$$</p>
+<p>for \(k \neq 0\):<br>$$<br>\theta_k^{(j)}:&#x3D;\theta_k^{(j)}-\alpha(\sum_{i:r(i,j)&#x3D;1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})x_k^{(i)} + \lambda\theta_k^{(j)})<br>$$</p>
+<h1 id="协同过滤"><a href="#协同过滤" class="headerlink" title="协同过滤"></a>协同过滤</h1><p>在之前的基于内容的推荐系统中，对于每一部电影，我们都掌握了可用的特征，使用这些特征训练出了每一个用户的参数。相反地，如果我们拥有用户的参数，我们可以学习得出电影的特征。</p>
+<p><img src="/../images/recommenderSys_3.png" alt="recommenderSys_3"></p>
+<p>但是如果我们既没有用户的参数，也没有电影的特征，这两种方法都不可行了。协同过滤算法可以同时学习这两者。我们的优化目标便改为同时针对\(x\)和\(\theta\)进行。<br>$$<br>J(x^{(1)},…,x^{(n_m)},\theta^{(1)},…,\theta^{(n_u)}) &#x3D; \frac{1}{2}\sum_{j&#x3D;1}^{n_u}\sum_{(i,j):r(i,j)&#x3D;1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})^2+\frac{\lambda}{2}\sum_{i&#x3D;1}^{n_m}\sum_{k&#x3D;1}^n(x_k^{(i)})^2+\frac{\lambda}{2}\sum_{j&#x3D;1}^{n_u}\sum_{k&#x3D;1}^n(\theta_k^{(j)})^2<br>$$<br>对代价函数求偏导数的结果如下：<br>$$<br>x_k^{(i)}:&#x3D;x_k^{(i)}-\alpha(\sum_{j:r(i,j)&#x3D;1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})\theta_k^{(i)} + \lambda x_k^{(j)})<br>$$</p>
+<p>$$<br>\theta_k^{(j)}:&#x3D;\theta_k^{(j)}-\alpha(\sum_{i:r(i,j)&#x3D;1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})x_k^{(i)} + \lambda\theta_k^{(j)})<br>$$</p>
+<p>协同过滤算法使用步骤如下：</p>
+<ul>
+<li>初始\(x^{(1)},…,x^{(n_m),\theta^{(1)},…,\theta^{(n_u)}\)为一些小的随机值</li>
+<li>使用梯度下降算法最小化代价函数</li>
+<li>在训练完算法后，我们预测\((\theta^{(j)})^Tx^{(i)}\)为用户\(j\)给电影\(i\)的评分</li>
+</ul>
+<h1 id="向量化：低秩矩阵分解"><a href="#向量化：低秩矩阵分解" class="headerlink" title="向量化：低秩矩阵分解"></a>向量化：低秩矩阵分解</h1><p>这里将会讲到有关协同过滤算法的向量化实现，以及说说有关该算法你可以做的其他事情，例如：</p>
+<ol>
+<li>当给出一件产品时，你能否找到与之相关的其它产品。</li>
+<li>一位用户最近看上一件产品，有没有其它相关的产品，你可以推荐给他。</li>
+</ol>
+<h2 id="向量化"><a href="#向量化" class="headerlink" title="向量化"></a>向量化</h2><p>我们有关于五部电影的数据集，我将要做的是，将这些用户的电影评分，进行分组并存到一个矩阵中。</p>
+<p>我们有五部电影，以及四位用户，那么 这个矩阵Y就是一个5行4列的矩阵，它将这些电影的用户评分数据都存在矩阵里：</p>
+<p><img src="/../images/recommenderSys_4.png" alt="recommenderSys_4"></p>
+<p>使用协同过滤算法，我们就可以找到特征向量X，以及参数\(\Theta\)。从而，推导出预测的评分\(X\Theta^T\)</p>
+<p><img src="/../images/recommenderSys_5.png" alt="recommenderSys_5"></p>
+<h2 id="找到相似产品"><a href="#找到相似产品" class="headerlink" title="找到相似产品"></a>找到相似产品</h2><p>当用户在看某部电影  的时候，如果你想找5部与电影非常相似的电影，为了能给用户推荐5部新电影，你需要做的是找出电影\(j\)与我们要找的电影\(i\)的距离最小，这样你就能给你的用户推荐几部不同的电影了。</p>
+<p><img src="/../images/recommenderSys_6.png" alt="recommenderSys_6"></p>
+<h1 id="均值归一化"><a href="#均值归一化" class="headerlink" title="均值归一化"></a>均值归一化</h1><p>让我们来看下面的用户评分数据：</p>
+<p><img src="/../images/recommenderSys_7.png" alt="recommenderSys_7"></p>
+<p>如果我们新增一个用户 Eve，并且 Eve 没有为任何电影评分，那么我们以什么为依据为Eve推荐电影呢？</p>
+<p>我们首先需要对结果 矩阵进行均值归一化处理，将每一个用户对某一部电影的评分减去所有用户对该电影评分的平均值：</p>
+<p><img src="/../images/recommenderSys_8.png" alt="recommenderSys_8"></p>
+<p>然后我们利用这个新的Y矩阵来训练算法。 如果我们要用新训练出的算法来预测评分，则需要将平均值重新加回去，预测\((\theta^{(j)})^Tx^{(i)}+\mu_i\)，对于Eve，我们的新模型会认为她给每部电影的评分都是该电影的平均分。</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="石磊磊 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="石磊磊 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" rel="tag"># 计算机</a>
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" rel="tag"># 人工智能</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/09/11/Machine%20Learning-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-19/" rel="prev" title="Machine Learning-学习笔记-19-Anomaly Detection">
+      <i class="fa fa-chevron-left"></i> Machine Learning-学习笔记-19-Anomaly Detection
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/09/12/Machine%20Learning-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-21/" rel="next" title="Machine Learning-学习笔记-21-execrise 8 summary">
+      Machine Learning-学习笔记-21-execrise 8 summary <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%AD%A6%E4%B9%A0%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.</span> <span class="nav-text">为什么学习推荐系统</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%BD%A2%E5%BC%8F%E5%8C%96"><span class="nav-number">2.</span> <span class="nav-text">问题形式化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%86%85%E5%AE%B9%E7%9A%84%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F"><span class="nav-number">3.</span> <span class="nav-text">基于内容的推荐系统</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%8F%E5%90%8C%E8%BF%87%E6%BB%A4"><span class="nav-number">4.</span> <span class="nav-text">协同过滤</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E5%8C%96%EF%BC%9A%E4%BD%8E%E7%A7%A9%E7%9F%A9%E9%98%B5%E5%88%86%E8%A7%A3"><span class="nav-number">5.</span> <span class="nav-text">向量化：低秩矩阵分解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E5%8C%96"><span class="nav-number">5.1.</span> <span class="nav-text">向量化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%BE%E5%88%B0%E7%9B%B8%E4%BC%BC%E4%BA%A7%E5%93%81"><span class="nav-number">5.2.</span> <span class="nav-text">找到相似产品</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9D%87%E5%80%BC%E5%BD%92%E4%B8%80%E5%8C%96"><span class="nav-number">6.</span> <span class="nav-text">均值归一化</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="石磊磊"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">石磊磊</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">199</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">105</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://shileilei.com/" title="https:&#x2F;&#x2F;shileilei.com" rel="noopener" target="_blank">石磊磊的个人站点</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">石磊磊</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://https-shilei165-github-io.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://shilei165.github.io/2022/09/11/Machine%20Learning-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-20/";
+    this.page.identifier = "2022/09/11/Machine Learning-学习笔记-20/";
+    this.page.title = "Machine Learning-学习笔记-20-Recommender Systems";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-shilei165-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>

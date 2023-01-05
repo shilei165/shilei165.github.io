@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+  <meta name="google-site-verification" content="meta name="google-site-verification" content="OFztbMGk5mHL-nB9dNplx2RVd3ZFbn7Dj5q939MulL0"">
+  <meta name="msvalidate.01" content="meta name="msvalidate.01" content="E3EF3FEE5F8DAD15F7062E99869A0067"">
+  <meta name="baidu-site-verification" content="meta name="baidu-site-verification" content="code-OTfzuo5G1O"">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"shilei165.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="本文将展示我最近用Arduino DIY的一个配有LED音阶显示小灯的蜂鸣奏乐器。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="配有LED音阶显示的Arduino蜂鸣奏乐器">
+<meta property="og:url" content="https://shilei165.github.io/2021/01/01/%E9%85%8D%E6%9C%89led%E9%9F%B3%E9%98%B6%E6%98%BE%E7%A4%BA%E7%9A%84%E8%9C%82%E9%B8%A3%E5%A5%8F%E4%B9%90%E5%99%A8/index.html">
+<meta property="og:site_name" content="石磊磊的个人站点">
+<meta property="og:description" content="本文将展示我最近用Arduino DIY的一个配有LED音阶显示小灯的蜂鸣奏乐器。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-148d2c9d95b10ff60f11ee8e14c3f7b0_1440w.jpg">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-c73033343912c3c9c8e1b966b12e292e_1440w.jpg">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-6dcd74bd881952e0a78a487db8e95510_1440w.jpg">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-a9abaa4b71fcde336b36ba0f9414f65d_1440w.jpg">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-0765fb91c3eb7d8342be4826a94450b7_1440w.jpg">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-89c5808cd3982cb6b8f18c5b850cf86f_1440w.jpg">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-d428fb2fc1ca05b7a7998bbc05fcf783_1440w.jpg">
+<meta property="article:published_time" content="2021-01-01T20:47:06.000Z">
+<meta property="article:modified_time" content="2022-08-12T03:19:04.178Z">
+<meta property="article:author" content="石磊磊">
+<meta property="article:tag" content="Arduino">
+<meta property="article:tag" content="DIY">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic1.zhimg.com/80/v2-148d2c9d95b10ff60f11ee8e14c3f7b0_1440w.jpg">
+
+<link rel="canonical" href="https://shilei165.github.io/2021/01/01/%E9%85%8D%E6%9C%89led%E9%9F%B3%E9%98%B6%E6%98%BE%E7%A4%BA%E7%9A%84%E8%9C%82%E9%B8%A3%E5%A5%8F%E4%B9%90%E5%99%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>配有LED音阶显示的Arduino蜂鸣奏乐器 | 石磊磊的个人站点</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="石磊磊的个人站点" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">石磊磊的个人站点</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://shilei165.github.io/2021/01/01/%E9%85%8D%E6%9C%89led%E9%9F%B3%E9%98%B6%E6%98%BE%E7%A4%BA%E7%9A%84%E8%9C%82%E9%B8%A3%E5%A5%8F%E4%B9%90%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="石磊磊">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="石磊磊的个人站点">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          配有LED音阶显示的Arduino蜂鸣奏乐器
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-01 15:47:06" itemprop="dateCreated datePublished" datetime="2021-01-01T15:47:06-05:00">2021-01-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Raspberry-Pi-Arduino/" itemprop="url" rel="index"><span itemprop="name">Raspberry Pi & Arduino</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2021/01/01/%E9%85%8D%E6%9C%89led%E9%9F%B3%E9%98%B6%E6%98%BE%E7%A4%BA%E7%9A%84%E8%9C%82%E9%B8%A3%E5%A5%8F%E4%B9%90%E5%99%A8/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/01/配有led音阶显示的蜂鸣奏乐器/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文将展示我最近用Arduino DIY的一个配有LED音阶显示小灯的蜂鸣奏乐器。</p>
+<span id="more"></span>
+<h1 id="一、效果展示"><a href="#一、效果展示" class="headerlink" title="一、效果展示"></a><strong>一、效果展示</strong></h1><p><strong>-—————————————————————————————</strong></p>
+<p>知乎：</p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/zvideo/1325378495463915520">月亮代表我的心</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/zvideo/1325379476785008640">DIY蜂鸣器演奏《牵手》</a> </p>
+<p>YouTube:</p>
+<p><a target="_blank" rel="noopener" href="https://youtu.be/Up8Yi3Mj7tw">https://youtu.be/Up8Yi3Mj7tw</a></p>
+<p><a target="_blank" rel="noopener" href="https://youtu.be//_QSvo-1RP8g">https://youtu.be/\_QSvo-1RP8g</a></p>
+<h1 id="二、所需器材"><a href="#二、所需器材" class="headerlink" title="二、所需器材"></a><strong>二、所需器材</strong></h1><p><strong>-—————————————————————————————</strong></p>
+<ol>
+<li><strong>Arduino 板</strong></li>
+<li><strong>无源蜂鸣器</strong></li>
+<li><strong>LED灯7个</strong></li>
+<li><strong>串并行寄存器</strong></li>
+<li><strong>220欧姆电阻器7个</strong></li>
+<li><strong>杜邦线若干</strong></li>
+<li><strong>面包板1个</strong></li>
+</ol>
+<h1 id="三、插线连接"><a href="#三、插线连接" class="headerlink" title="三、插线连接"></a><strong>三、插线连接</strong></h1><p><strong>-—————————————————————————————</strong></p>
+<p><strong>连接示意图和真实连接图如下：</strong></p>
+<p><strong>注意：因为本实验中只用了7个LED灯来代表音阶中的1、2、3、4、5、6、7，所以第八个LED被划掉了。</strong></p>
+<p><img src="https://pic1.zhimg.com/80/v2-148d2c9d95b10ff60f11ee8e14c3f7b0_1440w.jpg"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-c73033343912c3c9c8e1b966b12e292e_1440w.jpg"></p>
+<p><img src="https://pic1.zhimg.com/80/v2-6dcd74bd881952e0a78a487db8e95510_1440w.jpg"></p>
+<h1 id="四、蜂鸣器演奏音乐"><a href="#四、蜂鸣器演奏音乐" class="headerlink" title="四、蜂鸣器演奏音乐"></a><strong>四、蜂鸣器演奏音乐</strong></h1><p><strong>-—————————————————————————————</strong></p>
+<p>音乐的旋律是由声音的频率和节拍来决定的，如果我们能够控制好频率和节拍，那就有可能演奏出动听的音乐。因此，我们首先需要搞清楚各音调的频率，我从网上找到了这张对应的表格：</p>
+<p>低音：</p>
+<p><img src="https://pic2.zhimg.com/80/v2-a9abaa4b71fcde336b36ba0f9414f65d_1440w.jpg"></p>
+<p>中音：</p>
+<p><img src="https://pic4.zhimg.com/80/v2-0765fb91c3eb7d8342be4826a94450b7_1440w.jpg"></p>
+<p>高音：</p>
+<p><img src="https://pic4.zhimg.com/80/v2-89c5808cd3982cb6b8f18c5b850cf86f_1440w.jpg"></p>
+<p>我们知道了音调的频率后，下一步就是控制音符的演奏时间。每个音符都会播放一定的时间，这样才能构成一首优美的曲子，而不是生硬的一个调的把所有的音符一股脑的都播放出来。音符节奏分为一拍、半拍、1&#x2F;4拍、1&#x2F;8拍，我们规定一拍音符的时间为1；半拍为0.5；1&#x2F;4拍为0.25；1&#x2F;8拍为0.125……，所以我们可以为每个音符赋予这样的拍子播放出来，音乐就成了。但具体的音阶根频率之间的关系，可能需要再进一步调节，我们后面会讲到。</p>
+<p>首先，我们看《月亮代表我的心》的简谱：</p>
+<p><img src="https://pic4.zhimg.com/80/v2-d428fb2fc1ca05b7a7998bbc05fcf783_1440w.jpg"></p>
+<p>这里你可以选择C、D、E任意大调，然后在程序中定义相应的频率即可。另外，该音乐为四分之四拍，每个对应为1拍。几个特殊音符说明如下：</p>
+<p>1）普通音符，占1拍。</p>
+<p>2）带下划线音符，表示0.5拍。</p>
+<p>3）有的音符后带一个点，表示多加0.5拍。</p>
+<p>4）有的音符后带一个—，表示多加1拍。</p>
+<p>5）有的两个连续的音符上面带弧线，表示连音。如果后面那个音与前面的相同，可以只发一次音，然后将节拍相加。也可以稍微改下连音后面那个音的频率，比如减少或增加一些数值（需自己调试），这样表现会更流畅。</p>
+<h1 id="五、代码"><a href="#五、代码" class="headerlink" title="五、代码"></a><strong>五、代码</strong></h1><p><strong>-—————————————————————————————</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br></pre></td><td class="code"><pre><span class="line">//定义音阶频率</span><br><span class="line">#define NTE0 -1</span><br><span class="line">#define NTE1 330</span><br><span class="line">#define NTE2 370</span><br><span class="line">#define NTE3 410</span><br><span class="line">#define NTE4 441</span><br><span class="line">#define NTE5 495</span><br><span class="line">#define NTE6 556 </span><br><span class="line">#define NTE7 624</span><br><span class="line"></span><br><span class="line">#define NTEL1 165</span><br><span class="line">#define NTEL2 175</span><br><span class="line">#define NTEL3 196</span><br><span class="line">#define NTEL4 221</span><br><span class="line">#define NTEL5 248</span><br><span class="line">#define NTEL6 278</span><br><span class="line">#define NTEL7 312</span><br><span class="line"></span><br><span class="line">#define NTEH1 661</span><br><span class="line">#define NTEH2 740</span><br><span class="line">#define NTEH3 820</span><br><span class="line">#define NTEH4 882</span><br><span class="line">#define NTEH5 990</span><br><span class="line">#define NTEH6 1112</span><br><span class="line">#define NTEH7 1248</span><br><span class="line">  </span><br><span class="line">  //根据简谱列出《月亮代表我的心》的各频率</span><br><span class="line">int tune2[] = &#123;</span><br><span class="line">  NTE5, NTE3, NTE2, NTE1,</span><br><span class="line">  NTE3,</span><br><span class="line">  NTE6,NTE4, NTE2, NTE1,</span><br><span class="line">  NTEL7,NTE0, NTEL5, </span><br><span class="line">  NTE1, NTE3, NTE5, NTE1,</span><br><span class="line">  NTEL7, NTE3, NTE5, NTE0, NTE5,</span><br><span class="line">  NTE6, NTE7, NTEH1,  </span><br><span class="line">  NTE6, NTE5, NTE3, NTE2,</span><br><span class="line">  NTE1, NTE1, NTE1, NTE3, NTE2,</span><br><span class="line">  NTE1,NTE1, NTE1, NTE2, NTE3,</span><br><span class="line">  NTE2, NTE1, NTEL6, NTE2, NTE3,</span><br><span class="line">  NTE2, NTE0, NTEL5,</span><br><span class="line">  </span><br><span class="line">  NTE1, NTE3, NTE5, NTE1,</span><br><span class="line">  NTEL7, NTE3, NTE5, NTE0, NTE5,</span><br><span class="line">  NTE6, NTE7, NTEH1, </span><br><span class="line">  NTE6, NTE5, NTE3, NTE2,</span><br><span class="line">  NTE1, NTE1, NTE1, NTE3, NTE2,</span><br><span class="line">  NTE1,NTE1, NTE1, NTE2, NTE3,</span><br><span class="line">  </span><br><span class="line">  NTE2, NTEL6, NTEL7, NTE1, NTE2,</span><br><span class="line">  NTE1, NTE3, NTE5, </span><br><span class="line">  NTE3, NTE2, NTE1, NTE5,</span><br><span class="line">  NTEL7, NTEL6, NTEL7,</span><br><span class="line">  NTEL6, NTEL7, NTEL6, NTEL5,</span><br><span class="line">  NTE3, NTE5,</span><br><span class="line">  NTE3, NTE2, NTE1, NTE5,</span><br><span class="line">  NTEL7, NTEL6, NTEL7,</span><br><span class="line">  </span><br><span class="line">  NTE1, NTE1, NTE1, NTE2, NTE3, </span><br><span class="line">  NTE2, NTE0, NTEL5,</span><br><span class="line">  NTE1, NTE3, NTE5, NTE1,</span><br><span class="line">  NTEL7, NTE3, NTE5, NTE5,</span><br><span class="line">  NTE6, NTE7, NTEH1, </span><br><span class="line">  NTE6, NTE5, NTE3, NTE2,</span><br><span class="line">  NTE1, NTE1, NTE1, NTE3, NTE2,</span><br><span class="line">  NTE1, NTE1, NTE1, NTE2, NTE3, </span><br><span class="line">  NTE2, NTEL6, NTEL7, NTE1, NTE2,</span><br><span class="line">  NTE1, NTE0</span><br><span class="line">  </span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">  //根据简谱列出《月亮代表我的心》的各节拍</span><br><span class="line">float durt2[]=&#123;</span><br><span class="line">  1.5, 0.5, 0.5, 0.5,</span><br><span class="line">  4,</span><br><span class="line">  1.5, 0.5, 0.5, 0.5,</span><br><span class="line">  3, 0.5, 0.5,</span><br><span class="line">  1.5, 0.5, 1, 0.5, //问我爱你</span><br><span class="line">  1.5, 0.5, 1, 0.5, 0.5,</span><br><span class="line">  1.5, 0.5, 1.5,</span><br><span class="line">  1, 1.5, 0.5, 0.5,</span><br><span class="line">  1.5, 0.5, 1, 0.5, 0.5,</span><br><span class="line">  1.5, 0.5, 1, 0.5, 0.5,</span><br><span class="line">  1.5, 0.5, 1, 0.5, 0.5,</span><br><span class="line">  3, 0.5, 0.5,//心。你</span><br><span class="line">  </span><br><span class="line">  1.5, 0.5, 1, 0.5, //问我爱你</span><br><span class="line">  1.5, 0.5, 1, 0.5, 0.5,//有多深，我</span><br><span class="line">  1.5, 0.5, 1.5,//爱你有</span><br><span class="line">  1, 1.5, 0.5, 0.5,//几分？我的</span><br><span class="line">  1.5, 0.5, 1, 0.5, 0.5,//情不移，我的</span><br><span class="line">  1.5, 0.5, 1, 0.5, 0.5,//爱不变，月亮</span><br><span class="line">  </span><br><span class="line">  1.5, 0.5, 1, 0.5, 0.5,//代表我的</span><br><span class="line">  3, 0.5, 0.5,//心。轻</span><br><span class="line">  1.5, 0.5, 1, 1, //轻的一个</span><br><span class="line">  3, 0.5, 0.5,//吻，已经</span><br><span class="line">  1.5, 0.5, 1.5,0.5,//打动我的</span><br><span class="line">  3, 1,//心，深</span><br><span class="line">  1.5,0.5, 1, 1,//深的一段</span><br><span class="line">  3, 0.5, 0.5,//情，教我</span><br><span class="line">  1.5, 0.5, 1, 0.5, 0.5,//思念到如</span><br><span class="line">  3, 0.5, 0.5,//</span><br><span class="line">  1.5, 0.5, 1.5, 0.5,</span><br><span class="line">  1.5, 0.5, 1.5, 0.5,</span><br><span class="line">  1.5, 0.5, 1.5,</span><br><span class="line">  1, 1.5, 0.5, 0.5,</span><br><span class="line">  1.5, 0.5, 1, 0.5, 0.5,</span><br><span class="line">  1.5, 0.5, 1, 0.5, 0.5,</span><br><span class="line">  1.5, 0.5, 1, 0.5, 0.5,</span><br><span class="line">  3, 1</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">int length2;</span><br><span class="line">int tonePin = 6; //用6号接口</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">int latchPin = 11;</span><br><span class="line">int clockPin = 9;</span><br><span class="line">int dataPin = 12;</span><br><span class="line">//控制七个LED灯的排列组合来模拟七个音阶</span><br><span class="line">byte LED1s = 0b11111110;</span><br><span class="line">byte LED2s = 0b11111101;</span><br><span class="line">byte LED3s = 0b11111011;</span><br><span class="line">byte LED4s = 0b11110111;</span><br><span class="line">byte LED5s = 0b11101111;</span><br><span class="line">byte LED6s = 0b11011111;</span><br><span class="line">byte LED7s = 0b10111111;</span><br><span class="line">byte LED0s = 0b11111111;</span><br><span class="line"></span><br><span class="line">void setup() &#123;</span><br><span class="line">  Serial.begin(9600);</span><br><span class="line">  pinMode(tonePin, OUTPUT);</span><br><span class="line">  pinMode(latchPin,OUTPUT);</span><br><span class="line">  pinMode(dataPin,OUTPUT);</span><br><span class="line">  pinMode(clockPin,OUTPUT);</span><br><span class="line">  length2 = sizeof(tune2)/sizeof(tune2[0]); //计算长度</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void loop() &#123;</span><br><span class="line">  </span><br><span class="line">  for (int x = 0; x&lt;length2; x++)&#123;</span><br><span class="line">    tone(tonePin, tune2[x]);</span><br><span class="line">    delay(300*durt2[x]);</span><br><span class="line">    </span><br><span class="line">    digitalWrite(latchPin, LOW);</span><br><span class="line">    shiftOut(dataPin,clockPin,LSBFIRST,LED0s);</span><br><span class="line">    digitalWrite(latchPin,HIGH);</span><br><span class="line">    </span><br><span class="line">    if(tune2[x] == NTE0)&#123;</span><br><span class="line">      digitalWrite(latchPin, LOW);</span><br><span class="line">      shiftOut(dataPin,clockPin,LSBFIRST,LED0s);</span><br><span class="line">      digitalWrite(latchPin,HIGH);</span><br><span class="line">      Serial.println(0);</span><br><span class="line">      delay(200*durt2[x]);</span><br><span class="line">    &#125;</span><br><span class="line">    if(tune2[x] == NTEH1  tune2[x] == NTE1  tune2[x] == NTEL1)&#123;</span><br><span class="line">      digitalWrite(latchPin, LOW);</span><br><span class="line">      shiftOut(dataPin,clockPin,LSBFIRST,LED1s);</span><br><span class="line">      digitalWrite(latchPin,HIGH);</span><br><span class="line">      Serial.println(1);</span><br><span class="line">      delay(200*durt2[x]);</span><br><span class="line">    &#125;</span><br><span class="line">    if(tune2[x] == NTEH2  tune2[x] == NTE2  tune2[x] == NTEL2)&#123;</span><br><span class="line">      digitalWrite(latchPin, LOW);</span><br><span class="line">      shiftOut(dataPin,clockPin,LSBFIRST,LED2s);</span><br><span class="line">      digitalWrite(latchPin,HIGH);</span><br><span class="line">      Serial.println(2);</span><br><span class="line">      delay(200*durt2[x]);</span><br><span class="line">    &#125;</span><br><span class="line">    if(tune2[x] == NTEH3  tune2[x] == NTE3  tune2[x] == NTEL3)&#123;</span><br><span class="line">      digitalWrite(latchPin, LOW);</span><br><span class="line">      shiftOut(dataPin,clockPin,LSBFIRST,LED3s);</span><br><span class="line">      digitalWrite(latchPin,HIGH);</span><br><span class="line">      Serial.println(3);</span><br><span class="line">      delay(200*durt2[x]);</span><br><span class="line">    &#125;</span><br><span class="line">    if(tune2[x] == NTEH4  tune2[x] == NTE4  tune2[x] == NTEL4)&#123;</span><br><span class="line">      digitalWrite(latchPin, LOW);</span><br><span class="line">      shiftOut(dataPin,clockPin,LSBFIRST,LED4s);</span><br><span class="line">      digitalWrite(latchPin,HIGH);</span><br><span class="line">      Serial.println(4);</span><br><span class="line">      delay(200*durt2[x]);</span><br><span class="line">    &#125;</span><br><span class="line">    if(tune2[x] == NTEH5  tune2[x] == NTE5  tune2[x] == NTEL5)&#123;</span><br><span class="line">      digitalWrite(latchPin, LOW);</span><br><span class="line">      shiftOut(dataPin,clockPin,LSBFIRST,LED5s);</span><br><span class="line">      digitalWrite(latchPin,HIGH);</span><br><span class="line">      Serial.println(5);</span><br><span class="line">      delay(200*durt2[x]);</span><br><span class="line">    &#125;</span><br><span class="line">    if(tune2[x] == NTEH6  tune2[x] == NTE6  tune2[x] == NTEL6)&#123;</span><br><span class="line">      digitalWrite(latchPin, LOW);</span><br><span class="line">      shiftOut(dataPin,clockPin,LSBFIRST,LED6s);</span><br><span class="line">      digitalWrite(latchPin,HIGH);</span><br><span class="line">      Serial.println(6);</span><br><span class="line">      delay(200*durt2[x]);</span><br><span class="line">    &#125;</span><br><span class="line">    if(tune2[x] == NTEH7  tune2[x] == NTE7  tune2[x] == NTEL7)&#123;</span><br><span class="line">      digitalWrite(latchPin, LOW);</span><br><span class="line">      shiftOut(dataPin,clockPin,LSBFIRST,LED7s);</span><br><span class="line">      digitalWrite(latchPin,HIGH);</span><br><span class="line">      Serial.println(7);</span><br><span class="line">      delay(200*durt2[x]);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    noTone(tonePin);</span><br><span class="line">  &#125;  </span><br><span class="line">  delay (2000);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意，代码中定义的音阶频率跟上表略有不同，因为不同的蜂鸣器可能振动频率略有差别，所以需要根据实际情况来进行一些调节。</p>
+<p>根据同样的原理，可以用蜂鸣器和LED灯来播放任意你喜欢的歌曲。</p>
+<hr>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="石磊磊 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="石磊磊 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Arduino/" rel="tag"># Arduino</a>
+              <a href="/tags/DIY/" rel="tag"># DIY</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/01/01/%E6%A0%91%E8%8E%93%E6%B4%BEraspberry-pi-%E5%9C%A8mac%E4%B8%8A%E5%81%9A%E7%B3%BB%E7%BB%9F%E5%A4%87%E4%BB%BD/" rel="prev" title="树莓派(Raspberry Pi) 在mac上做系统备份">
+      <i class="fa fa-chevron-left"></i> 树莓派(Raspberry Pi) 在mac上做系统备份
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/01/01/linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-1/" rel="next" title="Linux学习笔记 - 1">
+      Linux学习笔记 - 1 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%95%88%E6%9E%9C%E5%B1%95%E7%A4%BA"><span class="nav-number">1.</span> <span class="nav-text">一、效果展示</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%89%80%E9%9C%80%E5%99%A8%E6%9D%90"><span class="nav-number">2.</span> <span class="nav-text">二、所需器材</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%8F%92%E7%BA%BF%E8%BF%9E%E6%8E%A5"><span class="nav-number">3.</span> <span class="nav-text">三、插线连接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E8%9C%82%E9%B8%A3%E5%99%A8%E6%BC%94%E5%A5%8F%E9%9F%B3%E4%B9%90"><span class="nav-number">4.</span> <span class="nav-text">四、蜂鸣器演奏音乐</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E4%BB%A3%E7%A0%81"><span class="nav-number">5.</span> <span class="nav-text">五、代码</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="石磊磊"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">石磊磊</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">199</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">105</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://shileilei.com/" title="https:&#x2F;&#x2F;shileilei.com" rel="noopener" target="_blank">石磊磊的个人站点</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">石磊磊</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://https-shilei165-github-io.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://shilei165.github.io/2021/01/01/%E9%85%8D%E6%9C%89led%E9%9F%B3%E9%98%B6%E6%98%BE%E7%A4%BA%E7%9A%84%E8%9C%82%E9%B8%A3%E5%A5%8F%E4%B9%90%E5%99%A8/";
+    this.page.identifier = "2021/01/01/配有led音阶显示的蜂鸣奏乐器/";
+    this.page.title = "配有LED音阶显示的Arduino蜂鸣奏乐器";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-shilei165-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>

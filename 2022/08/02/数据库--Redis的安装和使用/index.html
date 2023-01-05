@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+  <meta name="google-site-verification" content="meta name="google-site-verification" content="OFztbMGk5mHL-nB9dNplx2RVd3ZFbn7Dj5q939MulL0"">
+  <meta name="msvalidate.01" content="meta name="msvalidate.01" content="E3EF3FEE5F8DAD15F7062E99869A0067"">
+  <meta name="baidu-site-verification" content="meta name="baidu-site-verification" content="code-OTfzuo5G1O"">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"shilei165.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="这篇文章跟大家分享一下非关系型数据库Redis的安装和使用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库--Redis的安装和使用">
+<meta property="og:url" content="https://shilei165.github.io/2022/08/02/%E6%95%B0%E6%8D%AE%E5%BA%93--Redis%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="石磊磊的个人站点">
+<meta property="og:description" content="这篇文章跟大家分享一下非关系型数据库Redis的安装和使用。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-08-03T02:05:44.000Z">
+<meta property="article:modified_time" content="2022-08-12T03:19:03.166Z">
+<meta property="article:author" content="石磊磊">
+<meta property="article:tag" content="计算机">
+<meta property="article:tag" content="编程">
+<meta property="article:tag" content="数据读写">
+<meta property="article:tag" content="教程">
+<meta property="article:tag" content="数据库">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://shilei165.github.io/2022/08/02/%E6%95%B0%E6%8D%AE%E5%BA%93--Redis%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>数据库--Redis的安装和使用 | 石磊磊的个人站点</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="石磊磊的个人站点" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">石磊磊的个人站点</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://shilei165.github.io/2022/08/02/%E6%95%B0%E6%8D%AE%E5%BA%93--Redis%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="石磊磊">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="石磊磊的个人站点">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数据库--Redis的安装和使用
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-08-02 22:05:44" itemprop="dateCreated datePublished" datetime="2022-08-02T22:05:44-04:00">2022-08-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Database/" itemprop="url" rel="index"><span itemprop="name">Database</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2022/08/02/%E6%95%B0%E6%8D%AE%E5%BA%93--Redis%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/08/02/数据库--Redis的安装和使用/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>这篇文章跟大家分享一下非关系型数据库Redis的安装和使用。</p>
+<span id="more"></span>
+<hr>
+<h1 id="Redis简介"><a href="#Redis简介" class="headerlink" title="Redis简介"></a><strong>Redis简介</strong></h1><p>Redis全称”Remote Dictionary Server”是一个非常高效的开源数据存储系统。Redis支持多种数据结构，包括字符串(string), 哈希(hashes), 列表(lists), 集合(sets), 有序集合(sorted sets)等。</p>
+<p>我们可以通过Redis来对数据进行原子性操作，例如追加字符串;将元素嵌入到列表;计算集合的交集、并集和差集;或者给数据进行排序，并获取排名最高的数据。这里的原子性是指就像原子不可分割的属性一样，一个事务不能再被继续分割就是指执行事务的原子性。或者简单的理解成一个操作要么成功执行，要么失败完全不执行。</p>
+<p>我们可以使用多种计算机语言来对Redis进行操作，包括C, C++, C#, Python, Java, Node.js, Matlab, Perl, PHP, R等。</p>
+<p>如果想要了解更多可以参考Redis的官方网站： <a target="_blank" rel="noopener" href="https://redis.io/">https://redis.io/</a> </p>
+<h1 id="Redis的安装"><a href="#Redis的安装" class="headerlink" title="Redis的安装"></a><strong>Redis的安装</strong></h1><h2 id="Windows下安装"><a href="#Windows下安装" class="headerlink" title="Windows下安装"></a>Windows下安装</h2><p>下载地址：<a target="_blank" rel="noopener" href="https://github.com/tporadowski/redis/releases">https://github.com/tporadowski/redis/releases</a></p>
+<p>选择自己计算机支持的位数（32位或者64位），比如Redis-x64-5.0.14.1.msi，点击下载安装即可。在安装过程中最好选择把路径添加到环境变量以便于调取使用。</p>
+<p>安装完成之后，我们把目录切换到redis路径下，然后在终端(CMD)输入以下代码来启动并且测试Redis是否安装成功</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Program Files\Redis&gt;redis-server.exe redis.windows.conf</span><br></pre></td></tr></table></figure>
+<p>如果返回值如下所示，说明已经成功安装：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">C:\Program Files\Redis&gt;redis-server.exe redis.windows.conf</span><br><span class="line">[45748] 01 Aug 22:10:16.074 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo</span><br><span class="line">[45748] 01 Aug 22:10:16.074 # Redis version=5.0.14.1, bits=64, commit=ec77f72d, modified=0, pid=45748, just started</span><br><span class="line">[45748] 01 Aug 22:10:16.074 # Configuration loaded</span><br><span class="line">                _._</span><br><span class="line">           _.-``__ &#x27;&#x27;-._</span><br><span class="line">      _.-``    `.  `_.  &#x27;&#x27;-._           Redis 5.0.14.1 (ec77f72d/0) 64 bit</span><br><span class="line">  .-`` .-```.  ```\/    _.,_ &#x27;&#x27;-._</span><br><span class="line"> (    &#x27;      ,       .-`  | `,    )     Running in standalone mode</span><br><span class="line"> |`-._`-...-` __...-.``-._|&#x27;` _.-&#x27;|     Port: 6379</span><br><span class="line"> |    `-._   `._    /     _.-&#x27;    |     PID: 45748</span><br><span class="line">  `-._    `-._  `-./  _.-&#x27;    _.-&#x27;</span><br><span class="line"> |`-._`-._    `-.__.-&#x27;    _.-&#x27;_.-&#x27;|</span><br><span class="line"> |    `-._`-._        _.-&#x27;_.-&#x27;    |           http://redis.io</span><br><span class="line">  `-._    `-._`-.__.-&#x27;_.-&#x27;    _.-&#x27;</span><br><span class="line"> |`-._`-._    `-.__.-&#x27;    _.-&#x27;_.-&#x27;|</span><br><span class="line"> |    `-._`-._        _.-&#x27;_.-&#x27;    |</span><br><span class="line">  `-._    `-._`-.__.-&#x27;_.-&#x27;    _.-&#x27;</span><br><span class="line">      `-._    `-.__.-&#x27;    _.-&#x27;</span><br><span class="line">          `-._        _.-&#x27;</span><br><span class="line">              `-.__.-&#x27;</span><br><span class="line"></span><br><span class="line">[45748] 01 Aug 22:10:16.079 # Server initialized</span><br><span class="line">[45748] 01 Aug 22:10:16.080 * DB loaded from disk: 0.001 seconds</span><br><span class="line">[45748] 01 Aug 22:10:16.081 * Ready to accept connections</span><br></pre></td></tr></table></figure>
+<p>这时我们重新打开一个CMD窗口，输入Redis-cli就可以进入Redis命令行模式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">C:\Program Files\Redis&gt;redis-cli</span><br><span class="line">127.0.0.1:6379&gt; set &#x27;name&#x27; &#x27;Leilei&#x27;</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; get &#x27;name&#x27;</span><br><span class="line">&quot;Leilei&quot;</span><br></pre></td></tr></table></figure>
+<p>我们现在暂时还无法远程连接来使用Redis，如果需要远程连接，我们可以修改Redis安装文件下的redis.windows.conf配置文件。<br>首先，将下面的IP栏注释掉：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bind 127.0.0.1</span><br></pre></td></tr></table></figure>
+<p>另外我们还可以通过取消注释并且修改下面这一行，来给Redis设置密码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">requirepass foobared</span><br></pre></td></tr></table></figure>
+<p>foodbared即当前的默认密码，我们需要修改为自己的密码。</p>
+<p>重启Redis服务之后，我们就可以使用密码远程连接Redis了。停止和重启Redis的服务命令如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">net stop redis</span><br><span class="line">net start redis</span><br></pre></td></tr></table></figure>
+
+<h2 id="Mac下安装"><a href="#Mac下安装" class="headerlink" title="Mac下安装"></a>Mac下安装</h2><p>在Mac环境下使用Homebrew安装会比较简单，直接执行如下命令即可：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install redis</span><br></pre></td></tr></table></figure>
+<p>可以使用如下命令来启动Redis服务：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew services start redis</span><br><span class="line">redis-server /usr/local/ect/redis.conf</span><br></pre></td></tr></table></figure>
+<p>同样使用redis-cli进入Redis命令行模式。</p>
+<p>停止和重启Redis的服务命令如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew services stop redis</span><br><span class="line">brew services restart redis</span><br></pre></td></tr></table></figure>
+<h1 id="全局命令"><a href="#全局命令" class="headerlink" title="全局命令"></a><strong>全局命令</strong></h1><h3 id="查询所有的key："><a href="#查询所有的key：" class="headerlink" title="查询所有的key："></a>查询所有的key：</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keys *</span><br></pre></td></tr></table></figure>
+<h3 id="查询key的总数："><a href="#查询key的总数：" class="headerlink" title="查询key的总数："></a>查询key的总数：</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dbsize</span><br></pre></td></tr></table></figure>
+<h3 id="检测key是否存在："><a href="#检测key是否存在：" class="headerlink" title="检测key是否存在："></a>检测key是否存在：</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exists key </span><br></pre></td></tr></table></figure>
+<h3 id="删除指定key："><a href="#删除指定key：" class="headerlink" title="删除指定key："></a>删除指定key：</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">del key [key...] </span><br></pre></td></tr></table></figure>
+<h3 id="指定key过期时长："><a href="#指定key过期时长：" class="headerlink" title="指定key过期时长："></a>指定key过期时长：</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">expire key seconds  # 当超过过期时间，会自动删除，key在seconds秒后过期</span><br><span class="line">expireat key timestamp # key在秒级时间戳timestamp后过期</span><br><span class="line">pexpire key milliseconds # 当超过过期时间，会自动删除，key在milliseconds毫秒后过期</span><br><span class="line">pexpireat key milliseconds-timestamp # key在豪秒级时间戳timestamp后过期</span><br><span class="line">ttl # 命令可以查看key的剩余过期时间，单位：秒（&gt;0剩余过期时间；-1没设置过期时间；-2键不存在）</span><br><span class="line">pttl #与ttl类似，但单位是毫秒</span><br></pre></td></tr></table></figure>
+<h3 id="查看key的数据结构类型"><a href="#查看key的数据结构类型" class="headerlink" title="查看key的数据结构类型:"></a>查看key的数据结构类型:</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">type key</span><br></pre></td></tr></table></figure>
+<h3 id="key重命名"><a href="#key重命名" class="headerlink" title="key重命名"></a>key重命名</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rename key newkey</span><br></pre></td></tr></table></figure>
+<h3 id="随机返回一个key"><a href="#随机返回一个key" class="headerlink" title="随机返回一个key"></a>随机返回一个key</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">randomkey</span><br></pre></td></tr></table></figure>
+<h3 id="切换数据库"><a href="#切换数据库" class="headerlink" title="切换数据库"></a>切换数据库</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select index # 默认16个数据库：0-15</span><br></pre></td></tr></table></figure>
+<h3 id="清除数据库"><a href="#清除数据库" class="headerlink" title="清除数据库"></a>清除数据库</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">flushdb # 清除当前数据库</span><br><span class="line">flushall # 清除所有数据库</span><br></pre></td></tr></table></figure>
+
+<h1 id="Redis数据类型"><a href="#Redis数据类型" class="headerlink" title="Redis数据类型"></a><strong>Redis数据类型</strong></h1><p> Redis支持多种数据类型，包括strings, hashes, lists, sets, sorted sets, bitmaps, hyperloglogs, geospatial indexes, 以及streams。其中我们最常用到的为字符串(string), 哈希(hashes), 列表(lists), 集合(sets), 有序集合(sorted sets)，下面我们就来简单介绍下如何使用这几种数据类型。</p>
+<h2 id="String-字符串"><a href="#String-字符串" class="headerlink" title="String(字符串)"></a>String(字符串)</h2><p> String是Redis最基本的数据类型，该类型的最大储存空间为512M。</p>
+<p>常用的Redis字符串命令如下：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>set key value</td>
+<td>设置key值</td>
+</tr>
+<tr>
+<td>get key</td>
+<td>获取key值</td>
+</tr>
+<tr>
+<td>mset key value [key value…]</td>
+<td>批量设置值</td>
+</tr>
+<tr>
+<td>mget key [key…]</td>
+<td>批量获取值</td>
+</tr>
+<tr>
+<td>incr key</td>
+<td>将key中储存的数字值增一</td>
+</tr>
+<tr>
+<td>decr key</td>
+<td>将key中储存的数字值减一</td>
+</tr>
+<tr>
+<td>strlen key</td>
+<td>字符串长度</td>
+</tr>
+<tr>
+<td>getset key value</td>
+<td>设置并返回原值</td>
+</tr>
+<tr>
+<td>setrange key offset</td>
+<td>设置指定位置的字符</td>
+</tr>
+<tr>
+<td>getrange key start end</td>
+<td>获取部分字符串，start和end分别为开始和结束的偏移量</td>
+</tr>
+</tbody></table>
+<p>最常用的存储和获取string的示例如下：<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; set name leilei</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; get name</span><br><span class="line">&quot;leilei&quot;</span><br></pre></td></tr></table></figure></p>
+<p>相对来说稍微复杂的incr, setrange, getrange 举例如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">## incr &amp; decr</span><br><span class="line">127.0.0.1:6379&gt; set age 20</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; incr age</span><br><span class="line">(integer) 21</span><br><span class="line">127.0.0.1:6379&gt; decr age</span><br><span class="line">(integer) 20</span><br><span class="line"></span><br><span class="line">## setrange</span><br><span class="line">127.0.0.1:6379&gt; set name Leilei</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; setrange name 0 M</span><br><span class="line">(integer) 6</span><br><span class="line">127.0.0.1:6379&gt; get name</span><br><span class="line">&quot;Meilei&quot;</span><br><span class="line"></span><br><span class="line">## getrange</span><br><span class="line">127.0.0.1:6379&gt; set name Leilei</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; getrange name 0 3</span><br><span class="line">&quot;Leil&quot;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="Hash-哈希"><a href="#Hash-哈希" class="headerlink" title="Hash(哈希)"></a>Hash(哈希)</h2><p>Redish Hash是一个键值对(key &#x3D;&gt; value)集合。</p>
+<p>常用的Redis哈希命令如下：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>hset key field value</td>
+<td>设置值</td>
+</tr>
+<tr>
+<td>hget key field</td>
+<td>获取值</td>
+</tr>
+<tr>
+<td>hdel key field [field…]</td>
+<td>删除field</td>
+</tr>
+<tr>
+<td>hlen key</td>
+<td>field个数</td>
+</tr>
+<tr>
+<td>hmset key field value [field value…]</td>
+<td>批量设置field-value</td>
+</tr>
+<tr>
+<td>hmget key field [field…]</td>
+<td>批量获取field</td>
+</tr>
+<tr>
+<td>hexists key field</td>
+<td>判断field是否存在</td>
+</tr>
+<tr>
+<td>hkeys key</td>
+<td>获取所有field</td>
+</tr>
+<tr>
+<td>havls key</td>
+<td>获取所有value</td>
+</tr>
+<tr>
+<td>hincrby key field increment</td>
+<td>增加field所对应的value, increment必须为整数</td>
+</tr>
+<tr>
+<td>hidecrbyfloat key field increment</td>
+<td>增加field所对应的value()，increment为浮点型</td>
+</tr>
+<tr>
+<td>hstrlen key field</td>
+<td>计算value字符串长度</td>
+</tr>
+</tbody></table>
+<p>在创建单组数据时，我们即可以使用HMSET，也可使用HSET命令，创建时需要输入key field value示例如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; hmset students stu1 &quot;Leilei&quot; stu2 &quot;Jason&quot; stu3 &quot;James&quot;</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; hget students stu1</span><br><span class="line">&quot;Leilei&quot;</span><br><span class="line">127.0.0.1:6379&gt; hget students stu2</span><br><span class="line">&quot;Jason&quot;</span><br></pre></td></tr></table></figure>
+<p>这里HMSET和HSET唯一的不同在于返回值不同，HMSET返回值为字符串(例如OK)，而HSET返回值为整数值(例如0, 1等)。</p>
+<h2 id="List-列表"><a href="#List-列表" class="headerlink" title="List(列表)"></a>List(列表)</h2><p>Redis列表是简单的字符串列表，字符串可以多次重复出现，可以按照插入顺序排序排列。</p>
+<p>列表有四种操作类型，归类如下：</p>
+<table>
+<thead>
+<tr>
+<th>操作类别</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>添加</td>
+<td>rpush, lpush, linsert</td>
+</tr>
+<tr>
+<td>查找</td>
+<td>lrange, lindex, llen</td>
+</tr>
+<tr>
+<td>删除</td>
+<td>lpop, rpop, lrem, ltrim</td>
+</tr>
+<tr>
+<td>修改</td>
+<td>lset</td>
+</tr>
+<tr>
+<td>阻塞操作</td>
+<td>blpop, brpop</td>
+</tr>
+</tbody></table>
+<p>常用的Redis列表命令如下：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>lpush key value1 [value2]</td>
+<td>将一个或多个值插入到列表头部</td>
+</tr>
+<tr>
+<td>rpush key value1 [value2]</td>
+<td>在列表中添加一个或多个值到列表尾部</td>
+</tr>
+<tr>
+<td>linsert key before|after pivot value</td>
+<td>在列表的元素前或者后插入元素</td>
+</tr>
+<tr>
+<td>lrange key start stop</td>
+<td>获取列表指定范围内的元素</td>
+</tr>
+<tr>
+<td>lindex key index</td>
+<td>通过索引获取列表中的元素。</td>
+</tr>
+<tr>
+<td>llen key</td>
+<td>获取列表长度</td>
+</tr>
+<tr>
+<td>lpop key</td>
+<td>弹出并获取列表的第一个元素</td>
+</tr>
+<tr>
+<td>rpop key</td>
+<td>弹出并获取列表的最后一个元素</td>
+</tr>
+<tr>
+<td>lrem key count value</td>
+<td>移除列表元素。count &gt; 0 : 从表头开始向表尾搜索，移除与value相等的元素，数量为count。count &lt; 0 : 从表尾开始向表头搜索，移除与value 相等的元素，数量为count的绝对值。count &#x3D; 0 : 移除表中所有与value相等的值。</td>
+</tr>
+<tr>
+<td>ltrim key start stop</td>
+<td>对一个列表进行修剪(trim)，就是说，让列表只保留指定区间内的元素，不在指定区间之内的元素都将被删除。</td>
+</tr>
+<tr>
+<td>lset key index value</td>
+<td>通过索引设置列表元素的值</td>
+</tr>
+<tr>
+<td>blpop key1 [key2 …] timeout</td>
+<td>弹出并获取列表的第一个元素，如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止。</td>
+</tr>
+<tr>
+<td>brpop key1 [key2 …] timeout</td>
+<td>弹出并获取列表的最后一个元素，如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止。</td>
+</tr>
+<tr>
+<td>brpoplpush source destination timeout</td>
+<td>弹出列表的最后一个元素，并将该元素添加到另一个列表并返回；如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止。</td>
+</tr>
+<tr>
+<td>rpoplpush source destination</td>
+<td>弹出列表的最后一个元素，并将该元素添加到另一个列表并返回</td>
+</tr>
+</tbody></table>
+<p>linsert key before|after pivot value举例如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; rpush newlist a b c d e f g</span><br><span class="line">(integer) 7</span><br><span class="line">127.0.0.1:6379&gt; linsert newlist after b a</span><br><span class="line">(integer) 8</span><br><span class="line">127.0.0.1:6379&gt; lrange newlist 0 -1</span><br><span class="line">1) &quot;a&quot;</span><br><span class="line">2) &quot;b&quot;</span><br><span class="line">3) &quot;a&quot;</span><br><span class="line">4) &quot;c&quot;</span><br><span class="line">5) &quot;d&quot;</span><br><span class="line">6) &quot;e&quot;</span><br><span class="line">7) &quot;f&quot;</span><br><span class="line">8) &quot;g&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Set-集合"><a href="#Set-集合" class="headerlink" title="Set(集合)"></a>Set(集合)</h2><p>Redis的Set是string类型的无序集合，元素只能出现一次。</p>
+<p>常用的Redis集合命令如下：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>sadd key element [element…]</td>
+<td>添加元素</td>
+</tr>
+<tr>
+<td>srem key element [element…]</td>
+<td>删除元素</td>
+</tr>
+<tr>
+<td>scard key</td>
+<td>计算元素个数</td>
+</tr>
+<tr>
+<td>sismember key element</td>
+<td>判断元素是否在集合中</td>
+</tr>
+<tr>
+<td>srandmember key [count]</td>
+<td>随机从集合返回指定个数元素</td>
+</tr>
+<tr>
+<td>smembers key</td>
+<td>获取所有元素</td>
+</tr>
+<tr>
+<td>sinter key [key…]</td>
+<td>求多个集合的交集</td>
+</tr>
+<tr>
+<td>sunion key [key…]</td>
+<td>求多个集合的并集</td>
+</tr>
+<tr>
+<td>sdiff key [key…]</td>
+<td>求多个集合的差集</td>
+</tr>
+<tr>
+<td>sinterstore destination key [key …]</td>
+<td>将多个集合的交集保存</td>
+</tr>
+<tr>
+<td>sunionstore destination key [key…]</td>
+<td>将多个集合的并集保存</td>
+</tr>
+<tr>
+<td>sdiffstore destination key [key…]</td>
+<td>将多个集合的差集保存</td>
+</tr>
+</tbody></table>
+<h2 id="Zset-有序集合"><a href="#Zset-有序集合" class="headerlink" title="Zset(有序集合)"></a>Zset(有序集合)</h2><p>Redis zset和set一样也是string类型元素的集合,且不允许成员重复。不同的是每个成员都会关联一个double类型的分数。redis正是通过分数来为集合中的成员进行从小到大的排序。</p>
+<p>常用的Redis有序集合命令如下：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>zadd key score member</td>
+<td>添加成员</td>
+</tr>
+<tr>
+<td>zcard key</td>
+<td>计算成员个数</td>
+</tr>
+<tr>
+<td>zscore key member</td>
+<td>计算成员分数</td>
+</tr>
+<tr>
+<td>zrank key member</td>
+<td>计算成员排名</td>
+</tr>
+<tr>
+<td>zrem key member [member…]</td>
+<td>删除成员</td>
+</tr>
+<tr>
+<td>zincrby key increment member</td>
+<td>增加成员分数</td>
+</tr>
+<tr>
+<td>zrange key start end</td>
+<td>从低分到高分排列</td>
+</tr>
+<tr>
+<td>zrevrange key start end</td>
+<td>从高分到低分排列</td>
+</tr>
+<tr>
+<td>zrangebyscore key min max</td>
+<td>返回指定分数范围的成员，分数从低到高排列</td>
+</tr>
+<tr>
+<td>zrevrangebyscore key max min</td>
+<td>返回指定分数范围的成员，分数从高到低排列</td>
+</tr>
+<tr>
+<td>zcount key min max</td>
+<td>返回指定分数范围的成员个数</td>
+</tr>
+<tr>
+<td>zremrangebyrank key start end</td>
+<td>删除指定排名内的升序元素</td>
+</tr>
+<tr>
+<td>zremrangebyscore key min max</td>
+<td>删除指定分数范围的成员</td>
+</tr>
+<tr>
+<td>zinterstore destination key [key …]</td>
+<td>将多个集合的交集保存</td>
+</tr>
+<tr>
+<td>zunionstore destination key [key…]</td>
+<td>将多个集合的并集保存</td>
+</tr>
+</tbody></table>
+<p>zrange和zrangebyscore的区别，示例如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">27.0.0.1:6379&gt; zadd school 100 UC</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; zadd school 90 UH</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; zadd school 70 CU</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; zrange school 0 -1</span><br><span class="line">1) &quot;CU&quot;</span><br><span class="line">2) &quot;UH&quot;</span><br><span class="line">3) &quot;UC&quot;</span><br><span class="line">127.0.0.1:6379&gt; zrangebyscore school 80 100</span><br><span class="line">1) &quot;UH&quot;</span><br><span class="line">2) &quot;UC&quot;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="石磊磊 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="石磊磊 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" rel="tag"># 计算机</a>
+              <a href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag"># 编程</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E8%AF%BB%E5%86%99/" rel="tag"># 数据读写</a>
+              <a href="/tags/%E6%95%99%E7%A8%8B/" rel="tag"># 教程</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag"># 数据库</a>
+              <a href="/tags/Redis/" rel="tag"># Redis</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/07/31/Python%E6%95%99%E7%A8%8B--%E6%96%87%E4%BB%B6%E7%9A%84%E5%AD%98%E5%82%A8%E4%B8%8E%E8%AF%BB%E5%8F%96/" rel="prev" title="Python教程--文件的存储与读取">
+      <i class="fa fa-chevron-left"></i> Python教程--文件的存储与读取
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/08/10/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Python%E6%93%8D%E4%BD%9CRedis%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="next" title="如何使用Python来操作Redis数据库">
+      如何使用Python来操作Redis数据库 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">Redis简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis%E7%9A%84%E5%AE%89%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">Redis的安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Windows%E4%B8%8B%E5%AE%89%E8%A3%85"><span class="nav-number">2.1.</span> <span class="nav-text">Windows下安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mac%E4%B8%8B%E5%AE%89%E8%A3%85"><span class="nav-number">2.2.</span> <span class="nav-text">Mac下安装</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%A8%E5%B1%80%E5%91%BD%E4%BB%A4"><span class="nav-number">3.</span> <span class="nav-text">全局命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E6%89%80%E6%9C%89%E7%9A%84key%EF%BC%9A"><span class="nav-number">3.0.1.</span> <span class="nav-text">查询所有的key：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2key%E7%9A%84%E6%80%BB%E6%95%B0%EF%BC%9A"><span class="nav-number">3.0.2.</span> <span class="nav-text">查询key的总数：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A3%80%E6%B5%8Bkey%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%EF%BC%9A"><span class="nav-number">3.0.3.</span> <span class="nav-text">检测key是否存在：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E6%8C%87%E5%AE%9Akey%EF%BC%9A"><span class="nav-number">3.0.4.</span> <span class="nav-text">删除指定key：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E5%AE%9Akey%E8%BF%87%E6%9C%9F%E6%97%B6%E9%95%BF%EF%BC%9A"><span class="nav-number">3.0.5.</span> <span class="nav-text">指定key过期时长：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8Bkey%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%B1%BB%E5%9E%8B"><span class="nav-number">3.0.6.</span> <span class="nav-text">查看key的数据结构类型:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#key%E9%87%8D%E5%91%BD%E5%90%8D"><span class="nav-number">3.0.7.</span> <span class="nav-text">key重命名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E8%BF%94%E5%9B%9E%E4%B8%80%E4%B8%AAkey"><span class="nav-number">3.0.8.</span> <span class="nav-text">随机返回一个key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%87%E6%8D%A2%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">3.0.9.</span> <span class="nav-text">切换数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%85%E9%99%A4%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">3.0.10.</span> <span class="nav-text">清除数据库</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">4.</span> <span class="nav-text">Redis数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#String-%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">4.1.</span> <span class="nav-text">String(字符串)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hash-%E5%93%88%E5%B8%8C"><span class="nav-number">4.2.</span> <span class="nav-text">Hash(哈希)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#List-%E5%88%97%E8%A1%A8"><span class="nav-number">4.3.</span> <span class="nav-text">List(列表)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Set-%E9%9B%86%E5%90%88"><span class="nav-number">4.4.</span> <span class="nav-text">Set(集合)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Zset-%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88"><span class="nav-number">4.5.</span> <span class="nav-text">Zset(有序集合)</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="石磊磊"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">石磊磊</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">199</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">105</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://shileilei.com/" title="https:&#x2F;&#x2F;shileilei.com" rel="noopener" target="_blank">石磊磊的个人站点</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">石磊磊</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://https-shilei165-github-io.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://shilei165.github.io/2022/08/02/%E6%95%B0%E6%8D%AE%E5%BA%93--Redis%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8/";
+    this.page.identifier = "2022/08/02/数据库--Redis的安装和使用/";
+    this.page.title = "数据库--Redis的安装和使用";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-shilei165-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>
