@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Learning Objectives Discuss the relationship between risk management and information security Explain the various types of threats to the security of information Identify the main goals of information">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Information System 8- Securing Information">
+<meta property="og:url" content="http://example.com/2023/01/28/Information_Systems_Chapter_8/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="Learning Objectives Discuss the relationship between risk management and information security Explain the various types of threats to the security of information Identify the main goals of information">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-01-29T01:07:00.000Z">
+<meta property="article:modified_time" content="2023-01-29T01:29:06.386Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Information Systems">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2023/01/28/Information_Systems_Chapter_8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Information System 8- Securing Information | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/28/Information_Systems_Chapter_8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Information System 8- Securing Information
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-01-28 20:07:00" itemprop="dateCreated datePublished" datetime="2023-01-28T20:07:00-05:00">2023-01-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Information-Systems/" itemprop="url" rel="index"><span itemprop="name">Information Systems</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Learning-Objectives"><a href="#Learning-Objectives" class="headerlink" title="Learning Objectives"></a><strong>Learning Objectives</strong></h1><ul>
+<li>Discuss the relationship between risk management and information security</li>
+<li>Explain the various types of threats to the security of information</li>
+<li>Identify the main goals of information security</li>
+<li>Discuss the different categorizations of security technologies and solutions</li>
+<li>Explain the basic functioning of security technologies and solutions, such as passwords and password managers, two-factor authentication, firewalls, biometrics, encryption, virus protection, and wireless security</li>
+<li>Discuss the main purposes and content of security policies</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="Introduction-and-Definitions"><a href="#Introduction-and-Definitions" class="headerlink" title="Introduction and Definitions"></a>Introduction and Definitions</h1><p><strong>Information security</strong> is defined as the set of protections put in place to safeguard information systems and&#x2F;or data from security threats such as unauthorized access, use, disclosure, disruption, modification, or destruction.</p>
+<h2 id="Risk-Management"><a href="#Risk-Management" class="headerlink" title="Risk Management"></a>Risk Management</h2><p><strong>Risk management</strong> is the process of identifying, assessing, and prioritizing the security risks an organization may face.</p>
+<p>Organizations may decide to accept the risks, try to mitigate or prevent those risks by investing in security protections, or share the security risks with another organizations (such as buy insurance).</p>
+<ul>
+<li><p>Security is focused on protecting the assets a company has from both external and internal threats.</p>
+<ul>
+<li>External threats such as hackers and viruses threaten the valuable information in business</li>
+<li>Internal threats include monitoring the network to make sure that policies are not being breached in a harmful way and that employees are only able to access systems they are authorized to</li>
+</ul>
+</li>
+<li><p>Risk management has a larger focus than information security or cybersecurity</p>
+<ul>
+<li>It includes analyzing and balancing risks with the resources available to mitigate them.</li>
+</ul>
+</li>
+</ul>
+<h2 id="Information-Security-Concepts"><a href="#Information-Security-Concepts" class="headerlink" title="Information Security Concepts"></a>Information Security Concepts</h2><ul>
+<li>First, security is not only about technology but also about management and people. It needs to make sure that security tools are properly used and security policies are followed adequately.</li>
+<li>Second, the world of information security is somewhat unfair. One party must do everything to protect itself, while the other party (the attacker) only needs to find one weakness.</li>
+<li>Third, security for individuals, and even for organizations, requires what is called defense in depth. It means that there must be multiple layers of security protections in place.<ul>
+<li>Example: if you have very important data on your PC, defense in depth means that have a lock on the computer, a password to access it, a firewall to protect it, and even encryption of the data.</li>
+</ul>
+</li>
+</ul>
+<h2 id="Levels-of-Security-Protection-in-Depth"><a href="#Levels-of-Security-Protection-in-Depth" class="headerlink" title="Levels of Security Protection in Depth"></a>Levels of Security Protection in Depth</h2><p><strong>Three Main Levels</strong></p>
+<ol>
+<li>Protection of the information itself –  example: <a target="_blank" rel="noopener" href="https://www.online-toolz.com/tools/text-encryption-decryption.php">https://www.online-toolz.com/tools/text-encryption-decryption.php</a></li>
+<li>Protection of the computer on which the information is stored</li>
+<li>Protection of the network to which the computer is connected</li>
+</ol>
+<h2 id="Security-Goals"><a href="#Security-Goals" class="headerlink" title="Security Goals"></a>Security Goals</h2><p>CIA: confidentiality, integrity, and availability</p>
+<ul>
+<li><strong>Confidentiality</strong> involves making sure that only authorized individuals can access information or data.</li>
+<li><strong>Integrity</strong> involves making sure that data are consistent and complete. – example: message data must not be modified during the transmission.</li>
+<li><strong>Availability</strong> involves ensuring that systems and&#x2F;or data are available when they are needed. – the organization must protect they systems from disruptions not only due to security threats but also due to power outages, hardware failures, and system updates.</li>
+</ul>
+<p>Two additional goals:</p>
+<ul>
+<li><strong>Authentication</strong> is basically making sure that the parties involved are who they say they are and that transactions, data, or communications are genuine.</li>
+<li><strong>Nonrepudiation</strong> is particularly important in e-commerce, refers to making sure someone cannot renege&#x2F;rɪ’neɪg&#x2F; on his or her obligations.</li>
+</ul>
+<h1 id="Information-Security-Threats"><a href="#Information-Security-Threats" class="headerlink" title="Information Security Threats"></a>Information Security Threats</h1><p>One definition of an <strong>information security threat</strong> is any event or circumstance with the potential to affect negatively the confidentiality, integrity, or availability of the resources of the organization (including information systems, data, people, and processes).</p>
+<ul>
+<li><p>Threats that affect confidentiality – unauthorized access to systems or data (someone accesses systems and&#x2F;or data illegally, or theft and fraud).</p>
+</li>
+<li><p>Threats that affect integrity – unauthorized access and illegally modify information in a database.</p>
+</li>
+<li><p>Threats that affect availability – nature disasters or malicious software with similar consequences.</p>
+</li>
+<li><p>Confidentiality, integrity, and availability are often considered the <strong>threat targets</strong>, while the methods used to conduct the attack are considered the <strong>threat vectors</strong>.</p>
+</li>
+</ul>
+<h2 id="Threat-Vectors-for-Unauthorized-Access"><a href="#Threat-Vectors-for-Unauthorized-Access" class="headerlink" title="Threat Vectors for Unauthorized Access"></a>Threat Vectors for Unauthorized Access</h2><ul>
+<li>Hacking  – Password cracker; Malware; Keystroke logger; Cryptojacking; Sniffing; Software security holes; Web-based attacks</li>
+<li>Social Engineering and Phishing – Tricking someone into giving out information or taking an action that reduces security or harms a system</li>
+<li>Web-based attacks – example: formjacking to control access to the site’s form page and collect the user information that is entered here</li>
+<li>Consequences of unauthorized access<ul>
+<li>rootkits – have access to everything on the system</li>
+<li>backdoors – allowing them to access the system again at their will</li>
+<li>victimization software – keystroke logger, spyware, attack software or other remote tools to control the systems</li>
+</ul>
+</li>
+<li>Theft and fraud<ul>
+<li>Software – employees copy legitimate software installed on their company’s server to bring home or to give someone else</li>
+<li>Hardware – e.g. USB drive can automatically copy everything when it is inserted.</li>
+</ul>
+</li>
+</ul>
+<h2 id="Threat-Vectors-for-Denial-of-Service"><a href="#Threat-Vectors-for-Denial-of-Service" class="headerlink" title="Threat Vectors for Denial of Service"></a>Threat Vectors for Denial of Service</h2><p><strong>Denial of service</strong> attacks lead to legitimate users not being able to access a system or data that they should normally have access to.</p>
+<ul>
+<li>Intentional acts – many sophisticated tools</li>
+<li>Careless behavior – (1) education (2) automation of security tools and updates</li>
+<li>Nature disaster  – a careful security disaster recovery plan</li>
+</ul>
+<h2 id="Malware"><a href="#Malware" class="headerlink" title="Malware"></a>Malware</h2><p><strong>Malware</strong> refers to malicious software or malicious code.<br><strong>Virus</strong> are computer program designed to perform unwanted functions. Some cause minor harm, such as sending undesirable messages. Others are very destructive, deleting all files on a computer or creating so much traffic on a network that it crashes and cannot be used by its users.</p>
+<ul>
+<li>Trojan horses – viruses are embedded into a legitimate file</li>
+<li>Worms – propagate themselves throughout the Internet with no user intervention</li>
+<li>Stealth virus – more advanced virus that changes its own bit pattern to become undetectable by virus scanners</li>
+<li>Polymorphic virus – a virus that modifies itself each time it infects a computer to avoid detection</li>
+<li>Macro virus – infects documents by inserting commands</li>
+<li>Spyware – captures everything users do on their computers, unbeknown to them</li>
+<li>Ransomware – installed on the victim’s computer via viruses, unauthorized access, or phishing</li>
+</ul>
+<h2 id="Other-Threats"><a href="#Other-Threats" class="headerlink" title="Other Threats"></a>Other Threats</h2><ul>
+<li><strong>Spamming</strong> involves sending emails to many individuals at once, often promoting various legitimate or nonlegitimate products.<ul>
+<li>Huge volume of unwanted messages</li>
+<li>Include malware</li>
+</ul>
+</li>
+<li><strong>Spimming</strong> similar to spamming, but sent via text messaging.</li>
+<li>Virus hoaxes</li>
+</ul>
+<h1 id="Security-Technologies-and-Solutions"><a href="#Security-Technologies-and-Solutions" class="headerlink" title="Security Technologies and Solutions"></a>Security Technologies and Solutions</h1><h2 id="Preventive-Corrective-and-Detective-Controls"><a href="#Preventive-Corrective-and-Detective-Controls" class="headerlink" title="Preventive, Corrective, and Detective Controls"></a>Preventive, Corrective, and Detective Controls</h2><ul>
+<li>The goal of <strong>preventive controls</strong> is to stop or limit the security threat from happening in the first place – antivirus software give alerts</li>
+<li>The goal of <strong>detective controls</strong> is to find or discover where and when security threats occur – audit logs</li>
+<li>The goal of <strong>corrective controls</strong> is to repair damages after a security problem has occurred – antivirus software remove a virus</li>
+</ul>
+<h2 id="Physical-Security-versus-Logical-Security"><a href="#Physical-Security-versus-Logical-Security" class="headerlink" title="Physical Security versus Logical Security"></a>Physical Security versus Logical Security</h2><p><strong>Physical access controls</strong> are those security solutions that involve protecting physical access to systems, applications, or data</p>
+<ul>
+<li>Locks for laptops, locked computer rooms, and secured rooms for backup storage</li>
+<li>Drive shredders should be used to make sure the discarded disk drives cannot be read again</li>
+<li>Wiring closets are properly locked and secured</li>
+<li>Selection of personnel<br><strong>Logical access controls</strong> include security solutions that protect access to systems, applications, or data by ensuring that users or systems are authenticated and allowed to have such access</li>
+<li>Logical access controls use many technologies to require authentication of users and systems trying to access specific applications, networks, data, or computers. These include user profiles, biometrics, firewalls, and encryption.</li>
+</ul>
+<h2 id="User-Profiles"><a href="#User-Profiles" class="headerlink" title="User Profiles"></a>User Profiles</h2><ul>
+<li><p>User profiles are one of the main solutions used to prevent unauthorized access to systems, data, and applications.</p>
+</li>
+<li><p>User profiles require that individuals be differentiated from one another using one or several levels of identification: possession, knowledge, or trait.</p>
+<ul>
+<li><strong>Possession</strong> is when an individual owns a form of identification. For example, your driver’s license, your student ID, and your passport are possession forms of identification.</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><strong>Knowledge</strong> is when an individual needs to know something to gain access. Passwords are a good example of knowledge required to access systems. Combining possession and knowledge, such as requiring a personal identification number (PIN) with a banking card, provides more security.</li>
+<li><strong>Traits</strong> require recognition of physical or behavioral human characteristics, such as a fingerprint or a signature style, to gain access to systems, data, or applications. This is part of biometrics.</li>
+</ul>
+<h2 id="Two-Factor-Authentication"><a href="#Two-Factor-Authentication" class="headerlink" title="Two-Factor Authentication"></a>Two-Factor Authentication</h2><p>With 2FA, you add an extra step to logging into an application or device that goes beyond using your username and password.<br>Examples: Apple, Google, LinkedIn, Amazon.com, some banks</p>
+<h2 id="Virus-Protection"><a href="#Virus-Protection" class="headerlink" title="Virus Protection"></a>Virus Protection</h2><ul>
+<li>Antivirus software looks for the signatures or variations of the virus in files and systems.</li>
+<li>Unfortunately, most antivirus programs are primarily reactive –&gt; detect existing viruses or ones that look similar to an old virus.</li>
+</ul>
+<h2 id="Biometrics"><a href="#Biometrics" class="headerlink" title="Biometrics"></a>Biometrics</h2><p>Biometrics uses human traits and characteristics to recognize individuals.</p>
+<ul>
+<li>Physiological Biometrics<ul>
+<li>Fingerprint recognition</li>
+<li>Facial recognition</li>
+<li>Retina recognition</li>
+<li>DNA recognition</li>
+<li>Voice recognition</li>
+</ul>
+</li>
+<li>Behavioral Biometrics<ul>
+<li>Signature recognition</li>
+<li>Keystroke recognition</li>
+</ul>
+</li>
+</ul>
+<h2 id="Firewall"><a href="#Firewall" class="headerlink" title="Firewall"></a>Firewall</h2><p>A firewall is a computer or a router that controls access in and out of the organization’s networks, applications, and computers.</p>
+<p>There are several types of firewalls, which vary in how they control access into and out of the organization.</p>
+<ul>
+<li>Packet-level firewall – e.g. if the source IP is from an acceptable computer</li>
+<li>Stateful inspection firewall </li>
+<li>Application-layer firewall</li>
+</ul>
+<h2 id="Rendering-Data-Unreadable-Encryption"><a href="#Rendering-Data-Unreadable-Encryption" class="headerlink" title="Rendering Data Unreadable: Encryption"></a>Rendering Data Unreadable: Encryption</h2><p><strong>Encryption</strong>, also known as cryptography, is the use of mathematical algorithms to convert a message or data into information that is scrambled to make it unreadable.</p>
+<h3 id="Types-of-Cryptography"><a href="#Types-of-Cryptography" class="headerlink" title="Types of Cryptography"></a>Types of Cryptography</h3><p>Two types of cryptographic systems:</p>
+<ol>
+<li>Asymmetric – two keys are used. Public key is used to encrypt messages. Private key is used to decrypt those message.</li>
+<li>Symmetric – the same key is used to encrypt and decrypt data.</li>
+</ol>
+<h3 id="Encryption-in-Business-Applications"><a href="#Encryption-in-Business-Applications" class="headerlink" title="Encryption in Business Applications:"></a>Encryption in Business Applications:</h3><ul>
+<li>Virtual private network (VPN) – A VPN is a connection that makes use of an open wired network such as the Internet but that provides a secured channel through encryption and other security features.</li>
+<li>Web and Credit Card Security – Encryption is also used for protecting information in business transactions online.<ul>
+<li>Security certificates – Public key is included in your browser, browser can then generate a secret key and and it to the server, and decrypted by the server.</li>
+<li>EMV Chip card technology – Europay, MasterCard, and Visa (EMV) use chip to replace magnetic stripes. The technology allows data to be stored on the chip.</li>
+<li>Near Field Communications</li>
+</ul>
+</li>
+</ul>
+<h2 id="Wireless-Security"><a href="#Wireless-Security" class="headerlink" title="Wireless Security"></a>Wireless Security</h2><p>The best protection for wireless networks remains encryption.</p>
+<ul>
+<li>WEP, Wired Equivalent Privacy – older encryption algorithm</li>
+<li>WPA, Wi-Fi Protected Access – more powerful encryption algorithm</li>
+<li>WPA-2 – even more powerful and is widely available in most routers (256-bit key)</li>
+<li>A further protection for home wireless networks is to disable the broadcasting of the network’s ID (SSID)</li>
+</ul>
+<h2 id="Security-Policies"><a href="#Security-Policies" class="headerlink" title="Security Policies"></a>Security Policies</h2><ul>
+<li>Security policies describe what the general security guidelines are for an organization</li>
+<li>Security procedures describe how to implement the security policies<ul>
+<li>Example: “All users must change their passwords every two months”</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Information-Systems/" rel="tag"># Information Systems</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/01/24/ML4T_01-08_OptimizersBuildingAParameterizedModel/" rel="prev" title="Machine Learning for Trading--1-8 Optimizers Building a Parameterized Model">
+      <i class="fa fa-chevron-left"></i> Machine Learning for Trading--1-8 Optimizers Building a Parameterized Model
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/01/29/Information_Systems_Chapter_9/" rel="next" title="Information System 9- Protecting the Confidentiality and Privacy of Information">
+      Information System 9- Protecting the Confidentiality and Privacy of Information <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Learning-Objectives"><span class="nav-number">1.</span> <span class="nav-text">Learning Objectives</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction-and-Definitions"><span class="nav-number">2.</span> <span class="nav-text">Introduction and Definitions</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Risk-Management"><span class="nav-number">2.1.</span> <span class="nav-text">Risk Management</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Information-Security-Concepts"><span class="nav-number">2.2.</span> <span class="nav-text">Information Security Concepts</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Levels-of-Security-Protection-in-Depth"><span class="nav-number">2.3.</span> <span class="nav-text">Levels of Security Protection in Depth</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Security-Goals"><span class="nav-number">2.4.</span> <span class="nav-text">Security Goals</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Information-Security-Threats"><span class="nav-number">3.</span> <span class="nav-text">Information Security Threats</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Threat-Vectors-for-Unauthorized-Access"><span class="nav-number">3.1.</span> <span class="nav-text">Threat Vectors for Unauthorized Access</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Threat-Vectors-for-Denial-of-Service"><span class="nav-number">3.2.</span> <span class="nav-text">Threat Vectors for Denial of Service</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Malware"><span class="nav-number">3.3.</span> <span class="nav-text">Malware</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Other-Threats"><span class="nav-number">3.4.</span> <span class="nav-text">Other Threats</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Security-Technologies-and-Solutions"><span class="nav-number">4.</span> <span class="nav-text">Security Technologies and Solutions</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Preventive-Corrective-and-Detective-Controls"><span class="nav-number">4.1.</span> <span class="nav-text">Preventive, Corrective, and Detective Controls</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Physical-Security-versus-Logical-Security"><span class="nav-number">4.2.</span> <span class="nav-text">Physical Security versus Logical Security</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#User-Profiles"><span class="nav-number">4.3.</span> <span class="nav-text">User Profiles</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Two-Factor-Authentication"><span class="nav-number">4.4.</span> <span class="nav-text">Two-Factor Authentication</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Virus-Protection"><span class="nav-number">4.5.</span> <span class="nav-text">Virus Protection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Biometrics"><span class="nav-number">4.6.</span> <span class="nav-text">Biometrics</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Firewall"><span class="nav-number">4.7.</span> <span class="nav-text">Firewall</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rendering-Data-Unreadable-Encryption"><span class="nav-number">4.8.</span> <span class="nav-text">Rendering Data Unreadable: Encryption</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Types-of-Cryptography"><span class="nav-number">4.8.1.</span> <span class="nav-text">Types of Cryptography</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Encryption-in-Business-Applications"><span class="nav-number">4.8.2.</span> <span class="nav-text">Encryption in Business Applications:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Wireless-Security"><span class="nav-number">4.9.</span> <span class="nav-text">Wireless Security</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Security-Policies"><span class="nav-number">4.10.</span> <span class="nav-text">Security Policies</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

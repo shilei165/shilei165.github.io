@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="The ML problem Supervised Regression Learning How it works with stock data Backtesting">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Machine Learning for Trading--3-1 How Machine Learning is Used at a Hedge Fund?">
+<meta property="og:url" content="http://example.com/2023/02/15/ML4T_03-01_HowMachineLearningIsUsedAtAHedgeFund/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="The ML problem Supervised Regression Learning How it works with stock data Backtesting">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/..%5Cimages%5CML4T-0301_01.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5CML4T-0301_02.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5CML4T-0301_03.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5CML4T-0301_04.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5CML4T-0301_05.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5CML4T-0301_06.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5CML4T-0301_07.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5CML4T-0301_08.png">
+<meta property="article:published_time" content="2023-02-16T02:54:22.000Z">
+<meta property="article:modified_time" content="2023-02-28T15:29:36.953Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="ML4T">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/..%5Cimages%5CML4T-0301_01.png">
+
+<link rel="canonical" href="http://example.com/2023/02/15/ML4T_03-01_HowMachineLearningIsUsedAtAHedgeFund/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Machine Learning for Trading--3-1 How Machine Learning is Used at a Hedge Fund? | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/15/ML4T_03-01_HowMachineLearningIsUsedAtAHedgeFund/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Machine Learning for Trading--3-1 How Machine Learning is Used at a Hedge Fund?
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-02-15 21:54:22" itemprop="dateCreated datePublished" datetime="2023-02-15T21:54:22-05:00">2023-02-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Machine-Learning-for-Trading/" itemprop="url" rel="index"><span itemprop="name">Machine Learning for Trading</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ul>
+<li>The ML problem</li>
+<li>Supervised Regression Learning</li>
+<li>How it works with stock data</li>
+<li>Backtesting</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="The-ML-problem"><a href="#The-ML-problem" class="headerlink" title="The ML problem"></a>The ML problem</h1><p>In most cases, we use machine learning algorithms to build a model. A model is essentially a function: it receives an input X and produces an output Y.</p>
+<p>Typically, X is a measurement or set of measurements that we have taken or observed. The model processes X and produces the output Y, which is usually a prediction about the world. For example, X might be the current price of a stock, and Y might be the future price of that stock.</p>
+<p>The machine learning process involves running historical data through a machine-learning algorithm to derive a model based on that data. Later, when we need to use the model, we pass in new examples and receive fresh predictions.</p>
+<p><img src="/..%5Cimages%5CML4T-0301_01.png" alt="ML problem"></p>
+<h2 id="What’s-X-and-Y-quiz"><a href="#What’s-X-and-Y-quiz" class="headerlink" title="What’s X and Y quiz"></a>What’s X and Y quiz</h2><p>Let’s think about building a model to use in trading. Which of the following factors might be input values (X) to the model, and which might be output values (Y)?</p>
+<p><img src="/..%5Cimages%5CML4T-0301_02.png" alt="quiz"></p>
+<p>Since we often use models to predict values in the future, both future price and future return make sense as output values. </p>
+<h1 id="Supervised-Regression-Learning"><a href="#Supervised-Regression-Learning" class="headerlink" title="Supervised Regression Learning"></a>Supervised Regression Learning</h1><p>When we talk about <strong>regression</strong>, we are talking about making a numerical approximation or prediction. For example, predicting stock prices is a regression problem. Regression learning sits in contrast to <strong>classification learning</strong>, which involves classifying an object into one of several types.</p>
+<p>In <strong>supervised</strong> learning, we present the algorithm with the correct answers during the training period. In other words, we show the machine an X value and its corresponding Y value. After seeing a sufficient number of input&#x2F;output pairs, the algorithm is ready to predict Y values for new, previously unseen X values.</p>
+<p>Finally, when we talk about <strong>learning</strong>, we are talking about training with data. In this class, for example, we are often taking historical stock data and training the system to predict the future price of the stock. We “teach” the algorithm to make new predictions by showing it relevant data from the past.</p>
+<p>Many different algorithms use supervised regression learning techniques, and we can discuss four briefly here: linear regression, K-nearest neighbor, decision trees, and decision forests.</p>
+<p><strong>Linear regression</strong> involves finding the coefficients of a line that best fits the data. The coefficients are the parameters of the model, and linear regression is known as a type of parametric learning.</p>
+<p><strong>K-nearest neighbors (KNN)</strong> is another popular approach that evaluates an incoming X by examining the K-nearest (X,Y) pairs. Since this algorithm compares incoming data to instances of already-seen data points, this approach is known as instance-based learning.</p>
+<p><strong>Decision trees</strong> redirect incoming X values down individual branches based on evaluations of factors of X that occur at each node. The regression values are stored in the leaves of the tree, and the output of a decision tree for a given X is the leaf in which the X ends up.</p>
+<p><strong>Decision forests</strong> are composed of many decision trees queried in turn and combined in some way to provide an overall result.</p>
+<h1 id="How-it-works-with-stock-data"><a href="#How-it-works-with-stock-data" class="headerlink" title="How it works with stock data"></a>How it works with stock data</h1><p>Let’s consider how we can generate the type of data we can feed into a machine learning algorithm in order to build a model.</p>
+<p>Assume we have a pandas DataFrame containing historical features of a particular stock, arranged in the usual way: one row for each date with columns representing each metric.</p>
+<p>We might have many features for each stock, such as Bollinger Bands, momentum, and P&#x2F;E ratio. We can represent each feature in a DataFrame, and then “stack” the DataFrames one behind the other.</p>
+<p><img src="/..%5Cimages%5CML4T-0301_03.png" alt="how it works with stock data"></p>
+<p>These features make up the input values - the X - for the model that the machine learning algorithm synthesizes. In most cases, we want to use our model to produce a future price - the Y - given this historical feature data as input.</p>
+<p>Let’s see how we can generate these examples starting from the first date d for which we have data. We can look at the stock features for d, and the price at some future date, such as d + 5. Note that even though the price is historical, it’s in the future relative to d.</p>
+<p><img src="/..%5Cimages%5CML4T-0301_04.png" alt="how it works with stock data"></p>
+<p>This pairing between features X at d and future price Y at d + 5 comprises our first training example. We can step forward day-by-day to generate subsequent examples mapping X at d + n to Y at d + 5 + n. Once this process is complete, we will have a large set of examples that we can use to build our model.</p>
+<p><img src="/..%5Cimages%5CML4T-0301_05.png" alt="how it works with stock data"></p>
+<h1 id="Backtesting"><a href="#Backtesting" class="headerlink" title="Backtesting"></a>Backtesting</h1><p>Once we have our model, we might start to get curious about the accuracy of the forecasts it provides and whether we can act on them.</p>
+<p>We can evaluate the performance of our model through backtesting. <strong>Backtesting</strong> is the process of applying a trading strategy or analytical method to historical data to see how accurately the strategy or method would have predicted actual results.</p>
+<p>First, we limit our data to some subset and train a model on just that data. Next, we ask the model for a forecast of some time in the simulated future. Third, we place orders on the basis that the forecast is accurate, shorting or longing stocks as appropriate.</p>
+<p><img src="/..%5Cimages%5CML4T-0301_06.png" alt="backtesting"></p>
+<p>We can then roll time forward and see how the performance of our portfolio - measured by Sharpe ratio, daily return, or something similar - changes as the forecast does or does not come to fruition.</p>
+<p><img src="/..%5Cimages%5CML4T-0301_07.png" alt="backtesting"></p>
+<p>Finally, we repeat this process. We train a model based on a more recent subset of the data, make a prediction, and plot performance based on orders made in line with the prediction.</p>
+<p><img src="/..%5Cimages%5CML4T-0301_08.png" alt="backtesting"></p>
+<p>We can backtest our strategy against historical data to simulate the performance of our portfolio according to the strategy. Ultimately, the performance informs us whether the strategy is worth adopting.</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/ML4T/" rel="tag"># ML4T</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/02/13/Information_Systems_Chapter_14/" rel="prev" title="Information System 14- Information and Knowledge for Business Decision-Making">
+      <i class="fa fa-chevron-left"></i> Information System 14- Information and Knowledge for Business Decision-Making
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/02/16/ML4T_03-02_Regression/" rel="next" title="Machine Learning for Trading--3-2 Regression">
+      Machine Learning for Trading--3-2 Regression <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#The-ML-problem"><span class="nav-number">1.</span> <span class="nav-text">The ML problem</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#What%E2%80%99s-X-and-Y-quiz"><span class="nav-number">1.1.</span> <span class="nav-text">What’s X and Y quiz</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Supervised-Regression-Learning"><span class="nav-number">2.</span> <span class="nav-text">Supervised Regression Learning</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#How-it-works-with-stock-data"><span class="nav-number">3.</span> <span class="nav-text">How it works with stock data</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Backtesting"><span class="nav-number">4.</span> <span class="nav-text">Backtesting</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

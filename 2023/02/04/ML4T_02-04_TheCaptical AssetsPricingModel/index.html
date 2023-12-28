@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Definition of a portfolio The market portfolio The CAPM equation CAPM vs. Active management CAPM for portfolios Implications of CAPM  Arbitrage Pricing Theory">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Machine Learning for Trading--2-4 The Capital Assets Pricing Model (CAPM)">
+<meta property="og:url" content="http://example.com/2023/02/04/ML4T_02-04_TheCaptical%20AssetsPricingModel/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="Definition of a portfolio The market portfolio The CAPM equation CAPM vs. Active management CAPM for portfolios Implications of CAPM  Arbitrage Pricing Theory">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/ML4T-0204_01.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0204_Q1.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0204_02.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0204_03.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0204_Q2.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0204_04.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0204_05.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0204_06.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0204_07.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0204_08.png">
+<meta property="article:published_time" content="2023-02-05T02:54:22.000Z">
+<meta property="article:modified_time" content="2023-02-28T18:37:58.837Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="ML4T">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/ML4T-0204_01.png">
+
+<link rel="canonical" href="http://example.com/2023/02/04/ML4T_02-04_TheCaptical%20AssetsPricingModel/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Machine Learning for Trading--2-4 The Capital Assets Pricing Model (CAPM) | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/04/ML4T_02-04_TheCaptical%20AssetsPricingModel/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Machine Learning for Trading--2-4 The Capital Assets Pricing Model (CAPM)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-02-04 21:54:22" itemprop="dateCreated datePublished" datetime="2023-02-04T21:54:22-05:00">2023-02-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Machine-Learning-for-Trading/" itemprop="url" rel="index"><span itemprop="name">Machine Learning for Trading</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ul>
+<li>Definition of a portfolio</li>
+<li>The market portfolio</li>
+<li>The CAPM equation</li>
+<li>CAPM vs. Active management</li>
+<li>CAPM for portfolios</li>
+<li>Implications of CAPM </li>
+<li>Arbitrage Pricing Theory</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="Definition-of-a-portfolio"><a href="#Definition-of-a-portfolio" class="headerlink" title="Definition of a portfolio"></a>Definition of a portfolio</h1><p>A portfolio is a weighted set of assets. We can stipulate that the sum of the weights of each investment equals one; in other words, our portfolio allocations must add to 100%.</p>
+<p>However, not all weights need to be positive. For example, if we short GOOG, our allocation might be -0.2 instead of 0.2. </p>
+<p>For a given day, t, we can calculate the daily return of the portfolio, \(r_p(t)\), as the weighted sum of the daily returns of each of the assets on day t.</p>
+<p><img src="/../images/ML4T-0204_01.png" alt="portfolio"></p>
+<h2 id="Portfolio-return-quiz"><a href="#Portfolio-return-quiz" class="headerlink" title="Portfolio return quiz"></a>Portfolio return quiz</h2><p>Consider a portfolio consisting of two stocks: Stock A and Stock B. 75% of the portfolio is in Stock A, and -25% of the portfolio is in Stock B; in other words, the portfolio has taken a short position in Stock B.</p>
+<p>Assume that, today, the price of Stock A increases by 1%, while the price of Stock B decreases by 2%. What is the return on this portfolio?</p>
+<p><img src="/../images/ML4T-0204_Q1.png" alt="quiz"></p>
+<h1 id="The-market-portfolio"><a href="#The-market-portfolio" class="headerlink" title="The market portfolio"></a>The market portfolio</h1><p>When someone refers to “the market”, what they are usually referring to is an index that broadly covers a large set of stocks.</p>
+<p>The best example of such an index in the United States is the S&amp;P 500, which represents the 500 largest companies traded on stock exchanges. The value of the S&amp;P 500 changes each day as a result of stock price fluctuations among its constituent companies.</p>
+<p>There are similar stock market indices in other countries, such as FTA in the United Kingdom and TOPIX in Japan. Additionally, there are specialized indices that track companies only within specific industries, such as healthcare or technology.</p>
+<p>Stock market indices are composed of many individual stocks, and the market portfolio is the combination of those stocks according to a particular weighting. Most indices are capitalization-weighted, which means that the individual weight of each stock in the portfolio is proportional to that stock’s market capitalization.</p>
+<p><img src="/../images/ML4T-0204_02.png" alt="portfolio"></p>
+<h1 id="The-CAPM-equation"><a href="#The-CAPM-equation" class="headerlink" title="The CAPM equation"></a>The CAPM equation</h1><p>The core of the capital assets pricing model (CAPM) is captured in the following equation.</p>
+<p><img src="/../images/ML4T-0204_03.png" alt="CAPM"></p>
+<p>\(r\) is the return; i reprsent the individual stock i; t is the particular day, \(\beta\) and \(\alpha\) is stock-specific factors; \(r_m\) is the return on the market.</p>
+<ul>
+<li>Remember that when we are talking about the market, we are explicitly talking about a stock market index, such as the S&amp;P 500, of which stock i is a member.</li>
+<li>The \(\beta\) factor encapsulates the extent to which the market affects a particular stock. Many stocks have a \(\beta\) near 1, which means that when the market moves 1%, the stock also moves 1%. A larger \(\beta\) indicates that a stock moves more than 1% when the market moves 1%.</li>
+<li>If we try to compute the historical return for a particular stock based solely on the market return and \(\beta\), we won’t calculate the correct value. There is going to be something “left over”. The \(\alpha\) component of the CAPM equation captures this residual.</li>
+<li>A crucial assertion of CAPM is that the expectation for \(\alpha\) is 0. Technically, \(\alpha\) is a random variable with an expected value of 0.</li>
+<li>For each day, it looks like XYZ is more reactive than the S&amp;P 500; in other words, when the S&amp;P 500 goes up a little bit, XYZ goes up a lot. Additionally, XYZ appears to have a higher absolute return, on average, than the S&amp;P 500. We can create a scatterplot of the returns for XYZ against the returns for the S&amp;P 500.</li>
+<li>Like any line, the line above can be described by two parameters: slope and y-intercept. The slope is \(\beta\), and the y-intercept is \(\alpha\).</li>
+</ul>
+<h2 id="Compare-alpha-and-beta-quiz"><a href="#Compare-alpha-and-beta-quiz" class="headerlink" title="Compare alpha and beta quiz"></a>Compare alpha and beta quiz</h2><p>Consider the following two scatterplots. The plot on the left shows the daily returns of a fictional stock XYZ against the daily returns of the S&amp;P 500. The plot on the right shows the daily returns of a fictional stock ABC against the daily returns of the S&amp;P 500.</p>
+<p>Given these two plots, which asset has a higher \(\alpha\) and which has a higher \(\beta\)?</p>
+<p><img src="/../images/ML4T-0204_Q2.png" alt="quiz"></p>
+<h1 id="CAPM-vs-Active-management"><a href="#CAPM-vs-Active-management" class="headerlink" title="CAPM vs. Active management"></a>CAPM vs. Active management</h1><p><strong>Passive investing</strong> advises investors to buy an index portfolio - for example, an ETF like SPY that tracks the S&amp;P 500 - and hold it and let it grow.<br><strong>Active investing</strong>, on the other hand, is all about picking individual stocks.</p>
+<p><img src="/../images/ML4T-0204_04.png" alt="CAPM vs. Active management"></p>
+<ul>
+<li>Both active managers and passive managers agree with the first part of this equation; in other words, they agree that how a stock moves each day is most significantly influenced by the market, and the amount that it moves can be captured by \(\beta\) .</li>
+<li>However, they disagree concerning the treatment of the \(\alpha\) factor. Remember that CAPM says two essential things about \(\alpha\): it’s random, and it’s expected value is zero. Passive investors agree with CAPM.</li>
+<li>Active managers, on the other hand, believe that \(\alpha\) is neither random nor centered around zero. They think that they can examine stocks and predict which are going to rise or fall relative to the market. They might not be exactly right on every single pick, but they believe that, on average, they are better than random and better than zero.</li>
+</ul>
+<h1 id="CAPM-for-portfolios"><a href="#CAPM-for-portfolios" class="headerlink" title="CAPM for portfolios"></a>CAPM for portfolios</h1><p>Suppose now that instead of looking at just one stock, we want to consider an entire portfolio.</p>
+<p>We can calculate the \(\beta\) for the overall portfolio, \(\beta_p\), as the weighted sum of the individual \(\beta\) values for each stock.</p>
+<p><img src="/../images/ML4T-0204_05.png" alt="CAPM for portfolios"></p>
+<p>CAPM: the expected value of \(\alpha\)  is zero.</p>
+<p>Active portfolio manager: doesn’t believe the \(\alpha\) is a random variable centered at zero. As a result, they incorporate the weighted sum of individual stock \(\alpha\) values into the \(r_p(t)\) calculation.</p>
+<h2 id="Implications-of-CAPM-Quiz"><a href="#Implications-of-CAPM-Quiz" class="headerlink" title="Implications of CAPM Quiz"></a>Implications of CAPM Quiz</h2><p>If we are in an upward market, do we want a portfolio with a larger \(\beta_p\) or a smaller \(\beta_p\)? How about if we are in a downward market?</p>
+<p><img src="/../images/ML4T-0204_06.png" alt="Quiz"></p>
+<h1 id="Implications-of-CAPM"><a href="#Implications-of-CAPM" class="headerlink" title="Implications of CAPM"></a>Implications of CAPM</h1><ul>
+<li>The first point to remember is that CAPM says that \(\alpha\) is a random variable with an expected value of zero. This assertion excludes smart \(\alpha\) selection from our toolbox of ways to make money.</li>
+<li>The only way we can beat the market now is by cleverly choosing \(\beta\). When the market is going up, we want to invest in a portfolio with a large \(\beta\). When the market is going down, we want to invest in a portfolio with a small, even negative, \(\beta\).</li>
+<li>Unfortunately, the efficient markets hypothesis - which we are going to cover soon - essentially says that you can’t predict the market. As a result, the strategy of switching into portfolios with optimal \(\beta\) values based on expected market performance falls flat.</li>
+<li>If we believe CAPM, then we must concede that we cannot beat the market. Professor Balch does not believe CAPM.</li>
+</ul>
+<p><img src="/../images/ML4T-0204_07.png" alt="Implications of CAPM "></p>
+<h1 id="Arbitrage-Pricing-Theory"><a href="#Arbitrage-Pricing-Theory" class="headerlink" title="Arbitrage Pricing Theory"></a>Arbitrage Pricing Theory</h1><p>The classical value of \(\beta\) relates the performance of a stock to the performance of the entire stock market. However, researchers realized that, since a particular stock might have exposure to multiple sectors of the market, perhaps it ought to have a \(\beta\) value relating its performance to that of each sector. This is known as <strong>arbitrage pricing theory (APT)</strong>.</p>
+<p>For example, a particular stock, i, might have exposure to the financial sector, F, so we could compute the component of return for i due to F as the product of \(\beta_iF\) and the return \(rF\)for F for that day.</p>
+<p>We can continue this process, computing an individual \(\beta\) for each sector that impacts the stock. By breaking out the overall \(\beta\) into these sector components, we can get a more accurate forecast of returns.</p>
+<p><img src="/../images/ML4T-0204_08.png" alt="APT"></p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/ML4T/" rel="tag"># ML4T</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/02/03/ML4T_02-03_WhatIsACompanyWorth/" rel="prev" title="Machine Learning for Trading--2-3 What is a company worth?">
+      <i class="fa fa-chevron-left"></i> Machine Learning for Trading--2-3 What is a company worth?
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/02/05/Information_Systems_Chapter_11/" rel="next" title="Information System 11- Information-Based Business Processes">
+      Information System 11- Information-Based Business Processes <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Definition-of-a-portfolio"><span class="nav-number">1.</span> <span class="nav-text">Definition of a portfolio</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Portfolio-return-quiz"><span class="nav-number">1.1.</span> <span class="nav-text">Portfolio return quiz</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-market-portfolio"><span class="nav-number">2.</span> <span class="nav-text">The market portfolio</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-CAPM-equation"><span class="nav-number">3.</span> <span class="nav-text">The CAPM equation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Compare-alpha-and-beta-quiz"><span class="nav-number">3.1.</span> <span class="nav-text">Compare alpha and beta quiz</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CAPM-vs-Active-management"><span class="nav-number">4.</span> <span class="nav-text">CAPM vs. Active management</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CAPM-for-portfolios"><span class="nav-number">5.</span> <span class="nav-text">CAPM for portfolios</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Implications-of-CAPM-Quiz"><span class="nav-number">5.1.</span> <span class="nav-text">Implications of CAPM Quiz</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Implications-of-CAPM"><span class="nav-number">6.</span> <span class="nav-text">Implications of CAPM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Arbitrage-Pricing-Theory"><span class="nav-number">7.</span> <span class="nav-text">Arbitrage Pricing Theory</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

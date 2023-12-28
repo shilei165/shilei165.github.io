@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Learning Objectives Describe several important emerging technologies, including 5G, IoT, and AI Compare and contrast data, information, and knowledge Explain the concepts of connectedness and usefulne">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Information Systems 1- The Value of Information">
+<meta property="og:url" content="http://example.com/2023/01/04/Information_Systems_Chapter_1/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="Learning Objectives Describe several important emerging technologies, including 5G, IoT, and AI Compare and contrast data, information, and knowledge Explain the concepts of connectedness and usefulne">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-01-05T00:24:14.000Z">
+<meta property="article:modified_time" content="2023-07-17T14:50:08.766Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Information Systems">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2023/01/04/Information_Systems_Chapter_1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Information Systems 1- The Value of Information | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/04/Information_Systems_Chapter_1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Information Systems 1- The Value of Information
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-01-04 19:24:14" itemprop="dateCreated datePublished" datetime="2023-01-04T19:24:14-05:00">2023-01-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Information-Systems/" itemprop="url" rel="index"><span itemprop="name">Information Systems</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Learning-Objectives"><a href="#Learning-Objectives" class="headerlink" title="Learning Objectives"></a><strong>Learning Objectives</strong></h1><ul>
+<li>Describe several important emerging technologies, including 5G, IoT, and AI</li>
+<li>Compare and contrast data, information, and knowledge</li>
+<li>Explain the concepts of connectedness and usefulness as they relate to information</li>
+<li>Name the skills requird for information literacy</li>
+<li>Discuss the importance of information literacy in a businesses</li>
+<li>Compare and contrast information systems careers and information analysis careers</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="What-is-information-and-why-is-important"><a href="#What-is-information-and-why-is-important" class="headerlink" title="What is information and why is important?"></a>What is information and why is important?</h1><p>Information is important, so knowing about the <strong>technologies and systems</strong> that help one effectively deal with informaiton are also important.</p>
+<h2 id="Information-technology-vs-Information-Systems"><a href="#Information-technology-vs-Information-Systems" class="headerlink" title="Information technology vs. Information Systems"></a>Information technology vs. Information Systems</h2><ul>
+<li><strong>Information technology</strong>: hardware, software and media used to store, organize, retrieve and communicate information.</li>
+<li><strong>Information system</strong>: organized combination of hardware, software, infrastructure, data and people used to accomplish a specified organizational or personal bojective.</li>
+</ul>
+<h1 id="Information-and-Emerging-Technologies"><a href="#Information-and-Emerging-Technologies" class="headerlink" title="Information and Emerging Technologies"></a>Information and Emerging Technologies</h1><p>The world of technology changes rapidly, bring equally rapid changes in how we live and work. Examples include email, social media, mobile apps for ordering food, GPS, music etc.</p>
+<h2 id="Emering-technologies-that-are-likely-to-change-our-lives-even-more"><a href="#Emering-technologies-that-are-likely-to-change-our-lives-even-more" class="headerlink" title="Emering technologies that are likely to change our lives even more."></a>Emering technologies that are likely to change our lives even more.</h2><ul>
+<li><p><strong>Fifth-generation cellular networking (5G):</strong></p>
+<ol>
+<li>It offers much faster data transmission speed, wider coverage areas, and better response times than 4G. </li>
+<li>5G’s enhanced data-handing capabilities offer many possibilities for new technology applications that depend on the ability to send and receive information rapidly. </li>
+<li>These capabilities are especially useful when combined with IoT</li>
+</ol>
+</li>
+<li><p><strong>Internet of Things (IoT):</strong></p>
+<ol>
+<li>IoT refers to an almost limitless network of connected sensors that are embedded in physical objects ranging from refrigerators to airplanes.</li>
+<li>Sensors collect data from physical objects and environment, process the data in limited ways, and transmit the data to computer through the Internet.</li>
+<li>Computers process data further and send data back to sensors, which then can send commands to other processors embeded in the physical object.</li>
+<li>Examples include: traffic sensors; smart homes (smart climate control and lighting systems, surveilance systems, video doorbells, smart refrigerators, and smart locks, among many others)</li>
+</ol>
+</li>
+<li><p><strong>Artificial intelligence (AI):</strong></p>
+<ol>
+<li>AI is used to describe a family of technologies that approximate human cognitive abilities, such as resoning, planning, learning, problem-solving, perception, and language processing.</li>
+<li>Broad applications: expert systems, machining learning, natural language processing, and intelligent agents, among others.</li>
+</ol>
+</li>
+</ul>
+<h2 id="Combine-thses-Technologies-Together"><a href="#Combine-thses-Technologies-Together" class="headerlink" title="Combine thses Technologies Together"></a>Combine thses Technologies Together</h2><ul>
+<li><p>Information technology applications are built around the ability to <strong>gather, communicate, and process</strong> information.</p>
+</li>
+<li><p>These three capabilities align nicely with the main functions of <strong>IoT (gather), 5G (communicate), and AI (process)</strong>.</p>
+</li>
+<li><p><strong>Information</strong> has been, and continues to be, the driving element behind advances in how we apply information technologies.</p>
+</li>
+<li><p>The purpose of IoT is to gather information, the point of 5G is to communicate information faster and more effectively, and the point of AI is to use information more effectively.</p>
+</li>
+</ul>
+<h2 id="Interesting-Applications-of-the-Fusion"><a href="#Interesting-Applications-of-the-Fusion" class="headerlink" title="Interesting Applications of the Fusion"></a>Interesting Applications of the Fusion</h2><ul>
+<li><p><strong>Smart cities</strong></p>
+<ol>
+<li>The idea behind smart cities is to use IoT to collect data, which is then used to better manage resources and to more effectively provide services.</li>
+<li>Smart traffic control system: <strong>IoT-enabled sensors</strong> to conrol traffic by sensing when areas become congested and adjusting traffic lights to ease the traffic jams androute traffic to less congested routes. <strong>AI</strong> can be used to determine the optimal timing of traffic signals. <strong>5G</strong> and <strong>autonomous vehicles</strong> can further improve the efficiency and safety.</li>
+<li>Other smart city applications: environmental monitoring, energy management, intelligent transportation systems, management of public spaces, and refuse collection.</li>
+</ol>
+</li>
+<li><p><strong>Autonomous Vehicles</strong></p>
+<ol>
+<li>Automated systems alter the driver to potential hazards, such as stopped vehicle ahead. In some cases, the automated system will take over certain systems (e.g. braking system).</li>
+<li>There are 6 levels of automated driving systems. Level 0 - no automation, level 5 - full automation. Level 3 are becoming more common.</li>
+<li>Sensors – cameras, radar system, &amp; position and proximity sensors. 5G&#x2F;other network – send and receive data, communicate with traffic lights system or other vehicles. AI – use the information from IoT sensors and other information sources to take action to avoid potential collisions.</li>
+</ol>
+</li>
+<li><p><strong>VR, AR and Mixted Reality</strong></p>
+<ol>
+<li><strong>VR</strong>: Virtual reality. <strong>AR</strong>: Augmented reality. </li>
+<li>They are all similar in that they involve using digital technologies to reprsent or add to physical reality.</li>
+<li>VR is a fully immersive experience in which the technology makes you sense that you are in a different environment.</li>
+<li>AR systems overlay information on top of elements of the real world. Pokemon Go and Real Strike are examples.</li>
+<li>Mixed reality lies somewhere between VR and AR. It allows users to interact with both physical and virtual objects, which opens the possibilities for applications in many areas, such as surgery, training, retailing, real estate, and entertainment, etc.</li>
+</ol>
+</li>
+</ul>
+<h1 id="Data-Information-Knowledge-and-Wisdom"><a href="#Data-Information-Knowledge-and-Wisdom" class="headerlink" title="Data, Information, Knowledge, and Wisdom"></a>Data, Information, Knowledge, and Wisdom</h1><ul>
+<li><strong>Data</strong> are raw symbols. Data itself is meaningless.</li>
+<li><strong>Information</strong> is data that have been processed so that they are useful. In other words, <strong>Information</strong> is the original data combined with other related data and it helps us interpret the data.</li>
+<li><strong>Knowledge</strong> is when information is applied to some decision or action.</li>
+<li><strong>Wisdon</strong> involves using knowledge for the greater good. Wisdom is deeper and more uniquely human.</li>
+</ul>
+<h2 id="Two-reasons-bring-up-this-hierarchy"><a href="#Two-reasons-bring-up-this-hierarchy" class="headerlink" title="Two reasons bring up this hierarchy"></a>Two reasons bring up this hierarchy</h2><ol>
+<li><p>It gives us a way to think about different kinds of systems and how they have evolved. The hierarchy parallels how businesses have applied information technology.</p>
+<pre><code> Manage data --&gt;mamage information --&gt; manage knowledge --&gt; mamage wisdom (debatable).
+</code></pre>
+</li>
+<li><p>It helps frame two important concepts: <strong>connectedness and usefulness</strong>.</p>
+<pre><code> Data to information requires connecting data elements, and which gives the data meaning (may not be useful). 
+ To be useful, information is interpreted and applied leading to knowledge.
+</code></pre>
+</li>
+</ol>
+<h1 id="Information-Literacy"><a href="#Information-Literacy" class="headerlink" title="Information Literacy"></a>Information Literacy</h1><p><strong>Information Literacy</strong> is the ability to efficiently and effectively determine what information is needed and then access, evaluate, use, and manage that information in an ethical manner.</p>
+<p>Understanding how to deal with information may well have serious benefits as you move through your business career.</p>
+<h1 id="Use-Information"><a href="#Use-Information" class="headerlink" title="Use Information"></a>Use Information</h1><p>All businesses use information for three main purposes:</p>
+<ol>
+<li><p><strong>communication</strong> – Organizations much exchange information for many reasons, including sharing ideas, corrdinating actions, and transmitting information.</p>
+</li>
+<li><p><strong>process support</strong> – Many business processes are quite comples and involve various parts of business.</p>
+</li>
+<li><p><strong>decision-making</strong> – Making decision requires information about the alternatives.</p>
+</li>
+<li><p>Some businesses also use information for <strong>product</strong>. (like Google)</p>
+</li>
+</ol>
+<h1 id="Information-and-Your-Career"><a href="#Information-and-Your-Career" class="headerlink" title="Information and Your Career"></a>Information and Your Career</h1><ul>
+<li><p><strong>Information system careers</strong> – focus on the design, building, support or management of information systems.</p>
+<ul>
+<li>Examples include computer systems analyst, information systems manager, computer support specialists, etc.</li>
+</ul>
+</li>
+<li><p><strong>Information analysis careers</strong> – use systems to retrieve, report on, and analyze the information contained in the systems. </p>
+<ul>
+<li>Examples include data analyst, data scientist, business intelligence professional, etc.</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Information-Systems/" rel="tag"># Information Systems</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/09/13/Machine%20Learning-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-23/" rel="prev" title="Machine Learning-学习笔记-23-Application example:Photo OCR">
+      <i class="fa fa-chevron-left"></i> Machine Learning-学习笔记-23-Application example:Photo OCR
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/01/05/Information_Systems_Chapter_2/" rel="next" title="Information Systems 2- Introduction to Information Systems">
+      Information Systems 2- Introduction to Information Systems <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Learning-Objectives"><span class="nav-number">1.</span> <span class="nav-text">Learning Objectives</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#What-is-information-and-why-is-important"><span class="nav-number">2.</span> <span class="nav-text">What is information and why is important?</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Information-technology-vs-Information-Systems"><span class="nav-number">2.1.</span> <span class="nav-text">Information technology vs. Information Systems</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Information-and-Emerging-Technologies"><span class="nav-number">3.</span> <span class="nav-text">Information and Emerging Technologies</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Emering-technologies-that-are-likely-to-change-our-lives-even-more"><span class="nav-number">3.1.</span> <span class="nav-text">Emering technologies that are likely to change our lives even more.</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Combine-thses-Technologies-Together"><span class="nav-number">3.2.</span> <span class="nav-text">Combine thses Technologies Together</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Interesting-Applications-of-the-Fusion"><span class="nav-number">3.3.</span> <span class="nav-text">Interesting Applications of the Fusion</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Data-Information-Knowledge-and-Wisdom"><span class="nav-number">4.</span> <span class="nav-text">Data, Information, Knowledge, and Wisdom</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Two-reasons-bring-up-this-hierarchy"><span class="nav-number">4.1.</span> <span class="nav-text">Two reasons bring up this hierarchy</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Information-Literacy"><span class="nav-number">5.</span> <span class="nav-text">Information Literacy</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Use-Information"><span class="nav-number">6.</span> <span class="nav-text">Use Information</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Information-and-Your-Career"><span class="nav-number">7.</span> <span class="nav-text">Information and Your Career</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

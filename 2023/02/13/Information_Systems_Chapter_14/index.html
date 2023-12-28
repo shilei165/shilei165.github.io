@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Learning Objectives Explain why knowledge management is important to organizations Compare and contrast explicit and tacit knowledge Describe the main processes for knowledge management Compare and co">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Information System 14- Information and Knowledge for Business Decision-Making">
+<meta property="og:url" content="http://example.com/2023/02/13/Information_Systems_Chapter_14/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="Learning Objectives Explain why knowledge management is important to organizations Compare and contrast explicit and tacit knowledge Describe the main processes for knowledge management Compare and co">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-02-13T16:20:00.000Z">
+<meta property="article:modified_time" content="2023-02-19T18:02:32.426Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Information Systems">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2023/02/13/Information_Systems_Chapter_14/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Information System 14- Information and Knowledge for Business Decision-Making | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/13/Information_Systems_Chapter_14/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Information System 14- Information and Knowledge for Business Decision-Making
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-02-13 11:20:00" itemprop="dateCreated datePublished" datetime="2023-02-13T11:20:00-05:00">2023-02-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Information-Systems/" itemprop="url" rel="index"><span itemprop="name">Information Systems</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Learning-Objectives"><a href="#Learning-Objectives" class="headerlink" title="Learning Objectives"></a><strong>Learning Objectives</strong></h1><ul>
+<li>Explain why knowledge management is important to organizations</li>
+<li>Compare and contrast explicit and tacit knowledge</li>
+<li>Describe the main processes for knowledge management</li>
+<li>Compare and contrast major knowledge management technologies</li>
+<li>Describe the main categories of decision support systems</li>
+<li>Describe the main purposes of and techniques used in business analytics</li>
+<li>Explain how artificial intelligence and robots are affecting business</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="Knowledge-Management"><a href="#Knowledge-Management" class="headerlink" title="Knowledge Management"></a>Knowledge Management</h1><ul>
+<li><p>Knowledge is often applied to decision-making.</p>
+</li>
+<li><p>As organizations gather an increasing amount of data, being able to leverage these data for decision-making and action is an increasingly important aspect of business.</p>
+</li>
+<li><p>data are unconnected facts</p>
+</li>
+<li><p>information is data that have been processed so that they are useful</p>
+</li>
+<li><p>knowledge is information that is applied to a decision or action</p>
+</li>
+</ul>
+<p><strong>Knowledge management</strong> is a process that allows organizations to generate value from their knowledge-based assets. It involves capturing and decumenting what employees and other stakeholders know and developing systems that make it easier to share and use that knowledge.</p>
+<h1 id="Why-Managing-Knowledge-Is-Important"><a href="#Why-Managing-Knowledge-Is-Important" class="headerlink" title="Why Managing Knowledge Is Important"></a>Why Managing Knowledge Is Important</h1><ul>
+<li>Better problem solving</li>
+<li>Improved customer service</li>
+<li>More effective product management</li>
+<li>Increased innovation </li>
+<li>More efficient and more effective processes</li>
+<li>Increased intellectual capital</li>
+<li>Better leveraging of intellectual assets</li>
+</ul>
+<h2 id="Types-of-Knowledge"><a href="#Types-of-Knowledge" class="headerlink" title="Types of Knowledge"></a>Types of Knowledge</h2><ul>
+<li>Explicit knowledge<ul>
+<li>expressed easily - operations manuals, books, and articles</li>
+<li>easy to share, store, and manage</li>
+<li>think of explicit knowledge as “knowing that”</li>
+</ul>
+</li>
+<li>Tacit knowledge<ul>
+<li>difficult to communicate</li>
+<li>rooted in life experiences, values, and biases</li>
+<li>example 1: a good salesperson knows when to close a sale and when to back off.</li>
+<li>example 2: a knowledgeable computer programmer can quickly diagnose an error message.</li>
+<li>think of tacit knowledge as “knowing how”</li>
+</ul>
+</li>
+</ul>
+<h1 id="Main-Processes-for-Knowledge-Management"><a href="#Main-Processes-for-Knowledge-Management" class="headerlink" title="Main Processes for Knowledge Management"></a>Main Processes for Knowledge Management</h1><ol>
+<li>Creation</li>
+<li>Capture and codification</li>
+<li>Storage and retrieval</li>
+<li>transfer and application</li>
+</ol>
+<p>While information technology is not required for any of these processes, as you will see, IT can facilitate each process in a knowledge management system.</p>
+<h2 id="Creating-Knowledge"><a href="#Creating-Knowledge" class="headerlink" title="Creating Knowledge"></a>Creating Knowledge</h2><p>While knowledge exists in individuals, organizational knowledge can also be created.</p>
+<p>Nonaka and Takeuchi (1995) proposed the SECI model of organizational knowledge creation.</p>
+<p>According to the model, knowledge creation is a continuous process consisting of interactions between implicit and explicit knowledge. There are four processes by which knowledge is created:</p>
+<ul>
+<li>Socialization - sharing tacit knowledge. <em>tacit-to-tacit communication</em></li>
+<li>Externalization - tacit knowledge is converted to explicit knowledge by developing specific concepts, models, and the etc. <em>tacit-to-explicit communication</em></li>
+<li>Combination - combining the externalized explicit knowledge to form broader concepts, models, and theories.</li>
+<li>Internalization - occurs when explicit knowledge transforms to tacit knowledge and becomes internalized by individuals within the organization.</li>
+</ul>
+<h2 id="Capturing-and-Codifying-Knowledge"><a href="#Capturing-and-Codifying-Knowledge" class="headerlink" title="Capturing and Codifying Knowledge"></a>Capturing and Codifying Knowledge</h2><p>Once knowledge is created or otherwise acquired, it needs to be captured and codified.</p>
+<ul>
+<li>Scanning (gather “raw” information) <ul>
+<li>Can be electronic or human</li>
+<li>Interviews, focus groups, etc.</li>
+</ul>
+</li>
+<li>Codifying (into acceptable form) <ul>
+<li>Determining best way to codify and distribute the knowledge.</li>
+</ul>
+</li>
+<li>Designing knowledge maps (Tools that help codifying knowledge)<ul>
+<li>Cognitive maps</li>
+<li>Decision tables</li>
+<li>Decision trees</li>
+</ul>
+</li>
+</ul>
+<p><strong>Cognitive maps</strong> represent the mental model of the expert’s knowledge. Key concepts and the relationships among them are shown. Software such as Freemind, MindMeister, and Visio can help document the maps.</p>
+<p><strong>Decision tables</strong> show a list of conditions and their values along with a list of conclusions or actions. The conditions necessary for each conclusion are indicated.</p>
+<p><strong>Decision trees</strong> show the alternate paths that impact decisions. The tree shows various paths that can lead to certain outcomes. Here the idea is to use decision trees as a way to document how a decision is made.</p>
+<h1 id="Knowledge-Management-Technologies"><a href="#Knowledge-Management-Technologies" class="headerlink" title="Knowledge Management Technologies"></a>Knowledge Management Technologies</h1><h2 id="Repositories"><a href="#Repositories" class="headerlink" title="Repositories"></a>Repositories</h2><ul>
+<li>The goal of knowledge repositories is to make it easy to find and retrieve documents that contain knowledge.</li>
+</ul>
+<h2 id="Communication-Based-Tools"><a href="#Communication-Based-Tools" class="headerlink" title="Communication-Based Tools"></a>Communication-Based Tools</h2><ul>
+<li><p>There are many communication-oriented tools for knowledge management. Email is an example.</p>
+</li>
+<li><p>While email can be effective, you need to know who has the knowledge you need. You also need access to that individual. Social networks can help overcome these limitations.</p>
+</li>
+<li><p>Communities of practice that exist within networks are especially helpful. LinkedIn groups are an example.</p>
+</li>
+<li><p>Collaboration tools combine elements of repositories and communication-based knowledge management tools. Systems such as Google Docs allow for document sharing and coediting.</p>
+</li>
+</ul>
+<h2 id="Dashboards"><a href="#Dashboards" class="headerlink" title="Dashboards"></a>Dashboards</h2><ul>
+<li>Digital dashboards provide graphical views of key data along with graphical warnings when data indicate areas that need attention.</li>
+</ul>
+<h2 id="Expert-Systems"><a href="#Expert-Systems" class="headerlink" title="Expert Systems"></a>Expert Systems</h2><ul>
+<li>Expert systems help users solve problems or answer questions in a way that mimics an expert’s thought processes.</li>
+<li>Example: Turbotax, Insurance system.</li>
+</ul>
+<h2 id="Decision-Support-Systems-DSS"><a href="#Decision-Support-Systems-DSS" class="headerlink" title="Decision Support Systems (DSS)"></a>Decision Support Systems (DSS)</h2><ul>
+<li><strong>Decision support systems (DSSs)</strong> are computer-based systems that help decision makers use data and models to solve semistructured or unstructured problems.</li>
+<li>Many different types of DSSs<ul>
+<li>Data-driven – focuses on retrieval and manipulation of data, particularly useful for unstructured decision because of the amount of data retrieval required.</li>
+<li>Model-driven – focuses on providing the decision maker with the ability to access and manipulate analytical models.</li>
+<li>Document-driven – focuses on managing and retrieving documents that may help with decision-making.</li>
+<li>Communication-driven – facilitates collaboration and group-based decision-making. Groupware, which we discuss next, is one type of communication-driven DSS. Email, document sharing, coediting systems (such as Google Docs), and remote meeting systems are other examples.</li>
+</ul>
+</li>
+</ul>
+<h2 id="Collaboration-Systems"><a href="#Collaboration-Systems" class="headerlink" title="Collaboration Systems"></a>Collaboration Systems</h2><p>“Synchronous” and “asynchronous” describe whether the users collaborate at the same time (synchronous) or at different times (asynchronous).</p>
+<p>When group members are in the same physical location, they are colocated. We often use the dimensions of time and place to categorize common collaboration system functions.</p>
+<ul>
+<li>Group decision support system - facilitate group-based decision-making tasks. Include applications for brainstorming, anonymous commenting, and voting.</li>
+<li>Shared whiteboards - allow users who are not colocated to share drawings or notes in the same way.</li>
+<li>Videoconferencing - allows individuals to communicate using both voice and video.</li>
+<li>Chat systems - write real-time message in public space.</li>
+</ul>
+<h2 id="Business-Intelligence-and-Analytics"><a href="#Business-Intelligence-and-Analytics" class="headerlink" title="Business Intelligence and Analytics"></a>Business Intelligence and Analytics</h2><p>You may have heard about <strong>business analytics (BA)</strong>; it is a very hot topic. Essentially, business analytics is the process of transforming data into insights to improve operations and decision-making.</p>
+<p>Business analytics is a very close cousin to <strong>business intelligence (BI)</strong>.</p>
+<ul>
+<li>BI is often thought to be more concerned with descriptive tasks.</li>
+<li>BA is often thought to be more concerned with making predictions.</li>
+</ul>
+<ol>
+<li>The overall goal of BA is to help people make sense of data.</li>
+<li>Data warehouses are critical elements of many BA systems. The data stored in data warehouses come from various internal and external sources, including internal transaction processing systems.</li>
+</ol>
+<ul>
+<li>The data warehouse stores and organizes the data in a way that is well-suited for supporting decision-making and analysis.</li>
+</ul>
+<ol start="3">
+<li>Business analytics tools help many different types of organizations reduce spending and increase sales.</li>
+</ol>
+<h2 id="Business-Analytics-Methods"><a href="#Business-Analytics-Methods" class="headerlink" title="Business Analytics Methods"></a>Business Analytics Methods</h2><p>“Business analytics goals can be classified into three categories: descriptive, predictive, and prescriptive analytics. “</p>
+<ul>
+<li>Descriptive analytics provides insights into the past. Descriptive analytics methods include reporting, data mining, and visualization. </li>
+<li>Predictive analytics is directed at understanding the future by predicting likely outcomes based on analysis of historical data and other factors. </li>
+<li>Prescriptive analytics provides advice on preferred outcomes.</li>
+</ul>
+<p><strong>Three analytics approaches</strong>: visualization, reporting, and data mining.</p>
+<p><strong>Visualization</strong></p>
+<ul>
+<li>Visualizations use aesthetic design elements, including, position, shape, color, line characteristics (width and type), and size to express information.</li>
+<li>Visualizations focused on data exploration tend to display more information that those intended to explain, although this is not always the case. Exploratory data visualization helps you get a handle on the data that you have.</li>
+<li>Explanation typically follows exploration—once you know the story that lives in the data, you create visualizations that tell the story to your intended audience.</li>
+</ul>
+<p><strong>data mining</strong> is the process of analyzing data to identify trends, patterns, and other useful information. </p>
+<p>In most traditional statistical analyses, you create a model (such as a regression equation) and then test that model using data. Essentially, you have a hypothesis and then use data and statistical analysis to test that hypothesis.</p>
+<p>A restaurant might determine that customers who order wine typically buy dessert, while beer drinkers usually buy appetizers. The restaurant could develop special offerings based on this information.</p>
+<h1 id="Artificial-Intelligence-AI"><a href="#Artificial-Intelligence-AI" class="headerlink" title="Artificial Intelligence (AI)"></a>Artificial Intelligence (AI)</h1><p>AI refers to a family of technologies that approximate human cognitive abilities.</p>
+<p>Currently available AI systems can be classified as narrow AI and deep AI. </p>
+<ul>
+<li>Narrow AI – AI system focuses on a single, relatively narrow task. For example, virtual assistants, such as Apple’s Siri or Amazon’s Alexa, help users perform a relatively narrow range of tasks, such as getting directions to a nearby Thai restaurant or checking the weather.</li>
+<li>Deep AI – To be classified as deep AI, the system must be indistinguishable from a human in the way that it thinks and acts.</li>
+</ul>
+<p>Existing uses of AI:</p>
+<ul>
+<li>Computer Vision – use AI techniques such as neural networks to interpret visual data.</li>
+<li>Natural Language Processing (NPL) – The goal of NLP is for computers to understand language as humans can.</li>
+<li>Recommendation systems – Recommendation systems are widely used by companies such as Amazon to show consumers products that are likely to be of interest.</li>
+<li>Expert Systems – Expert systems use a knowledge base and an inference engine (a set of rules of applying the knowledge) to simulate the judgment of subject-area experts.</li>
+</ul>
+<h2 id="Machine-Learning"><a href="#Machine-Learning" class="headerlink" title="Machine Learning"></a>Machine Learning</h2><p>Machine learning is a branch of AI that involves developing applications that automatically get better through experience.</p>
+<p>Machine learning involves four steps. </p>
+<ul>
+<li>Choose and prepare a set of data (training data). </li>
+<li>Choose the algorithm to use to analyze the training data set. </li>
+<li>Evaluate the model. </li>
+<li>Apply the model.</li>
+</ul>
+<h2 id="Robots"><a href="#Robots" class="headerlink" title="Robots"></a>Robots</h2><p>Robots are computer-controlled machines that can carry out complex actions. Robotics is the study of robots—their design, construction, and operation.</p>
+<ul>
+<li>Example: some of the products moved through automated warehouses that made heavy use of robots. For example, Amazon uses small robots to move large stacks of products around its warehouses. Humans still do much of the work at these warehouses, but the level of automation is increasing.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Information-Systems/" rel="tag"># Information Systems</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/02/10/ML4T_02-10_TheEfficient_Frontier/" rel="prev" title="Machine Learning for Trading--2-10 Portfolio Optimization and the Efficient Frontier">
+      <i class="fa fa-chevron-left"></i> Machine Learning for Trading--2-10 Portfolio Optimization and the Efficient Frontier
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/02/15/ML4T_03-01_HowMachineLearningIsUsedAtAHedgeFund/" rel="next" title="Machine Learning for Trading--3-1 How Machine Learning is Used at a Hedge Fund?">
+      Machine Learning for Trading--3-1 How Machine Learning is Used at a Hedge Fund? <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Learning-Objectives"><span class="nav-number">1.</span> <span class="nav-text">Learning Objectives</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Knowledge-Management"><span class="nav-number">2.</span> <span class="nav-text">Knowledge Management</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Why-Managing-Knowledge-Is-Important"><span class="nav-number">3.</span> <span class="nav-text">Why Managing Knowledge Is Important</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Types-of-Knowledge"><span class="nav-number">3.1.</span> <span class="nav-text">Types of Knowledge</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Main-Processes-for-Knowledge-Management"><span class="nav-number">4.</span> <span class="nav-text">Main Processes for Knowledge Management</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Creating-Knowledge"><span class="nav-number">4.1.</span> <span class="nav-text">Creating Knowledge</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Capturing-and-Codifying-Knowledge"><span class="nav-number">4.2.</span> <span class="nav-text">Capturing and Codifying Knowledge</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Knowledge-Management-Technologies"><span class="nav-number">5.</span> <span class="nav-text">Knowledge Management Technologies</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Repositories"><span class="nav-number">5.1.</span> <span class="nav-text">Repositories</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Communication-Based-Tools"><span class="nav-number">5.2.</span> <span class="nav-text">Communication-Based Tools</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dashboards"><span class="nav-number">5.3.</span> <span class="nav-text">Dashboards</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Expert-Systems"><span class="nav-number">5.4.</span> <span class="nav-text">Expert Systems</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Decision-Support-Systems-DSS"><span class="nav-number">5.5.</span> <span class="nav-text">Decision Support Systems (DSS)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Collaboration-Systems"><span class="nav-number">5.6.</span> <span class="nav-text">Collaboration Systems</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Business-Intelligence-and-Analytics"><span class="nav-number">5.7.</span> <span class="nav-text">Business Intelligence and Analytics</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Business-Analytics-Methods"><span class="nav-number">5.8.</span> <span class="nav-text">Business Analytics Methods</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Artificial-Intelligence-AI"><span class="nav-number">6.</span> <span class="nav-text">Artificial Intelligence (AI)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Machine-Learning"><span class="nav-number">6.1.</span> <span class="nav-text">Machine Learning</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Robots"><span class="nav-number">6.2.</span> <span class="nav-text">Robots</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

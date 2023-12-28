@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Learning Objectives PixelRNN &amp; PixelCNN GANs: Generative Adversarial Networks  VAEs: Variational Autoencoders">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Deep Learning-4-3 Generative Models">
+<meta property="og:url" content="http://example.com/2023/07/23/DL_04-03_%20GenerativeModels/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="Learning Objectives PixelRNN &amp; PixelCNN GANs: Generative Adversarial Networks  VAEs: Variational Autoencoders">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/DL_04-03_01.png">
+<meta property="og:image" content="http://example.com/images/DL_04-03_02.png">
+<meta property="og:image" content="http://example.com/images/DL_04-03_03.png">
+<meta property="og:image" content="http://example.com/images/DL_04-03_04.png">
+<meta property="og:image" content="http://example.com/images/DL_04-03_05.png">
+<meta property="og:image" content="http://example.com/images/DL_04-03_06.png">
+<meta property="og:image" content="http://example.com/images/DL_04-03_07.png">
+<meta property="og:image" content="http://example.com/images/DL_04-03_08.png">
+<meta property="og:image" content="http://example.com/images/DL_04-03_09.png">
+<meta property="og:image" content="http://example.com/images/DL_04-03_10.png">
+<meta property="og:image" content="http://example.com/images/DL_04-03_11.png">
+<meta property="og:image" content="http://example.com/images/DL_04-03_12.png">
+<meta property="og:image" content="http://example.com/images/DL_04-03_13.png">
+<meta property="og:image" content="http://example.com/images/DL_04-03_14.png">
+<meta property="og:image" content="http://example.com/images/DL_04-03_15.png">
+<meta property="article:published_time" content="2023-07-24T03:14:22.000Z">
+<meta property="article:modified_time" content="2023-07-23T23:14:08.809Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="Deep Learning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/DL_04-03_01.png">
+
+<link rel="canonical" href="http://example.com/2023/07/23/DL_04-03_%20GenerativeModels/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Deep Learning-4-3 Generative Models | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/07/23/DL_04-03_%20GenerativeModels/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Deep Learning-4-3 Generative Models
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-07-23 23:14:22" itemprop="dateCreated datePublished" datetime="2023-07-23T23:14:22-04:00">2023-07-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Learning-Objectives"><a href="#Learning-Objectives" class="headerlink" title="Learning Objectives"></a>Learning Objectives</h1><ul>
+<li>PixelRNN &amp; PixelCNN</li>
+<li>GANs: Generative Adversarial Networks </li>
+<li>VAEs: Variational Autoencoders</li>
+</ul>
+<span id="more"></span>
+<hr>
+<p>In this lesson, we’ll talk about a different class of unsupervised learning methods called generative modeling. Here we take a probabilistic view of unsupervised learning and try to estimate the probability distribution over the input space.</p>
+<p>In unsupervised learning, there’s a whole host of different tasks we may want to do. In this lesson, we’ll focus on Density Estimation, that is producing a model of the probability distribution over the input space. In some cases, we may want to just have the ability to generate samples from this distribution, that is actually generate artificial examples that come from this distribution.</p>
+<p>Recall the distinction between Discriminative and Generative models:</p>
+<ul>
+<li><p><strong>Discriminative models</strong>, model the conditional distribution probability of the label given the input. Examples of this include neural networks, support vector machines, random forests and so on. You may not have known that this is actually what we’re doing, because really we just approximate this probability distribution using a blackbox neural network. We haven’t done any additional probabilistic reasoning. However, if you’ve taken a machine learning course, you may have learned that there’s an entire probabilistic and statistical view of machine learning. Where we can actually write out these probability distributions and reason about them. For example, to derive what loss functions we may want to use.</p>
+</li>
+<li><p><strong>Generative models</strong>, on the other hand, models the distribution over the input space. Now, this is a very complex distribution, and so there’s a question of how we can actually model it. Just, like discriminative models we can have a parametric approximation of this distribution. That is we can have a set of parameterized models $p(x,\theta)$. And use the principle of maximum likelihood to optimize the parameters given the unlabeled data set. Here $p(x,\theta)$ is our likelihood and we wanna maximize it or are real theta, that is we want our model to output high probabilities for the real deta. We can use this as the optimal set of parameters, data star, being the argmax data of the product of the likelihood of each example. This is because the examples are drawn independently and identically, that is we’re just sampling independently from this distribution. And so the likelihoods of all of the data can be decomposed as the product of the likelihood of each piece of data. We can then take the log of this because we’re maximizing it, and this turns out into a sum of log likelihoods.</p>
+</li>
+</ul>
+<p>These are called generative models because they can often generate samples. Once, we have some parameters data, we can also generate examples from this distribution that we’re approximating. Some examples include multi-variate Gaussian model, where we have mu and sigma, that is the mean and co-variants. And what we wanna do is estimate these values from the data, and then given these estimates, we can just sample from the multi-variate Gaussian to actually produce example. Now, of course, this is very difficult, especially for high dimensional data. Because generative modeling is so difficult, there’s been a whole host of different methods that have been developed. These can be categorized in various ways, for example, whether they use the maximum likelihood principle in order to optimize their parameters. There are methods that perform explicit tractable density estimation. That is, they simplify the joint distribution into some factorized model consisting of simpler components and then learn parameters for those. There are methods that perform approximations of various kinds, that is, they learn distributions that approximate the true joint distribution. And then there are implicit density models, where we don’t actually model the density itself. Rather, we’re just able to perform tasks such as sampling from the density. That is we can generate samples from the probability distribution, but we can’t really have an explicit model for it that we learned. We’ll cover the three most popular methods across the spectrum, in order to give you a flavor of all the different methods that exist.</p>
+<h1 id="PixelRNN-PixelCNN"><a href="#PixelRNN-PixelCNN" class="headerlink" title="PixelRNN &amp; PixelCNN"></a>PixelRNN &amp; PixelCNN</h1><p>In this lesson, we’ll talk about generative models that perform explicit tractable density estimation, that is still reduce or factorize the joint distribution into something that’s much more manageable that we can then approximate or learn using a recurrent neural network or CNN.</p>
+<p>The first set of models that we’ll talk about represent the joint distribution as an explicit tractable density. This is going to be similar to methods such as language model, where we model the distribution over sentences as just the product of the likelihoods over the work. We’ll do something similar, for example, for pixels in images. To simplify matters, we can use the chain rule to decompose the joint distribution. ie factorizing the joint distribution into a product of conditional distribution.</p>
+<p>Mathematically:<br>$$<br>\large p(x) &#x3D; \prod_{i&#x3D;1}^{n^2} p(x_i|x_1,\cdots,x_{i-1})<br>$$</p>
+<p>In the context of language modeling, this should be familiar. Rather than modeling the joint distribution over all words in a sentence, we can just factorize it, and here we have a natural sequence or ordering because the words come in a word at a time. And so we can model the probability of the sentence as the product of the conditionals, the probability of the first word, the probability of the second word given the first word and so on. And we can just take the product of these likelihoods in order to model the probability of the sentence.</p>
+<p>Mathematically:<br>$$<br>\large p(S) &#x3D; p(w_1) p(w_2|w_1) p(w_n|w_1,\cdots,w_{n-1}) &#x3D; p(w_1,w_2,\cdots,w_n)<br>$$<br>We can do something similar with images, here rather than the basic unit being words, the basic units are pixels. We can factorize the joint distribution as the product of conditionals, where we define some ordering over the pixels. For example, we could start with just the upper left pixel, and have some prior probability distribution over that pixel value. We can then move to the subsequent pixels from left to right and top to bottom, we can then model the probability of x as equal to the probability of x1, the upper left pixel times the probability of x2 given x1 times the probability of x3 given x1 times the rest of the product.</p>
+<p><img src="/../images/DL_04-03_01.png" alt="PixelRNN &amp; PixelCNN"></p>
+<p>We can also do student forcing, where the model predicts some distribution over the pixel values for this current pixel, and then we use the conditional as that value for the next pixels. Over time, we can then train this across the entire image and we’re updating our model to be better and better at modeling this conditional distribution p(xi) given the prior pixels. Once we have the model trained, we can actually generate new images, just sample from p(x1) that is the prediction of the model for the first pixel and then use that as input to predict the next pixels and sample from that.</p>
+<p>Another idea is to represent the conditional distribution as a convolution, that is rather than conditional on just the adjacent pixels, we have a receptive field or a window and then we have a learnable convolution filter that output this distribution. The downside is that there’s some future pixels that is part of the convolution window that we may not know.</p>
+<p><img src="/../images/DL_04-03_02.png" alt="PixelRNN &amp; PixelCNN"></p>
+<h1 id="GANs-Generative-Adversarial-Networks"><a href="#GANs-Generative-Adversarial-Networks" class="headerlink" title="GANs: Generative Adversarial Networks"></a>GANs: Generative Adversarial Networks</h1><p><img src="/../images/DL_04-03_03.png" alt="GANs"></p>
+<p>In this lesson we’ll talk about a different class of generative models called generative adversarial networks. Generative adversarial networks or GANS did not learn an explicit density function p of x, rather they fit under the implicit density category. What that means is rather than learn a parameterised density function We will instead learn a parameterised generation process that can give us samples from the joint distribution.</p>
+<p>We won’t have an explicit density though, to perform things like classification or things like that. But we’ll still be able to use the unlabeled data to learn how to generate new samples. That fits that distribution of the unlabeled data, or even learn features that might be good for downstream tasks.</p>
+<p>First we have to learn how to sample from a neural network output. It’s not clear how to produce random outputs. Given some fixed input thus far, we’ve only dealt with a particular input and then generate a particular output. We also will use the notion of adversarial training. We’ll use one that works predictions to train another networks, lost function. This is essentially can be seen as a dynamic loss function and you have two neural networks learning at the same time that we will pit against each other.</p>
+<p>There’s also lots of tricks to make this more stable. Because you have a game theoretic optimization pitting two neural networks against each other, the complex dynamics of learning will actually turn out to be quite difficult to train. And so there’s a lot of different tricks that researchers have developed in order to make this more stable and effective.</p>
+<p>Suppose we would like to sample from a very complex distribution p(x) using a neural network. We’re going to use a simple idea of first sampling from a simple distribution, they a Gaussian, where we know how to generate samples from, and then we’ll actually learn a transformation function that transforms samples from that simple distribution to samples from the complex distribution. Here’s an illustration.</p>
+<p><img src="/../images/DL_04-03_04.png" alt="GANs"></p>
+<p>Now this transformation function can be pretty complex, but that’s okay. We have deep learning where we can learn really complex functions as a result.</p>
+<p>Here’s a concrete instantiation of this idea:</p>
+<ul>
+<li>Suppose we sample from a Gaussian many different times to generate a vector of independently generated random numbers</li>
+<li>then we take this vector and use a generator that is a network that takes a vector and up samples into an image</li>
+<li>or transforms it into an image through a complex set of convolutions and spooling layers</li>
+<li>then it outputs a complete image.</li>
+</ul>
+<p>The key idea of generative adversarial networks is to have another network that distinguishes between real and generated or fake images. And the reason we wanna do this is that how well the discriminator performs, can be used as a signal to determine how well the generator is doing.</p>
+<p><img src="/../images/DL_04-03_05.png" alt="GANs"></p>
+<p>Here, the discriminator is supposed to output a probability of one for the real image and zero for the fake image. And so if d of g of z should be zero, because it’s a fake image, then we want one minus d of g of z. And then we take the log of that. And so this is essentially saying how well does this discriminator going to do? And the generator wants to minimize this because the generator wants to fool the discriminator.</p>
+<p>So again, this right side of the objective function is saying how well is the discriminator doing on fake data and generator wants to minimize that because it wants the discriminator to not do well. Note that the objective function for the generator only is affected by the right side. That is the gradients for the first part of the term of the objective function is zero. Because if you notice it only has log of D of x and there’s no term there that depends on G. So no amount of changing G parameters will affect that part of the objective.</p>
+<p><img src="/../images/DL_04-03_06.png" alt="GANs"></p>
+<p>On the other hand, the discriminator is doing the opposite. We can sample from the fake data and the discriminator wants to maximize this, how well the discriminator does, that is, it wants to output zero for the fake data. At the same time we sample a mini-max from the real and again the discriminator is maximizing this Note that for the generator, only one part of this objective function is valid. On the left side of the objective, we just have [log of D(x)]. That is the discriminator output on real data. And nothing we change about the generator’s parameters effects this part of the objective That is a gradient zero.</p>
+<p>So really the gradient for the generator only comes from the right side of the term, whereas the gradients for the discriminator comes from both. It wants to both do well on the real as well as on the fake in discriminating them.</p>
+<p><img src="/../images/DL_04-03_07.png" alt="GANs"></p>
+<p>Recall however the generator’s wants to minimize</p>
+<ul>
+<li>1-D(G(z)) will be pushed down to 0 while D(G(z)) will be lifted to 1<ul>
+<li>this means that it is taking fake data and giving it a probability of being real as 1</li>
+</ul>
+</li>
+<li>This means that the generator is fooling the discriminator<ul>
+<li>ie succeeding at generating images that the discriminator can’t discriminate from real</li>
+</ul>
+</li>
+</ul>
+<p>So again, we’ll update the generator using the gradients from this objective. So we’re tuning both the generation process and the feature extraction in order to essentially output more and more realistic images. Here is a visual depiction of the same thing.</p>
+<p><img src="/../images/DL_04-03_08.png" alt="GANs"></p>
+<p>Again, we’ll have a mini batch of real and fake data, we’ll have the generator producing the fake data, where we start from a vector of random numbers, where each random number in the vector is sampled from a normal distribution. And then we’ll also have in the mini batch real images. And we’ll feed those discriminator, and each part will have an objective, the generators objective only touches the 1-D(G(z)), because that’s the only part of the objective that has G in it. And we’re going to average this over the mini batch, that is over the fake data in the mini batch.</p>
+<p>The discriminator loss on the other hand, includes both of the terms it wants to both make sure that it outputs a high probability for the real data and a low probability for the fake data. And so we’ll perform backprop and average the gradients over the entire mini batch. And it turns out that the generators part of the objective is actually not very good in terms of its gradient property.</p>
+<h1 id="VAEs-Variational-Autoencoders"><a href="#VAEs-Variational-Autoencoders" class="headerlink" title="VAEs - Variational Autoencoders"></a>VAEs - Variational Autoencoders</h1><p>In this lesson we’ll talk about variational autoencoders. Another type of generative model that actually maintain explicit density models, as well as have some approximation that allow us to actually train them in a tractable manner.</p>
+<p>These are explicit density models, which have approximate densities. And in this case the optimization itself is approximate.</p>
+<p>Recall that autoencoders are architectures where the input is fed through an encoder, in order to generate a low-dimensional embedding. And this low dimensional embedding or bottleneck is then used in the decoder in order to reconstruct the image. A loss function (such as mean squared error) can be used in order to minimize the difference between the input and the reconstruction. The actual bottleneck features are hidden or latent variables. What we’d like them to be is disentangled factors of variation that produce an image.</p>
+<p>For example, in the case of handwritten digits, it can be what digit it is. The orientation, the scale and so on. Again, the key idea is that there exists some low dimensional set of factors that determine how the image is generated.</p>
+<p><img src="/../images/DL_04-03_09.png" alt="VAEs"></p>
+<p>We can actually write down an equation for the likelihood that involves these latent variables which we call z(orange middle bar in image), specifically, we can marginalize out the Z.<br>$$<br>P(X)&#x3D;\int P(X|Z;\theta)P(Z)dZ<br>$$</p>
+<p>So P of x can be just the integral of p of x given z here, also including theta, since it’s the parametric model that we’ll use times P(z), that is the prior over z times dz. Now, if we could directly maximize this, then we’re essentially maximizing the likelihood and optimizing the parameters. But we can’t really do this. Instead we maximize a variational lower bound (VLB) that we can compute.</p>
+<p>The notion of variational autoencoders combines a set of ideas, including</p>
+<p>The notion of variational autoencoders combines a set of ideas, including</p>
+<ul>
+<li>a probabilistic view of generative models<ul>
+<li>where we have P(X), in this case P(X|Z), some latent variables, and we try to use maximum likelihood to optimize the parameters,</li>
+</ul>
+</li>
+<li>notion of sampling where we’ll actually sample z from a random distribution.</li>
+<li>The notion of auto encoders, rather than having just the decoder,<ul>
+<li>which we’ll have in other models will also have an encoder that actually takes an image and estimate the Z.</li>
+</ul>
+</li>
+<li>then we’ll also have approximate optimization, which we’ll talk about.</li>
+</ul>
+<p>Just as before, we’ll start with a Z vector, where we sample from a random z in this case and then feed it through a decoder. And again this decoder models are P(X|Z) with some parameters.</p>
+<p><img src="/../images/DL_04-03_10.png" alt="VAEs"></p>
+<p>And here the output rather than being just the image for example, it will be a Gaussian distribution parameter. Here specifically, it will be mu and Sigma. That is the mean and covariance matrix of the distribution. We show them as vectors here, but they can just as well be images. And we know that for multi-variate Gaussian outputs, we’re not actually going to output a complex, large covariance matrix. We’re just going to output the diagonal covariance. We’re going to assume that the different dimensions are independent. So, this is essentially nothing but a decoder that rather than outputting deterministic thing, it outputs a set of parameters for a simpler distribution that we know how to sample from, for example, a Gaussian. So given a Z vector, we can feed it through the decoder, it gives us some mu and sigma. And if we actually want to generate samples, we just sample from this Gaussian instead.</p>
+<p><img src="/../images/DL_04-03_11.png" alt="VAEs"></p>
+<p>The problem still remains. How can we maximize the likelihood for this model? And it turns out that if we also have an encoder, then actually we’ll be able to derive some gradients that actually do quite well. In this case, we’ll have an encoder, where given an image will have Q of z given x with again, some new parameters  ϕ. So this is a different model than the decoder. And again given x, it’ll output not a particular z but it will output the parameters of a Gaussian distribution mu and sigma. And if we wanna generate an actual z, we again just sample from this simpler Gaussian. So now we have both an encoder and a decoder. We can put the encoder and decoder together that is given real data. Again, the whole idea of all of these generative models is that we have samples from the distribution and we want a model P(X).</p>
+<p><img src="/../images/DL_04-03_12.png" alt="VAEs"></p>
+<p>So given a piece of data X or a mini batch of data, we’ll estimate mu and sigma and then sample from that normal distribution to generate Z. Given Z’s, we can then feed it through the decoder. And then we can again estimate mu and sigma for x and then sample from that to generate samples. Again, if we want to use a standard straightforward autoencoder loss, we can just compare the reconstructed x with the original x, but in this case, we’ll have a more sophisticated derivation of a loss function.</p>
+<p>And so the question remains, How can we optimize the parameters of the two networks, the encoder and the decoder? Again, we’re going to use the principle of maximum likelihood just write out the term for log of probability of xi where xi is a sample. What’s interesting here is that, since we have an encoder that can take a particular xi produce mu z and sigma z and actually sample from that Gaussian in order to produce z samples. We can actually write this out as an expectation over q of z given x of the log probability of xi. One thing to note here is that the probability of xi doesn’t actually depend on z.</p>
+<p><img src="/../images/DL_04-03_13.png" alt="VAEs"></p>
+<p>What’s interesting to note is that the expectations that we get on the right side, the two terms on the right are actually equivalent to a similarity measure called KL divergence. As an aside, KL divergence is a distance measure between probability distributions.</p>
+<p>And we saw this being used. For example, to derive why we use the cross entropy loss. One thing to note is that it’s always greater or equal to 0. So if two probability distributions are exactly the same, we’ll have a KL divergence of 0, whereas if they’re different than it can be unbounded. The equation is as follows, H denotes the entropy</p>
+<p>$$KL(p||q)&#x3D;H_c(p,q)-H(p)&#x3D;\sum p(x)log p(x) - \sum p(x) log q(x)$$</p>
+<p>Recall that  $E[f]&#x3D;E_{x\sim q}[f(x)]&#x3D;\sum q(x)f(x)$</p>
+<p>So we can rewrite KL as  $KL( q(z) || p(z|x) ) &#x3D; E[log q(z)] - E[log p(z|x)]$</p>
+<p>Now let’s use this in our derivation from earlier</p>
+<p><img src="/../images/DL_04-03_14.png" alt="VAEs"></p>
+<p>Explanation:</p>
+<p>Term 1 : </p>
+<ul>
+<li>Decoder gives us pθ(x|z) so we can compute an estimate of the term through sampling</li>
+<li>and sampling is differentiable through a reparametrization trick</li>
+<li><a target="_blank" rel="noopener" href="http://gokererdogan.github.io/2016/07/01/reparameterization-trick/">http://gokererdogan.github.io/2016/07/01/reparameterization-trick/</a></li>
+</ul>
+<p>Term 2 : </p>
+<ul>
+<li>This KL term (between gaussians for encoder and z prior) has nice closed-form solution</li>
+</ul>
+<p>Term 3 : </p>
+<ul>
+<li>We cannot compute this as  pθ(z|x) is intractable as we saw earlier</li>
+<li>but we do know that the KL must be greater than or equal to 0 so this will suffice</li>
+</ul>
+<p>We can’t compute term 3, so what we’re going to do is do basically just ignore it. We know that KL divergence is always greater or equal to zero. And so if we just maximize the first two terms here, we know that we’ll still be making progress.</p>
+<p>let’s summarize how we can train our variational autoencoder. We’ll have a mini batch of unlabeled data x, and we’ll run it through our encoder.  Q(Z|X;ϕ) this will be used to output parameters of a Gaussian distribution. Again, this is an assumption we make mu z and sigma z. And so we’re going to make the approximate Posterior distribution close to the prior. That is we’re going to take the KL divergence between Q of z given x, which is what we’re computing here, and P of z. Again this can be assumed to be a normal distribution, let’s say with a mean of zero and standard deviation of one for example, and this is a KL divergence between two Gaussian distributions which actually can be computed in closed form. We can then sample from this and generate a bunch of Z. And then we feed it through our decoder, which feeds it through P of X given Z with parameters theta and generates mu X and sigma X. And now we can essentially maximize the likelihood of the original data being reconstructed. That is we’re going to maximize the log p of x given z, which is what our decoder is computing here.</p>
+<p>Finally we can put it all together in a single picture:</p>
+<p><img src="/../images/DL_04-03_15.png" alt="VAEs"></p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/Deep-Learning/" rel="tag"># Deep Learning</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/07/23/DL_04-02_%20UnsupervisedandSemi-Supervised/" rel="prev" title="Deep Learning-4-2 Unsupervised and Semi-Supervised Learning">
+      <i class="fa fa-chevron-left"></i> Deep Learning-4-2 Unsupervised and Semi-Supervised Learning
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Learning-Objectives"><span class="nav-number">1.</span> <span class="nav-text">Learning Objectives</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PixelRNN-PixelCNN"><span class="nav-number">2.</span> <span class="nav-text">PixelRNN &amp; PixelCNN</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GANs-Generative-Adversarial-Networks"><span class="nav-number">3.</span> <span class="nav-text">GANs: Generative Adversarial Networks</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VAEs-Variational-Autoencoders"><span class="nav-number">4.</span> <span class="nav-text">VAEs - Variational Autoencoders</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

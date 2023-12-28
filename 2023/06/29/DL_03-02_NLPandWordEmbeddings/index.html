@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Learning Objectives Introduction to Word Embeddings Learning Word Embeddings: Word2vec &amp; GloVe Applications using Word Embeddings">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Deep Learning-3-2 Natual Language Processing &amp; Word Embeddings">
+<meta property="og:url" content="http://example.com/2023/06/29/DL_03-02_NLPandWordEmbeddings/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="Learning Objectives Introduction to Word Embeddings Learning Word Embeddings: Word2vec &amp; GloVe Applications using Word Embeddings">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/DL_03-02_01.png">
+<meta property="og:image" content="http://example.com/images/DL_03-02_02.png">
+<meta property="og:image" content="http://example.com/images/DL_03-02_03.png">
+<meta property="og:image" content="http://example.com/images/DL_03-02_04.png">
+<meta property="og:image" content="http://example.com/images/DL_03-02_05.svg">
+<meta property="og:image" content="http://example.com/images/DL_03-02_06.png">
+<meta property="article:published_time" content="2023-06-30T01:14:22.000Z">
+<meta property="article:modified_time" content="2023-06-30T19:10:43.918Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="Deep Learning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/DL_03-02_01.png">
+
+<link rel="canonical" href="http://example.com/2023/06/29/DL_03-02_NLPandWordEmbeddings/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Deep Learning-3-2 Natual Language Processing & Word Embeddings | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/06/29/DL_03-02_NLPandWordEmbeddings/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Deep Learning-3-2 Natual Language Processing & Word Embeddings
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-06-29 21:14:22" itemprop="dateCreated datePublished" datetime="2023-06-29T21:14:22-04:00">2023-06-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Learning-Objectives"><a href="#Learning-Objectives" class="headerlink" title="Learning Objectives"></a>Learning Objectives</h1><ul>
+<li>Introduction to Word Embeddings</li>
+<li>Learning Word Embeddings: Word2vec &amp; GloVe</li>
+<li>Applications using Word Embeddings</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="Introduction-to-Word-Embeddings"><a href="#Introduction-to-Word-Embeddings" class="headerlink" title="Introduction to Word Embeddings"></a>Introduction to Word Embeddings</h1><h2 id="Word-Representation"><a href="#Word-Representation" class="headerlink" title="Word Representation"></a>Word Representation</h2><ul>
+<li>One of the weaknesses of one-hot representation is that it treats each word as a thing onto itself, and it doesn’t allow an algorithm to easily generalize across words.<ul>
+<li>Because the any product between any two different one-hot vector is zero.</li>
+<li>It doesn’t know that somehow apple and orange are much more similar than king and orange or queen and orange.</li>
+</ul>
+</li>
+<li>Instead we can learn a featurized representation.<ul>
+<li>But by a lot of the features of apple and orange are actually the same, or take on very similar values. And so, this increases the odds of the learning algorithm that has figured out that orange juice is a thing, to also quickly figure out that apple juice is a thing.</li>
+<li>The features we’ll end up learning, won’t have a easy to interpret interpretation like that component one is gender, component two is royal, component three is age and so on. What they’re representing will be a bit harder to figure out.</li>
+<li>But nonetheless, the featurized representations we will learn, will allow an algorithm to quickly figure out that apple and orange are more similar than say, king and orange or queen and orange.</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Features\words</th>
+<th>Man(5391)</th>
+<th>Woman(9853)</th>
+<th>King(4914)</th>
+<th>Queen (7157)</th>
+<th>Apple (456)</th>
+<th>Orange (6257)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Gender</td>
+<td>-1</td>
+<td>1</td>
+<td>-0.95</td>
+<td>0.97</td>
+<td>0.00</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>Royal</td>
+<td>0.01</td>
+<td>0.02</td>
+<td>0.93</td>
+<td>0.95</td>
+<td>-0.01</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>Age (adult?)</td>
+<td>0.03</td>
+<td>0.02</td>
+<td>0.7</td>
+<td>0.69</td>
+<td>0.03</td>
+<td>-0.02</td>
+</tr>
+<tr>
+<td>Food</td>
+<td>0.09</td>
+<td>0.01</td>
+<td>0.02</td>
+<td>0.01</td>
+<td>0.95</td>
+<td>0.97</td>
+</tr>
+<tr>
+<td>Size</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody></table>
+<ul>
+<li>One common algorithm for visualizing word representation is the <a target="_blank" rel="noopener" href="http://www.cs.toronto.edu/~hinton/absps/tsne.pdf">t-SNE</a> algorithm due to Laurens van der Maaten and Geoff Hinton.</li>
+</ul>
+<h2 id="Using-word-embeddings"><a href="#Using-word-embeddings" class="headerlink" title="Using word embeddings"></a>Using word embeddings</h2><ul>
+<li>Learn word embeddings from large text corpus. (1-100B words) (Or download pre-trained embedding online.)</li>
+<li>Transfer embedding to new task with smaller training set. (say, 100k words)</li>
+<li>Optional: Continue to finetune the word embeddings with new data.<ul>
+<li>In practice, you would do this only if this task 2 has a pretty big data set.</li>
+<li>If your label data set for step 2 is quite small, then usually, I would not bother to continue to fine tune the word embeddings.</li>
+</ul>
+</li>
+</ul>
+<p>Word embeddings tend to make the biggest difference when the task you’re trying to carry out has a relatively smaller training set.</p>
+<ul>
+<li>Useful for NLP standard tasks.<ul>
+<li>Named entity recognition</li>
+<li>Text summarization</li>
+<li>Co-reference</li>
+<li>Parsing</li>
+</ul>
+</li>
+<li>Less useful for:<ul>
+<li>Language modeling</li>
+<li>Machine translation</li>
+</ul>
+</li>
+</ul>
+<p><strong>Word embedding vs. face recognition encoding:</strong></p>
+<ul>
+<li>The words encoding and embedding mean fairly similar things. In the face recognition literature, people also use the term encoding to refer to the vectors, <code>f(x(i))</code> and <code>f(x(j))</code>. Refer to Course 4.</li>
+<li>For face recognition, you wanted to train a neural network that can take any face picture as input, even a picture you’ve never seen before, and have a neural network compute an encoding for that new picture.</li>
+<li>What we’ll do for learning word embeddings is that we’ll have a fixed vocabulary of, say, 10,000 words. We’ll learn a fixed encoding or learn a fixed embedding for each of the words in our vocabulary.</li>
+<li>The terms encoding and embedding are used somewhat interchangeably. So the difference is not represented by the difference in terminologies. It’s just a difference in how we need to use these algorithms in face recognition with unlimited pictures and natural language processing with a fixed vocabulary.</li>
+</ul>
+<h2 id="Properties-of-word-embeddings"><a href="#Properties-of-word-embeddings" class="headerlink" title="Properties of word embeddings"></a>Properties of word embeddings</h2><p>Word embeddings can be used for analogy reasoning, which can help convey a sense of what word embeddings are doing even though analogy reasoning is not by itself the most important NLP application.<br>P</p>
+<ul>
+<li><code>man --&gt; woman</code> vs. <code>king --&gt; queen</code>: $e_{man} - e_{woman} ≈ e_{king} - e_{queen}$</li>
+</ul>
+<p>To carry out an analogy reasoning, man is to woman as king is to what?</p>
+<ul>
+<li>To find a word so that $e_{man} - e_{woman} ≈ e_{king} - e_{?}$</li>
+<li>Find word <code>w</code>: $argmax_w sim(e_w, e_{king}-e_{man}+e_{woman})$</li>
+<li>We can use cosine similarity to calculate this similarity.</li>
+<li>Refer to work paper by <a target="_blank" rel="noopener" href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/rvecs.pdf">Tomas Mikolov, Wen-tau Yih, and Geoffrey Zweig</a>.</li>
+</ul>
+<p>The difference between t-SNE and analogy reasoning with word embedding?</p>
+<ul>
+<li>What t-SNE does is, it takes 300-D data, and it maps it in a very non-linear way to a 2D space. And so the mapping that t-SNE learns, this is a very complicated and very non-linear mapping. So after the t-SNE mapping, you should not expect these types of parallelogram relationships, like the one we saw on the left, to hold true. And many of the parallelogram analogy relationships will be broken by t-SNE.</li>
+</ul>
+<p><img src="/../images/DL_03-02_01.png" alt="Properties of word embeddings"></p>
+<h2 id="Embedding-matrix"><a href="#Embedding-matrix" class="headerlink" title="Embedding matrix"></a>Embedding matrix</h2><p>When you implement an algorithm to learn a word embedding, what you end up learning is an <strong>embedding matrix</strong>.</p>
+<ul>
+<li>E: embedding matrix (300, 10000)</li>
+<li>$O_{6257}$ &#x3D; [0,……0,1,0,…,0]^T, (10000, 1)</li>
+<li>$E·O_{6257}$ &#x3D; $e_{6257}$, (300, 1)</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>a</th>
+<th>aaron</th>
+<th>…</th>
+<th>orange (6257)</th>
+<th>…</th>
+<th>zulu</th>
+<th>&lt;UNK&gt;</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody></table>
+<p>Our goal will be to learn an embedding matrix E by initializing E randomly and then learning all the parameters of this (300, 10000) dimensional matrix.</p>
+<p>E times the one-hot vector gives you the embedding vector.</p>
+<p>In practice, use specialized function to look up an embedding.</p>
+<h1 id="Learning-Word-Embeddings-Word2vec-GloVe"><a href="#Learning-Word-Embeddings-Word2vec-GloVe" class="headerlink" title="Learning Word Embeddings: Word2vec &amp; GloVe"></a>Learning Word Embeddings: Word2vec &amp; GloVe</h1><h2 id="Learning-word-embeddings"><a href="#Learning-word-embeddings" class="headerlink" title="Learning word embeddings"></a>Learning word embeddings</h2><p>In the history of deep learning as applied to learning word embeddings, people actually started off with relatively complex algorithms. And then over time, researchers discovered they can use simpler and simpler algorithms and still get very good results especially for a large dataset.</p>
+<p><strong>A more complex algorithm</strong>: a neural language model, by Yoshua Bengio, Rejean Ducharme, Pascals Vincent, and Christian Jauvin: A Neural Probabilistic Language Model.</p>
+<p>Let’s start to build a neural network to predict the next word in the sequence below.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> I     want   a   glass   of    orange    ______.</span><br><span class="line">4343   9665   1   3852   6163    6257 </span><br></pre></td></tr></table></figure>
+<p><img src="/../images/DL_03-02_02.png" alt="Learning word embeddings"></p>
+<ul>
+<li><p>If we have a fixed historical window of 4 words (4 is a hyperparameter), then we take the four embedding vectors and stack them together, and feed them into a neural network, and then feed this neural network output to a softmax, and the softmax classifies among the 10,000 possible outputs in the vocab for the final word we’re trying to predict. These two layers have their own parameters W1,b1 and W2, b2.+ </p>
+</li>
+<li><p>This is one of the earlier and pretty successful algorithms for learning word embeddings.</p>
+</li>
+</ul>
+<p><strong>A more generalized algorithm.</strong></p>
+<ul>
+<li>We have a longer sentence: <code>I want a glass of orange juice to go along with my cereal.</code> The task is to predict the word juice in the middle.</li>
+<li>If it goes to build a language model then is natural for the context to be a few words right before the target word. But if your goal isn’t to learn the language model per se, then you can choose other contexts.</li>
+<li>Contexts:<ul>
+<li>Last 4 words: descibed previously.</li>
+<li>4 words on left &amp; right: a glass of orange ___ to go along with</li>
+<li>Last 1 word: orange, much more simpler context.</li>
+<li>Nearby 1 word: glass. This is the idea of a Skip-Gram model, which works surprisingly well.</li>
+</ul>
+</li>
+<li>If your main goal is really to learn a word embedding, then you can use all of these other contexts and they will result in very meaningful work embeddings as well.</li>
+</ul>
+<h2 id="Word2Vec"><a href="#Word2Vec" class="headerlink" title="Word2Vec"></a>Word2Vec</h2><p>Word2vec is a technique for natural language processing (NLP) published in 2013. The word2vec algorithm uses a neural network model to learn word associations from a large corpus of text. Once trained, such a model can detect synonymous words or suggest additional words for a partial sentence. As the name implies, word2vec represents each distinct word with a particular list of numbers called a vector. The vectors are chosen carefully such that they capture the semantic and syntactic qualities of words; as such, a simple mathematical function (cosine similarity) can indicate the level of semantic similarity between the words represented by those vectors.</p>
+<p>Paper: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1301.3781">Efficient Estimation of Word Representations in Vector Space</a> by Tomas Mikolov, Kai Chen, Greg Corrado, Jeffrey Dean.</p>
+<p><strong>The Skip-Gram model:</strong></p>
+<ul>
+<li><p>In the skip-gram model, what we’re going to do is come up with a few context to target errors to create our supervised learning problem.</p>
+</li>
+<li><p>So rather than having the context be always the last four words or the last end words immediately before the target word, what I’m going to do is, say, randomly pick a word to be the context word. And let’s say we chose the word orange.</p>
+</li>
+<li><p>What we’re going to do is randomly pick another word within some window. Say plus minus five words or plus minus ten words of the context word and we choose that to be target word.</p>
+<ul>
+<li>maybe by chance pick <code>juice</code> to be a target word, that just one word later.</li>
+<li>maybe <code>glass</code>, two words before.</li>
+<li>maybe <code>my</code>.</li>
+</ul>
+</li>
+<li><p>And so we’ll set up a supervised learning problem where given the context word, you’re asked to predict what is a randomly chosen word within say, a ±10 word window, or a ±5 word window of the input context word.</p>
+</li>
+<li><p>This is not a very easy learning problem, because within ±10 words of the word orange, it could be a lot of different words.</p>
+</li>
+<li><p>But the goal of setting up this supervised learning problem isn’t to do well on the supervised learning problem per se. It is that we want to use this learning problem to learning good word embeddings.</p>
+</li>
+</ul>
+<p><strong>Model details:</strong></p>
+<ul>
+<li>Context c: <code>orange</code> and target t: <code>juice</code>.</li>
+<li>$o_c$ —&gt; E —&gt; $e_c$ —&gt; O(softmax) —&gt; ŷ. This is the little neural network with basically looking up the embedding and then just a softmax unit.</li>
+<li>Softmax: $$p(t|c) &#x3D; \frac{e^{\theta_t^Te_c}}{\sum_{j&#x3D;1}^{10000}e^{\theta_j^Te_c}}$$<ul>
+<li>𝜃t: parameter associated with output t. (bias term is omitted)</li>
+</ul>
+</li>
+<li>Loss: $$L(\hat{y}, y) &#x3D; -sum(y_ilog\hat{y}_i)$$</li>
+<li>So this is called the skip-gram model because it’s taking as input one word like <code>orange</code> and then trying to predict some words skipping a few words from the left or the right side.</li>
+</ul>
+<p><strong>Model problem:</strong></p>
+<ul>
+<li>Computational speed: in the softmax step, every time evaluating the probability, you need to carry out a sum over all 10,000, maybe even larger 1,000,000, words in your vocabulary. It gets really slow to do that every time.</li>
+</ul>
+<p><strong>Hierarchical softmax classifier:</strong></p>
+<p>Hierarchical softmax classifier is one of a few solutions to the computational problem.</p>
+<ul>
+<li>Instead of trying to categorize something into all 10,000 categories on one go, imagine if you have one classifier, it tells you is the target word in the first 5,000 words in the vocabulary, or is in the second 5,000 words in the vocabulary, until eventually you get down to classify exactly what word it is, so that the leaf of this tree.</li>
+<li>The main advantage is that instead of evaluating <code>W</code> output nodes in the neural network to obtain the probability distribution, it is needed to evaluate only about <code>log2(W)</code> nodes.</li>
+<li>In practice, the hierarchical softmax classifier doesn’t use a perfectly balanced tree or perfectly symmetric tree. The hierarchical softmax classifier can be developed so that the common words tend to be on top, whereas the less common words like durian can be buried much deeper in the tree.</li>
+</ul>
+<p><strong>How to sample context c:</strong></p>
+<p>One thing you could do is just sample uniformly, at random, from your training corpus.</p>
+<ul>
+<li>When we do that, you find that there are some words like the, of, a, and, to and so on that appear extremely frequently.</li>
+<li>In your context to target mapping pairs just get these these types of words extremely frequently, whereas there are other words like orange, apple, and also durian that don’t appear that often.</li>
+</ul>
+<p>In practice the distribution of words <code>p(c)</code> isn’t taken just entirely uniformly at random for the training set purpose, but instead there are different heuristics that you could use in order to balance out something from the common words together with the less common words.</p>
+<p><strong>CBOW:</strong></p>
+<p>The other version of the Word2Vec model is CBOW, the continuous bag of words model, which takes the surrounding contexts from middle word, and uses the surrounding words to try to predict the middle word. And the algorithm also works, which also has some advantages and disadvantages.</p>
+<h2 id="Negative-Sampling"><a href="#Negative-Sampling" class="headerlink" title="Negative Sampling"></a>Negative Sampling</h2><p>Paper: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1310.4546">Distributed Representations of Words and Phrases and their Compositionality</a> by Tomas Mikolov, Ilya Sutskever, Kai Chen, Greg Corrado, and Jeff Dean.</p>
+<p>Negative sampling is a modified learning problem to do something similar to the Skip-Gram model with a much more efficient learning algorithm.</p>
+<ul>
+<li><p><code>I want a glass of orange juice to go along with my cereal.</code></p>
+</li>
+<li><p>To create a new supervised learning problem: given a pair of words like <code>orange, juice</code>, we’re going to predict it is a context-target pair or not?</p>
+</li>
+<li><p>First, generate a positive example. Sample a context word, like <code>orange</code> and a target word, <code>juice</code>, associate them with a label of 1.</p>
+</li>
+<li><p>Then generate negative examples. Take <code>orange</code> and pick another random word from the dictionary for k times.</p>
+<ul>
+<li><p>Choose large values of k for smaller data sets, like 5 to 20, and smaller k for large data sets, like 2 to 5.</p>
+</li>
+<li><p>In this example, k&#x3D;4. x&#x3D;(<code>context</code>, <code>word</code>), y&#x3D;<code>target</code>.</p>
+<table>
+<thead>
+<tr>
+<th>context</th>
+<th>word</th>
+<th>target?</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>orange</td>
+<td>juice</td>
+<td>1</td>
+</tr>
+<tr>
+<td>orange</td>
+<td>king</td>
+<td>0</td>
+</tr>
+<tr>
+<td>orange</td>
+<td>book</td>
+<td>0</td>
+</tr>
+<tr>
+<td>orange</td>
+<td>the</td>
+<td>0</td>
+</tr>
+<tr>
+<td>orange</td>
+<td>of</td>
+<td>0</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+<li><p>Compared to the original Skip-Gram model: instead of training all 10,000 of them on every iteration which is very expensive, we’re only going to train five, or k+1 of them. k+1 binary classification problems is relative cheap to do rather than updating a 10,000 weights of softmax classifier.</p>
+</li>
+<li><p>How to choose the negative examples?</p>
+<ul>
+<li>One thing you could do is sample it according to the empirical frequency of words in your corpus. The problem is you end up with a very high representation of words like ‘the’, ‘of’, ‘and’, and so on.</li>
+<li>Other extreme method would use <code>p(w)=1/|V|</code> to sample the negative examples uniformly at random. This is also very non-representative of the distribution of English words.</li>
+<li>The paper choose a method somewhere in-between: $$p(w_i)&#x3D;\frac{f(w_i)^{3&#x2F;4}}{\sum_{j&#x3D;1}^{10000}f(w_j)^{3&#x2F;4}}$$<ul>
+<li>$f(w_i)$ is the observed frequency of word $w_i$.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="GloVe-word-vectors"><a href="#GloVe-word-vectors" class="headerlink" title="GloVe word vectors"></a>GloVe word vectors</h2><p>Paper: GloVe: Global Vectors for Word Representation</p>
+<ul>
+<li>$X_{ij}$: # of times j appear in context of i. (Think $X_{ij}$ as $X_{ct}$).<ul>
+<li>$X_{ij}$ &#x3D; $X_{ji}$.</li>
+<li>If the context is always the word immediately before the target word, then $X_{ij}$ is not symmetric.</li>
+</ul>
+</li>
+<li>For the GloVe algorithm, define context and target as whether or not the two words appear in close proximity, say within ±10 words of each other. So, $X_{ij}$ is a count that captures how often do words i and j appear with each other or close to each other.</li>
+<li>Model: glove-model.$$minimize \sum_{i&#x3D;1}^{10,000}\sum_{j&#x3D;1}^{10,000}f(X_{ij})(\theta_i^Te_j + b_j +b_j’ - logX_{ij})^2$$<ul>
+<li>$\theta_i^Te_j$ plays the role of $\theta_t^Te_c$ in the previous sections.</li>
+<li>We just want to learn vectors, so that their end product is a good predictor for how often the two words occur together.</li>
+<li>There are various heuristics for choosing this weighting function f that neither gives these words too much weight nor gives the infrequent words too little weight.<ul>
+<li>To prevent the second term goes infinity, $f(X_{ij})$ &#x3D; 0 if $X_{ij}$ &#x3D; 0 to make sure 0log0&#x3D;0</li>
+</ul>
+</li>
+<li>One way to train the algorithm is to initialize <code>theta</code> and <code>e</code> both uniformly random, run gradient descent to minimize its objective, and then when you’re done for every word, to then take the average.<ul>
+<li>For a given words <code>w</code>, you can have $e^{final}$ to be equal to the embedding that was trained through this gradient descent procedure, plus <code>theta</code> trained through this gradient descent procedure divided by two, because <code>theta</code> and <code>e</code> in this particular formulation play symmetric roles unlike the earlier models we saw in the previous videos, where theta and e actually play different roles and couldn’t just be averaged like that.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Conclusion:</strong></p>
+<ul>
+<li>The way that the inventors end up with this algorithm was, they were building on the history of much more complicated algorithms like the newer language model, and then later, there came the Word2Vec skip-gram model, and then this came later.</li>
+<li>But when you learn a word embedding using one of the algorithms that we’ve seen, such as the GloVe algorithm that we just saw on the previous slide, what happens is, you cannot guarantee that the individual components of the embeddings are interpretable.</li>
+<li>But despite this type of linear transformation, the parallelogram map that we worked out when we were describing analogies, that still works.</li>
+</ul>
+<h1 id="Applications-using-Word-Embeddings"><a href="#Applications-using-Word-Embeddings" class="headerlink" title="Applications using Word Embeddings"></a>Applications using Word Embeddings</h1><h2 id="Sentiment-Classification"><a href="#Sentiment-Classification" class="headerlink" title="Sentiment Classification"></a>Sentiment Classification</h2><table>
+<thead>
+<tr>
+<th>comments</th>
+<th>stars</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>The dessert is excellent.</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Service was quite slow.</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Good for a quick meal, but nothing special.</td>
+<td>3</td>
+</tr>
+<tr>
+<td>Completely lacking in good taste, good service, and good ambience.</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<p><strong>A simple sentiment classification model:</strong></p>
+<p><img src="/../images/DL_03-02_03.png" alt="Sentiment Classification"></p>
+<ul>
+<li>So one of the challenges of sentiment classification is you might not have a huge label data set.</li>
+<li>If this was trained on a very large data set, like a hundred billion words, then this allows you to take a lot of knowledge even from infrequent words and apply them to your problem, even words that weren’t in your labeled training set.</li>
+<li>Notice that by using the average operation here, this particular algorithm works for reviews that are short or long because even if a review that is 100 words long, you can just sum or average all the feature vectors for all hundred words and so that gives you a representation, a 300-dimensional feature representation, that you can then pass into your sentiment classifier.</li>
+<li>One of the problems with this algorithm is it ignores word order.<ul>
+<li><code>&quot;Completely lacking in good taste, good service, and good ambiance&quot;.</code></li>
+<li>This is a very negative review. But the word good appears a lot.</li>
+</ul>
+</li>
+</ul>
+<p><strong>A more sophisticated model:</strong></p>
+<p><img src="/../images/DL_03-02_04.png" alt="Sentiment Classification"></p>
+<ul>
+<li>Instead of just summing all of your word embeddings, you can instead use a RNN for sentiment classification.<ul>
+<li>In the graph, the one-hot vector representation is skipped.</li>
+<li>This is an example of a many-to-one RNN architecture.</li>
+</ul>
+</li>
+</ul>
+<h2 id="Debiasing-word-embeddings"><a href="#Debiasing-word-embeddings" class="headerlink" title="Debiasing word embeddings"></a>Debiasing word embeddings</h2><p>Word embeddings maybe have the bias problem such as gender bias, ethnicity bias and so on. As word embeddings can learn analogies like man is to woman like king to queen. The paper shows that a learned word embedding might output:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Man: Computer_Programmer as Woman: Homemaker</span><br></pre></td></tr></table></figure>
+<p>Learning algorithms are making very important decisions and so I think it’s important that we try to change learning algorithms to diminish as much as is possible, or, ideally, eliminate these types of undesirable biases.</p>
+<p><strong>Identify bias direction</strong></p>
+<ul>
+<li>The first thing we’re going to do is to identify the direction corresponding to a particular bias we want to reduce or eliminate.</li>
+<li>And take a few of these differences and basically average them. And this will allow you to figure out in this case that what looks like this direction is the gender direction, or the bias direction. Suppose we have a 50-dimensional word embedding.  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">g1 = eshe - ehe</span><br><span class="line">g2 = egirl - eboy</span><br><span class="line">g3 = emother - efather</span><br><span class="line">g4 = ewoman - eman</span><br></pre></td></tr></table></figure></li>
+<li><code>g = g1 + g2 + g3 + g4 + ...</code> for gender vector.</li>
+<li>Then we have<ul>
+<li><code>cosine_similarity(sophie, g)) = 0.318687898594</code></li>
+<li><code>cosine_similarity(john, g)) = -0.23163356146</code></li>
+<li>To see male names tend to have positive similarity with gender vector whereas female names tend to have a negative similarity. This is acceptable.</li>
+</ul>
+</li>
+<li>But we also have<ul>
+<li><code>cosine_similarity(computer, g)) = -0.103303588739</code></li>
+<li><code>cosine_similarity(singer, g)) = 0.185005181365</code></li>
+<li>It is astonishing how these results reflect certain unhealthy gender stereotypes.</li>
+</ul>
+</li>
+<li>The bias direction can be higher than 1-dimensional. Rather than taking an average, SVD (singular value decomposition) and PCA might help.</li>
+</ul>
+<p><strong>Neutralize</strong></p>
+<ul>
+<li>For every word that is not definitional, project to get rid of bias.</li>
+</ul>
+<p><img src="/../images/DL_03-02_05.svg" alt="Neutralize"></p>
+<p><strong>Equalize pairs</strong></p>
+<ul>
+<li>In the final equalization step, what we’d like to do is to make sure that words like grandmother and grandfather are both exactly the same similarity, or exactly the same distance, from words that should be gender neutral, such as babysitter or such as doctor.</li>
+<li>The key idea behind equalization is to make sure that a particular pair of words are equi-distant from the 49-dimensional g⊥.</li>
+</ul>
+<p><img src="/../images/DL_03-02_06.png" alt="Equalize pairs"></p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/Deep-Learning/" rel="tag"># Deep Learning</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/06/29/DL_03-01_RecurrentNeuralNetworks/" rel="prev" title="Deep Learning-3-1 Recurrent Neural Networks">
+      <i class="fa fa-chevron-left"></i> Deep Learning-3-1 Recurrent Neural Networks
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/06/30/DL_03-03_Sequence%20modelsAndAttention%20mechanism%20-%20Copy/" rel="next" title="Deep Learning-3-3 Sequence models & Attention mechanism">
+      Deep Learning-3-3 Sequence models & Attention mechanism <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Learning-Objectives"><span class="nav-number">1.</span> <span class="nav-text">Learning Objectives</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction-to-Word-Embeddings"><span class="nav-number">2.</span> <span class="nav-text">Introduction to Word Embeddings</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Word-Representation"><span class="nav-number">2.1.</span> <span class="nav-text">Word Representation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Using-word-embeddings"><span class="nav-number">2.2.</span> <span class="nav-text">Using word embeddings</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Properties-of-word-embeddings"><span class="nav-number">2.3.</span> <span class="nav-text">Properties of word embeddings</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Embedding-matrix"><span class="nav-number">2.4.</span> <span class="nav-text">Embedding matrix</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Learning-Word-Embeddings-Word2vec-GloVe"><span class="nav-number">3.</span> <span class="nav-text">Learning Word Embeddings: Word2vec &amp; GloVe</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Learning-word-embeddings"><span class="nav-number">3.1.</span> <span class="nav-text">Learning word embeddings</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Word2Vec"><span class="nav-number">3.2.</span> <span class="nav-text">Word2Vec</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Negative-Sampling"><span class="nav-number">3.3.</span> <span class="nav-text">Negative Sampling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GloVe-word-vectors"><span class="nav-number">3.4.</span> <span class="nav-text">GloVe word vectors</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Applications-using-Word-Embeddings"><span class="nav-number">4.</span> <span class="nav-text">Applications using Word Embeddings</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Sentiment-Classification"><span class="nav-number">4.1.</span> <span class="nav-text">Sentiment Classification</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Debiasing-word-embeddings"><span class="nav-number">4.2.</span> <span class="nav-text">Debiasing word embeddings</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Learning Objectives Semi-Supervised Learning Few-Shot Learning Unsupervised and Self-Supervised Learning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Deep Learning-4-2 Unsupervised and Semi-Supervised Learning">
+<meta property="og:url" content="http://example.com/2023/07/23/DL_04-02_%20UnsupervisedandSemi-Supervised/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="Learning Objectives Semi-Supervised Learning Few-Shot Learning Unsupervised and Self-Supervised Learning">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/DL_04-02_01.png">
+<meta property="og:image" content="http://example.com/images/DL_04-02_02.png">
+<meta property="og:image" content="http://example.com/images/DL_04-02_03.png">
+<meta property="og:image" content="http://example.com/images/DL_04-02_04.png">
+<meta property="og:image" content="http://example.com/images/DL_04-02_05.png">
+<meta property="og:image" content="http://example.com/images/DL_04-02_06.png">
+<meta property="og:image" content="http://example.com/images/DL_04-02_07.png">
+<meta property="og:image" content="http://example.com/images/DL_04-02_08.png">
+<meta property="og:image" content="http://example.com/images/DL_04-02_09.png">
+<meta property="og:image" content="http://example.com/images/DL_04-02_10.png">
+<meta property="og:image" content="http://example.com/images/DL_04-02_11.png">
+<meta property="og:image" content="http://example.com/images/DL_04-02_12.png">
+<meta property="og:image" content="http://example.com/images/DL_04-02_13.png">
+<meta property="article:published_time" content="2023-07-24T02:14:22.000Z">
+<meta property="article:modified_time" content="2023-07-23T20:51:07.113Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="Deep Learning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/DL_04-02_01.png">
+
+<link rel="canonical" href="http://example.com/2023/07/23/DL_04-02_%20UnsupervisedandSemi-Supervised/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Deep Learning-4-2 Unsupervised and Semi-Supervised Learning | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/07/23/DL_04-02_%20UnsupervisedandSemi-Supervised/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Deep Learning-4-2 Unsupervised and Semi-Supervised Learning
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-07-23 22:14:22" itemprop="dateCreated datePublished" datetime="2023-07-23T22:14:22-04:00">2023-07-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Learning-Objectives"><a href="#Learning-Objectives" class="headerlink" title="Learning Objectives"></a>Learning Objectives</h1><ul>
+<li>Semi-Supervised Learning</li>
+<li>Few-Shot Learning</li>
+<li>Unsupervised and Self-Supervised Learning</li>
+</ul>
+<span id="more"></span>
+<hr>
+<p>In this lesson, we’ll go beyond supervised learning and talk about various other machine learning settings. For example, we’ll look at low labeled machine learning settings where we have only a few labeled examples, possibly with a larger amount of unlabeled example. We’ll also talk about pure unsupervised or self-supervised learning where we’ll try to learn effective feature representations using unlabeled data only.</p>
+<p>We will be looking at three main types, but there are many more</p>
+<ul>
+<li>In semi-supervised learning, we have some reasonable amount of labels per category, let’s say ten or more. However, we also have a large set of unlabeled data.</li>
+<li>In few-shot learning, this is taken to extreme. Specifically, we have only 1 to 5 examples per category. In the vanilla setting, we also don’t have any unlabeled data, but it is assumed that we have some larger labelled auxiliary set. What we wanna do is learn models and feature representations that will generalize or transfer to a new set of categories where we only have 1 to 5 examples per category.</li>
+<li>In self-supervised learning, which is a form of unsupervised learning, we assume we have no labels.</li>
+</ul>
+<p>Note that in traditional machine learning, and to some degree in deep learning, there’s also purely unsupervised learning where we can perform tasks, such as clustering or density estimation. We’ll talk about the distinction between self-supervised and unsupervised learning later.</p>
+<p><img src="/../images/DL_04-02_01.png" alt="Intro"></p>
+<p>For modeling the P(x), there are deep generative models. For comparing and grouping, there are metric learning, or clustering approaches. And obviously, representation learning is pretty much what deep learning is.</p>
+<p>Some Common ideas are shown below.</p>
+<p>For modeling the P(x), there are deep generative models. For comparing and grouping, there are metric learning, or clustering approaches. And obviously, representation learning is pretty much what deep learning is.</p>
+<p><img src="/../images/DL_04-02_02.png" alt="Intro"></p>
+<h1 id="Semi-Supervised-Learning"><a href="#Semi-Supervised-Learning" class="headerlink" title="Semi-Supervised Learning"></a>Semi-Supervised Learning</h1><p>It is often much cheaper (cost&#x2F;time) to get large-scale unlabeled datasets. This begs the question: Can we overcome a small set of labeled data by using unlabeled data? Which is often much cheaper to get in a large scale (such as the internet). Further, would it improve the performance all the way to a highly labeled scenario?</p>
+<p><img src="/../images/DL_04-02_03.png" alt="Semi-Supervised Learning"></p>
+<p>A very simple idea is to learn&#x2F;train a model on labeled data, make predictions on unlabeled data, then add back into the training data. This can be repeated as often as is necessary. Another approach is to combine unlabeled and labelled data and perform co-training predictions across multiple views. In this method we generally use augmented data techniques.</p>
+<p>There is a recent algorithm called FixMatch(<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2001.07685">https://arxiv.org/abs/2001.07685</a>). Which has proven extremely effective in the Semi-Supervised Learning context. There are several ways to instantiate this idea. There would be two stages where we train the supervised model on the label data. And then we apply that model on unlabeled data. Obtain pseudo-labels for those predictions that are confident, feed those back into the training set. Again, we’ll retrain the supervised model.</p>
+<p><img src="/../images/DL_04-02_04.png" alt="Semi-Supervised Learning"></p>
+<p>The beauty of deep-learning is that we don’t actually have to do this in multiple stages. We can have this entire pipeline trained in an end to end manner. Specifically, we can have the mini batch consist of both labeled and unlabeled examples. For the labeled part of the mini batch, it goes through the traditional pipeline. We’ll extract features, make predictions and then use cross-entropy loss because we have ground truth labels annotated by humans. For the unlabeled examples, we’ll apply two types of augmentations. Again do feature extraction and prediction. And then use the predictions obtained on the weakly augmented labeled data, not in its own loss functions, but really as ground truth for the loss from the strongly augmented data. At the bottom right we can see what the loss function looks for the unlabeled part. We’ll have a batch size B, for example, 64 examples for the labelled part. And then we’ll have a multiplication factor here, for example 7. So our unlabeled mini batch size will actually be much larger than the labeled part. Finally, we just sum up the loss function and averages. And our specific loss function will include the cross-entropy loss H, between the pseudo-label Q hat B and our predictions from the strongly augmented data QB. And then we’ll also have this indicator function, which looks like a 1, that only applies this to the predictions that have some greater than a threshold prediction.</p>
+<p>Some details to keep in mind</p>
+<ul>
+<li>Labelled data batch size of 64, and Unlabeled batch size of 448 is a key factor</li>
+<li>Confidence threshold of 0.95<ul>
+<li>too low and the pseudo labelling will be noisy</li>
+<li>this causes weight convergence difficulties</li>
+</ul>
+</li>
+<li>Cosine learning rate schedule<ul>
+<li>$\large \eta cos(\frac{7 \pi k}{16 K})$</li>
+</ul>
+</li>
+<li>These can differ though for larger data sets<ul>
+<li>batch sizes (1024&#x2F;5120)</li>
+<li>Confidence 0.7</li>
+<li>Inference using the EMA of weights<ul>
+<li>$\theta’<em>t &#x3D; \alpha \theta’</em>{t-1} + (1-\alpha)\theta_t$</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>While Fixmatch is the most recent there are other methods</p>
+<ul>
+<li>MaxMatch&#x2F;ReMixMatch is a more complex variation prior to fixmatch<ul>
+<li>uses temperature scaling and entropy minimazation</li>
+<li>Multiple augmentations and ensembling to improve pseudo-labels</li>
+</ul>
+</li>
+<li>Virtual Adversarial Training<ul>
+<li>Augmentation through adversarial examples (via backprop)</li>
+</ul>
+</li>
+<li>Mean Teacher:<ul>
+<li>Student&#x2F;teacher distillation consistency method with exponential moving average</li>
+</ul>
+</li>
+</ul>
+<h1 id="Few-Shot-Learning"><a href="#Few-Shot-Learning" class="headerlink" title="Few-Shot Learning"></a>Few-Shot Learning</h1><p>In this lesson we discuss few shot learning where you may only have a few examples per category. Furthermore you may, or should, have a larger model from which you can transfer some learning, but which may have been built for some other purpose. The goal of few-shot learning is to learn a new capability from a very small number of examples.</p>
+<p><img src="/../images/DL_04-02_05.png" alt="Few-Shot Learning"></p>
+<p>In most literature on few-shot learning the approach is studied in terms of N-Way-K classification. Here the goal is to discriminate between N classes with K examples of each. For ex 10-5 would imply 10 classes with 5 samples a piece.</p>
+<p>Some approaches include:</p>
+<ul>
+<li>Fine-Tuning</li>
+<li>Train classifier on base classes</li>
+<li>Optionally freeze the feature extractor</li>
+<li>Learn classifier weights for new classes using a few amounts of labeled data during query time<ul>
+<li>this is surprisingly effective compared to more sophisticated methods</li>
+</ul>
+</li>
+</ul>
+<p>Interestingly a cosine layer (rather than a simple fully connected layer) has been shown to be beneficial in many situations but not all.</p>
+<p><img src="/../images/DL_04-02_06.png" alt="Few-Shot Learning"></p>
+<p>There are some drawbacks</p>
+<ul>
+<li>The training we do on the base classes does not factor in the task into account</li>
+<li>No notion that we will be performing a bunch of N-way tests, during inference time</li>
+</ul>
+<p>One positive note is that it simulates what is seen during test time. This leads us to the idea of Meta-Learning. In the meta-learning framework, we learn how to learn to classifiy given a set of training tasks and evaluate using a set of test tasks. In other words, we use one set of classification problems to help solve other unrelated sets.</p>
+<p><img src="/../images/DL_04-02_07.png" alt="Meta Learning"></p>
+<p>The key factor here is that the classes shown are different than anything seen before.</p>
+<p>This begs the question: What can we learn from these meta learning tasks, and what models can be constructed and conditioned on a support set M(⋅|S).</p>
+<p><img src="/../images/DL_04-02_08.png" alt="Meta Learning"></p>
+<p>We can think of this as parametrizing a learning algorithm.</p>
+<p>There are Two main aproaches to defining a meta-learner:</p>
+<ul>
+<li>Be inspired from a known algorithm<ul>
+<li>kNN&#x2F;Kernal machine: Matching Networks</li>
+<li>Gaussian Classifier: Prototypical Networks</li>
+<li>Gradient Descent: Meta-Learner LSTM (Model agnostic Meta Learning MAML)</li>
+</ul>
+</li>
+<li>Derive is from a black box neural Network<ul>
+<li>MANN ( Santoro et al 2016 )</li>
+<li>SNAIL ( Mishra et al. 2018 )</li>
+</ul>
+</li>
+</ul>
+<p>For example if we wanted a model to learn gradient descent.</p>
+<ul>
+<li>Input: Parameter initialization and update rules</li>
+<li>Output: 1). Parameter initialization 2). Meta-Learner that decides how to update parameters</li>
+</ul>
+<p>Meta-Learner LSTM</p>
+<p><img src="/../images/DL_04-02_09.png" alt="Meta Learning"></p>
+<p>Contrast between MAML and RNN(LSTM) based meta learning methods</p>
+<p><img src="/../images/DL_04-02_10.png" alt="Meta Learning"></p>
+<h1 id="Unsupervised-and-Self-Supervised-Learning"><a href="#Unsupervised-and-Self-Supervised-Learning" class="headerlink" title="Unsupervised and Self-Supervised Learning"></a>Unsupervised and Self-Supervised Learning</h1><p>In this lesson, we’ll talk about unsupervised and self supervised learning, where we have only unlabeled data, and we’d like to learn effective feature representations, so that we can fine tune them for downstream tasks.</p>
+<p>In supervised learning, we have explored a number of architectures and last function in order to optimize this task.</p>
+<ul>
+<li>Classification, we often use fully connected networks at the end, which are then converted to probabilities through softmax, and we use the cross entropy loss.</li>
+<li>Regression tasks, we can use other loss functions, such as mean squared error. The key is that we have labels and these labels allow us to compute these loss functions, and we can use that to back propagate through the network to update the parameters.</li>
+</ul>
+<p>In unsupervised learning, there’s a set of traditional tasks that we may want to perform.<br>For example:</p>
+<ul>
+<li>We may want to perform clustering where the output is a set of clusters or groupings of data, where similar pieces of data are grouped into the same cluster, and this similar pieces of data are grouped into different clusters.</li>
+<li>We may just want to learn effective features typically reduced dimensionality from the input. Here, dimensionality reduction has been looked at widely even before deep learning. And we just want to convert x the input into some latent feature representation z, </li>
+<li>or we may want to perform density estimation that is we want to model the joint distribution over the inputs.</li>
+</ul>
+<p>One such task that we can use in order to learn feature representations that are effective is an outer encoder. Here, we’ll use the same encoder decoder architectures that we’ve talked about throughout, in order to first convert the image into a small low dimensional compressed vector that is features. These features are low dimensional embeddings that represent, hopefully the most important aspects of the image. Given this bottleneck features, we’ll perform a decoding step, we’ll perform a reconstruction task. That is, we’ll just try to reconstruct the input. This may seem strange, we already have the input, there’s no actual need to reconstruct the input. But we’re forcing the neural network to learn really effective low dimensional embeddings that capture important aspects of the input. Once we train the system, we can actually get rid of the encoder and just use the low dimensional embedding in order to for example, fine tune it to a labeled classification task. Again, the key thing is that here we can do this without any labels at all.</p>
+<p><img src="/../images/DL_04-02_11.png" alt="Unsupervised and Self-Supervised Learning"></p>
+<p>We know what the input is, we want to reconstruct it, we don’t need any labels. And this also allows us to use a very concrete loss function, that is we can minimize the difference with mean squared error for example, between the input and the reconstructed input.</p>
+<p>Another thing we can leverage is the clustering assumption. This is common in unsupervised learning, where we assume that high density regions form clusters, that is items or instances that are similar form groups or clumps in some feature space. While low density region, that is regions where there’s not a lot of examples separate clusters, which hold semantic meaning.</p>
+<p><img src="/../images/DL_04-02_12.png" alt="Unsupervised and Self-Supervised Learning"></p>
+<p>The key idea is that whatever feature space we learned, we’d like those feature spaces to have these kinds of characteristics. We’d like them to essentially have features that are similar to similar items and features that are far apart, according to some distance metric or elements that are different. And so, this is what we’re hoping, we’re hoping that essentially whatever original feature space or raw input space we feed.Once we’ve output feature space that’s transformed using a deep neural network, we’d like that feature space to have this property. One thing that we can test this property with is apply K-Mean.</p>
+<p>While a lot of these tasks have already existed before deep learning, for example, reconstruction is an optimization criteria for principal component analysis. And clustering has long existed before deep learning, we can actually generalize this idea into the concept of surrogate tasks. That is we’d like to come up with tasks where we can get the answer or label for free in order to drive optimization and prevent the need for human annotation. These tasks though, must also force the neural network to learn effective feature representation. And we’d like to engineer the tasks so that there aren’t any trivial solutions or ways that the neural network can cheat to prevent it from learning effective feature representation. It turns out that over the years, a large number of such tasks have been devised, and they all have different characteristics in terms of how effective the features that are learned are. And this can differ both in terms of the level at which the neural network learns features.</p>
+<p><img src="/../images/DL_04-02_13.png" alt="Unsupervised and Self-Supervised Learning"></p>
+<p>For example, low-level edge features versus high-level semantic features, as well as how well they can generalize to other tasks as well. One example is colorization. Given a red, green, blue three channel image, we can actually just convert it to grayscale. This can be done using a hard coded formula. And the input to a neural network will then be this grayscale image. And we’d like it to re-colorize the image. Now clearly, this forces the neural network to have to understand something about what is in the image. Otherwise it’s really hard to colorize. For example, if you don’t know that this is a fish or what type of fish it is or if you have other objects such as tennis balls and so on, it’s going to be really hard to apply the same color. And what’s nice is that we know the answer, we already have the original RGB image. So we can have the neural network predicts the colorized image and we can use for example, a mean squared error loss function to drive feature learning.</p>
+<p>There’s a specific way that we evaluate the results of these surrogate tasks. Specifically, what we’d like to do is answer the question how good are the feature representations that we learn in an unsupervised manner and how well do they generalize to new label tasks. And so what we typically do is just take the encoder part, for example in the rotation prediction, we don’t actually care about the layer that actually predicts the rotation amount. And then we transfer it to the actual task. This is essentially transfer learning where we use it to initialize the model of another supervised learning task. And we really use what we learned in an unsupervised way to extract features such that we can add another classifier on top, typically a neural network or prior machine learning methods such as support vector machines. Often we limit the classifier to simple linear layers. This is because we’re interested in how good are the feature representations that we learn and how generalizable are they. So if we’re comparing many different surrogate tasks with each other, we don’t wanna have another confounding effect by adding additional complex transformations or nonlinearity. That wouldn’t essentially tell us how good or the feature representations, but it kind of adds the additional element of training those additional layers. So typically we just take the features from the unsupervised surrogate tasks and then add a linear layer to whatever supervised classification task we’d like.</p>
+<p>In summary, there’s a large number of surrogate tasks and variations that we can use to learn really good feature representations using unlabeled data alone. This includes contrast of losses which work across image patches or context or instance discrimination. And there’s many different types of loss functions or training regimes that we can apply some of them more efficient than others. The two that have become dominant and extremely effective are for unsupervised learning. Contrastive losses and when we have semi supervised learning, pseudo labeling losses, where we have essentially the learned model applied to the labeled data, making predictions on the unlabeled data and that gets used to drive a cross entropy loss. You can also use soft knowledge distillation where you don’t make the prediction of one hot for the pseudo-label. And I haven’t covered all of these methods but a lot of these methods work and it’s not clear which one is the best currently. What we do know is that data augmentation is now key. These methods are used across almost all of these unsupervised learning and semi-supervised learning methods. And maybe unfortunately, methods tend to be sensitive to the choice of data augmentation. So there’s a lot of recent work exploring how we can automatically learn data augmentation or be able to figure out at least, what data augmentation to use. Overall, these advances have been extremely exciting and have really only occurred recently.</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/Deep-Learning/" rel="tag"># Deep Learning</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/07/23/DL_04-01_DeepReinforcementLearning/" rel="prev" title="Deep Learning-4-1 Deep Reinforcement Learning">
+      <i class="fa fa-chevron-left"></i> Deep Learning-4-1 Deep Reinforcement Learning
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/07/23/DL_04-03_%20GenerativeModels/" rel="next" title="Deep Learning-4-3 Generative Models">
+      Deep Learning-4-3 Generative Models <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Learning-Objectives"><span class="nav-number">1.</span> <span class="nav-text">Learning Objectives</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Semi-Supervised-Learning"><span class="nav-number">2.</span> <span class="nav-text">Semi-Supervised Learning</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Few-Shot-Learning"><span class="nav-number">3.</span> <span class="nav-text">Few-Shot Learning</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Unsupervised-and-Self-Supervised-Learning"><span class="nav-number">4.</span> <span class="nav-text">Unsupervised and Self-Supervised Learning</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="这篇文章将跟大家分享Python网络爬虫中另一个强大的第三方网页请求库–requests库的一些其他用法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python网络爬虫--requests库进阶">
+<meta property="og:url" content="http://example.com/2022/07/30/Python%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB--requests%E5%BA%93%E8%BF%9B%E9%98%B6/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="这篇文章将跟大家分享Python网络爬虫中另一个强大的第三方网页请求库–requests库的一些其他用法。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-07-31T00:47:56.000Z">
+<meta property="article:modified_time" content="2023-07-17T14:50:15.053Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="编程">
+<meta property="article:tag" content="网络">
+<meta property="article:tag" content="爬虫">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2022/07/30/Python%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB--requests%E5%BA%93%E8%BF%9B%E9%98%B6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Python网络爬虫--requests库进阶 | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/30/Python%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB--requests%E5%BA%93%E8%BF%9B%E9%98%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python网络爬虫--requests库进阶
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-07-30 20:47:56" itemprop="dateCreated datePublished" datetime="2022-07-30T20:47:56-04:00">2022-07-30</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>这篇文章将跟大家分享Python网络爬虫中另一个强大的第三方网页请求库–requests库的一些其他用法。</p>
+<span id="more"></span>
+<hr>
+<h1 id="Cookies–识别登录"><a href="#Cookies–识别登录" class="headerlink" title="Cookies–识别登录"></a><strong>Cookies–识别登录</strong></h1><p>Cookie,是网站为了识别用户身份、进行session追踪二存储在用户本地计算机上面的数据。比如，某些网站需要登录才能访问，那么就需要在请求中添加Cookie相关信息才能爬取网站。<br>前面我们使用urllib这个库处理Cookies的时候，需要先生命CookieJar对象。然后利用HTTPCookieProcessor()来构建Handler，最后再利用build_opener()来构建Opener，最后我们才可以用opener的open()函数来完成请求。这样的写法比较复杂，而有了requests这个请求库，我们就可以非常方便的设置Cookies。接下来，我们来看一个例子来说明如何处理Cookies吧。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">r = requests.get(&quot;https://www.google.com&quot;)</span><br><span class="line">print(r.cookies)</span><br><span class="line"></span><br><span class="line">for k,v in r.cookies.items():</span><br><span class="line">    print(k + &#x27;=&#x27; + v)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>运行结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;RequestsCookieJar[&lt;Cookie 1P_JAR=2022-07-29-00 for .google.com/&gt;, &lt;Cookie AEC=AakniGOkbXuoHM4--93l8g4QiXNnw2nf7S4VxTMHVZzP2DJQNyiV0T6vp4g for .google.com/&gt;, &lt;Cookie NID=511=g1ObAMG2H7aUlRE2wvPCMVXxH8aCwHqjOMJzy7cXdYIZCyvRk3NdNUhic37IydzmXyv0i9S8A02PoI3SflxpoC6Pq3N4CkscuiWAOXgmyUHKNG6Ip-M9t2i-jC0_awX2nvuJ9vtn5-Z4K_GzGYuBGDtvFdx9wgC_kH6sPzE9suc for .google.com/&gt;]&gt;</span><br><span class="line">1P_JAR=2022-07-29-00</span><br><span class="line">AEC=AakniGOkbXuoHM4--93l8g4QiXNnw2nf7S4VxTMHVZzP2DJQNyiV0T6vp4g</span><br><span class="line">NID=511=g1ObAMG2H7aUlRE2wvPCMVXxH8aCwHqjOMJzy7cXdYIZCyvRk3NdNUhic37IydzmXyv0i9S8A02PoI3SflxpoC6Pq3N4CkscuiWAOXgmyUHKNG6Ip-M9t2i-jC0_awX2nvuJ9vtn5-Z4K_GzGYuBGDtvFdx9wgC_kH6sPzE9suc</span><br></pre></td></tr></table></figure>
+<p>当然，我们也可以使用cookie来维持登录状态。比较简单的做法是从浏览器登录账户，然后找到并将Cookie内容复制下来。将其设置到请求的headers里面。这样做的唯一问题是会有一些繁琐。如果有机会的话，我们会专门写一篇文章来分享如何使用程序来自动获取并且使用cookie来模拟登录网站。</p>
+<h1 id="Session–会话维持"><a href="#Session–会话维持" class="headerlink" title="Session–会话维持"></a><strong>Session–会话维持</strong></h1><p>我们一般是通过http协议来访问网页的，而http协议是无法维持会话之间的状态。比如说我们成功登录一个网站之后，去访问这个网站的其他页面的时候，登录状态会消失。所以导致页面刷新后就需要反复重新登录来维持会话，这就会非常繁琐。所以我们需要想办法来维持会话。除了我们上面提到的cookie，我们也可以使用一种更为简洁的方法– session对象来维持登录状态。当使用它来成功登录某个网站之后，该网站的其它网页都会默认使用该session之前使用的cookie等参数。这样，我们就可以方便的维护一个会话，而不用担心cookies的问题。举例如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">import re</span><br><span class="line"></span><br><span class="line">session = requests.session()</span><br><span class="line">data =&#123;</span><br><span class="line">    &#x27;username&#x27;: &#x27;xxxxxxxx&#x27;,</span><br><span class="line">    &#x27;password&#x27;: &#x27;xxxxxxxx&#x27;, </span><br><span class="line">    &#x27;usecookie&#x27;: &#x27;0&#x27;,</span><br><span class="line">    &#x27;action&#x27;:&#x27;login&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">url =&quot;https://www.ptwxz.com/login.php&quot;</span><br><span class="line">result = session.post(url,data=data)</span><br><span class="line"># print(result.text)</span><br><span class="line">print(result.cookies)</span><br><span class="line"># 再次请求 拿取书架上的数据</span><br><span class="line">url2 = &quot;https://www.ptwxz.com/modules/article/bookcase.php&quot;</span><br><span class="line">result2 = session.get(url2)</span><br><span class="line">result2.encoding = &#x27;gb2312&#x27;</span><br><span class="line"># print(result2.text)</span><br><span class="line">book = re.findall(&#x27;&lt;table.*?&quot;checkbox&quot;.*?_blank&quot;&gt;(.*?)&lt;/a&gt;&lt;/td&gt;&#x27;,result2.text,re.S)</span><br><span class="line">print(book)</span><br></pre></td></tr></table></figure>
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;RequestsCookieJar[&lt;Cookie PHPSESSID=1a0627fa5d220f94aa39c668d6a7bb55 for www.ptwxz.com/&gt;, &lt;Cookie jieqiUserInfo=jieqiUserId%3D436281%2CjieqiUserName%3Dshilei165%2CjieqiUserGroup%3D3%2CjieqiUserVip%3D0%2CjieqiUserName_un%3Dshilei165%2CjieqiUserHonor_un%3D%26%23x6597%3B%26%23x8005%3B%2CjieqiUserGroupName_un%3D%26%23x666E%3B%26%23x901A%3B%26%23x4F1A%3B%26%23x5458%3B%2CjieqiUserLogin%3D1659144657 for www.ptwxz.com/&gt;, &lt;Cookie jieqiVisitInfo=jieqiUserLogin%3D1659144657%2CjieqiUserId%3D436281 for www.ptwxz.com/&gt;]&gt;</span><br><span class="line">[&#x27;万相之王&#x27;]</span><br></pre></td></tr></table></figure>
+<p>我们发现书架上的书被成功获取。相信可以理解如何使用session以及session的作用了吧。</p>
+<h1 id="Proxies–代理设置"><a href="#Proxies–代理设置" class="headerlink" title="Proxies–代理设置"></a><strong>Proxies–代理设置</strong></h1><p>对于采取了比较强的反爬措施的网站来说，为了顺利爬取网站数据，我们一般需要使用代理IP来防止我们自己的IP被封禁。这时候就需要使用proxies参数来设置代理。</p>
+<p>代理主要分为HTTP和SOCKS代理两种。其中，HTTP代理能够代理HTTP访问，主要是代理浏览器访问网页，他的端口一般为80, 8080, 3128等。SOCKS代理，只是简单的传递数据包，而并不关心是何种协议。速度上来说，一般SOCKS代理要比HTTP代理快很多。</p>
+<p>我们先看一下不使用代理，来测试下自己的IP：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">url = &#x27;http://icanhazip.com&#x27;</span><br><span class="line">try:</span><br><span class="line">    response = requests.get(url)</span><br><span class="line">    print(response.status_code)</span><br><span class="line">    if response.status_code == 200:</span><br><span class="line">        print(response.text)</span><br><span class="line">except requests.ConnectionError as e:</span><br><span class="line">    print(e.args)</span><br></pre></td></tr></table></figure>
+<p>运行上面的代码，我们就会返回类似如下的结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">200</span><br><span class="line">24.163.xx.xxx</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>然后我们再来测试一下使用代理之后的情况。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">proxies = &#123;</span><br><span class="line">  </span><br><span class="line">  &quot;http&quot;:&quot;http://103.148.178.xxx&quot;,</span><br><span class="line">  &quot;https&quot;: &quot;https://122.9.101.6&quot;,</span><br><span class="line">&#125;</span><br><span class="line">url = &#x27;http://icanhazip.com&#x27;</span><br><span class="line">try:</span><br><span class="line">    response = requests.get(url, proxies = proxies)</span><br><span class="line">    print(response.status_code)</span><br><span class="line">    if response.status_code == 200:</span><br><span class="line">        print(response.text)</span><br><span class="line">except requests.ConnectionError as e:</span><br><span class="line">    print(e.args)</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">200</span><br><span class="line">103.148.178.xxx</span><br></pre></td></tr></table></figure>
+<p>这时我们就可以发现返回的是我们代理所使用的IP，说明代理起作用了。<br>使用SOCKS代理的方法类似，但我们需要首先安装pysock这个库。安装完成之后我们就可以使用SOCKS代理了，示例如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">proxies = &#123;</span><br><span class="line">  </span><br><span class="line">  &quot;http&quot;:&quot;socks5://103.148.178.xxx&quot;,</span><br><span class="line">  &quot;https&quot;: &quot;socks5://103.148.178.xxx&quot;,</span><br><span class="line">&#125;</span><br><span class="line">url = &#x27;http://icanhazip.com&#x27;</span><br><span class="line">try:</span><br><span class="line">    response = requests.get(url, proxies = proxies)</span><br><span class="line">    print(response.status_code)</span><br><span class="line">    if response.status_code == 200:</span><br><span class="line">        print(response.text)</span><br><span class="line">except requests.ConnectionError as e:</span><br><span class="line">    print(e.args)</span><br></pre></td></tr></table></figure>
+
+<p>在爬取大量数据的时候，往往需要使用多个代理。那我们应该如何构造呢？主要两种方法，一种是使用免费的多个IP，但往往效果不太好，另一种比较靠谱的方法是使用付费的IP代理服务。付费代理在很多网站上都有售卖，比较稳定，大家可以自行选购。</p>
+<p>但是无论是免费的IP还是收费的IP，都不能保证可以稳定使用，因为我们用到的IP很有可能已经被目标站点禁掉，或者代理服务器网络繁忙。所以我们就需要搭建一个代理池来提前将不可用的代理筛选掉。以后如果有机会，我们再给大家分享一下如何搭建代理池。</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag"># 编程</a>
+              <a href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag"># 网络</a>
+              <a href="/tags/%E7%88%AC%E8%99%AB/" rel="tag"># 爬虫</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/07/28/Python%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB--requests%E5%BA%93%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95/" rel="prev" title="Python网络爬虫--requests库基本用法">
+      <i class="fa fa-chevron-left"></i> Python网络爬虫--requests库基本用法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/07/31/Python%E6%95%99%E7%A8%8B--%E6%96%87%E4%BB%B6%E7%9A%84%E5%AD%98%E5%82%A8%E4%B8%8E%E8%AF%BB%E5%8F%96/" rel="next" title="Python教程--文件的存储与读取">
+      Python教程--文件的存储与读取 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Cookies%E2%80%93%E8%AF%86%E5%88%AB%E7%99%BB%E5%BD%95"><span class="nav-number">1.</span> <span class="nav-text">Cookies–识别登录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Session%E2%80%93%E4%BC%9A%E8%AF%9D%E7%BB%B4%E6%8C%81"><span class="nav-number">2.</span> <span class="nav-text">Session–会话维持</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Proxies%E2%80%93%E4%BB%A3%E7%90%86%E8%AE%BE%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">Proxies–代理设置</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

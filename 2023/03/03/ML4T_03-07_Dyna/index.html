@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Dyna-Q Big Picture Learning T Learning R Dyna-Q Recap">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Machine Learning for Trading--3-7 Dyna">
+<meta property="og:url" content="http://example.com/2023/03/03/ML4T_03-07_Dyna/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="Dyna-Q Big Picture Learning T Learning R Dyna-Q Recap">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/ML4T-0307_01.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0307_02.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0307_03.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0307_04.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0307_05.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0307_06.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0307_07.png">
+<meta property="article:published_time" content="2023-03-04T02:54:22.000Z">
+<meta property="article:modified_time" content="2023-04-27T00:37:09.169Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="ML4T">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/ML4T-0307_01.png">
+
+<link rel="canonical" href="http://example.com/2023/03/03/ML4T_03-07_Dyna/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Machine Learning for Trading--3-7 Dyna | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/03/03/ML4T_03-07_Dyna/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Machine Learning for Trading--3-7 Dyna
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-03-03 21:54:22" itemprop="dateCreated datePublished" datetime="2023-03-03T21:54:22-05:00">2023-03-03</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Machine-Learning-for-Trading/" itemprop="url" rel="index"><span itemprop="name">Machine Learning for Trading</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ul>
+<li>Dyna-Q Big Picture</li>
+<li>Learning T</li>
+<li>Learning R</li>
+<li>Dyna-Q Recap</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="Dyna-Q-Big-Picture"><a href="#Dyna-Q-Big-Picture" class="headerlink" title="Dyna-Q Big Picture"></a>Dyna-Q Big Picture</h1><p>Dyna-Q is an algorithm developed by Richard Sutton intended to speed up learning, or policy convergence, for Q-learning. Remember that Q-learning is a model-free method, meaning that it does not rely on, or even know, the transition function, T, and the reward function, R. Dyna-Q augments traditional Q-learning by incorporating estimations of both T and R, based on experience.</p>
+<p>When we augment Q-learning with Dyna-Q, we add three new pieces. First, we add logic that enables us to build models of T and R. Then, for lack of a better term, we hallucinate a number of experiences. Finally, we update our Q-table according to the experience tuples we generated during the hallucination. We repeat these steps potentially several hundred times for each real experience.</p>
+<p><img src="/../images/ML4T-0307_01.png" alt="Dyna-Q Big Picture"></p>
+<p>When we talk about updating our model, what we want to do is find new values for T and R. Remember that T is the probability that if we are in state s and take action a we will end up in state s′, while R is our expected reward from taking action a in state s.</p>
+<p>Before we talk about how we hallucinate an experience, it’s essential to understand why we might want to do this in the first place. The issue is that interacting with the real world can be very expensive, in terms of time, money, or some other resource, while hallucinations are cheap. By hallucinating a large number of experiences - say 100 or 200 - for every real experience, we can amortize the cost of a real experience over many Q-table updates.</p>
+<p>We can hallucinate an experience in two steps. First, we randomly select a state, s, and an action, a. Next, we infer the new state, s′, using T, and we infer the reward, r, using R. Using this synthetic experience tuple, we can update our Q-table.</p>
+<p><img src="/../images/ML4T-0307_02.png" alt="Dyna-Q Big Picture"></p>
+<h1 id="Learning-T"><a href="#Learning-T" class="headerlink" title="Learning T"></a>Learning T</h1><p>Remember that T[s,a,s′] represents the probability that if we are in state, s, and we take action, a, we end up in state, s′. To learn a model of T, we need to observe and record the frequency with which state transitions occur.</p>
+<p>We can introduce a new table, Tc, of dimensions, (S,A,S’), where S is the number of total possible states, and A is the number of total possible actions. We initialize the cells in Tc to a very small number to avoid a potential divide-by-zero situation.</p>
+<p>As we iterate through the Q-learning process, we accumulate experience tuples. For each s, a, and s′ that we acquire, we increment the count in Tc[s,a,s′]. In this fashion, we can record the frequency of state transitions, which serves as an empirical model of T.</p>
+<p><img src="/../images/ML4T-0307_03.png" alt="Learning T"></p>
+<h2 id="How-to-Evaluate-T-Quiz"><a href="#How-to-Evaluate-T-Quiz" class="headerlink" title="How to Evaluate T Quiz"></a>How to Evaluate T Quiz</h2><p>Assume we have been interacting with the real world for a while, and we would like to consult our model of T. Can you write an equation for T in terms of Tc?</p>
+<p><img src="/../images/ML4T-0307_04.png" alt="Quiz"></p>
+<p><img src="/../images/ML4T-0307_05.png" alt="Quiz"></p>
+<p>NOTE: The denominator in this equation should reference Tc, not T.</p>
+<p>Let’s consider the numerator first. The total number of transitions from s to s′, as a result of a, is simply the recorded value,<br>Tc [s,a,s′].</p>
+<p>Next, let’s consider the denominator. The total number of times we transitioned out of s by taking a is the sum Tc[s,a,s1]+Tc[s,a,s2]+…+Tc[s,a,sn], where n is the size of S, the state space.</p>
+<h1 id="Learning-R"><a href="#Learning-R" class="headerlink" title="Learning R"></a>Learning R</h1><p>In addition to learning a model of T, we also need to learn a model of R. Remember that R[s,a] gives us the expected reward for taking an action, a, from a state, s. Recall also that each experience tuple contains an immediate reward, r, for taking the corresponding action from the corresponding state.</p>
+<p>Given this, we can formulate a simple equation for R, which we update after each real experience. Notice that this update equation is very similar to the Q-table update equation, incorporating the same learning rate, α, that we used in that equation.</p>
+<p>$$R’[s,a] &#x3D; (1-\alpha) * R[s,a] + \alpha * r$$</p>
+<p><img src="/../images/ML4T-0307_06.png" alt="Learning R"></p>
+<h1 id="Dyna-Q-Recap"><a href="#Dyna-Q-Recap" class="headerlink" title="Dyna-Q Recap"></a>Dyna-Q Recap</h1><p><img src="/../images/ML4T-0307_07.png" alt="Dyna-Q Recap"></p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/ML4T/" rel="tag"># ML4T</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/03/02/ML4T_03-06_Q-Learning/" rel="prev" title="Machine Learning for Trading--3-6 Q-Learning">
+      <i class="fa fa-chevron-left"></i> Machine Learning for Trading--3-6 Q-Learning
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/05/23/DL_01-01_IntroToDeepLearning/" rel="next" title="Deep Learning-1-1 Linear Classfiers and Gradient Descent">
+      Deep Learning-1-1 Linear Classfiers and Gradient Descent <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Dyna-Q-Big-Picture"><span class="nav-number">1.</span> <span class="nav-text">Dyna-Q Big Picture</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Learning-T"><span class="nav-number">2.</span> <span class="nav-text">Learning T</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#How-to-Evaluate-T-Quiz"><span class="nav-number">2.1.</span> <span class="nav-text">How to Evaluate T Quiz</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Learning-R"><span class="nav-number">3.</span> <span class="nav-text">Learning R</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Dyna-Q-Recap"><span class="nav-number">4.</span> <span class="nav-text">Dyna-Q Recap</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

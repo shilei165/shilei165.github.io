@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="What is Risk Visualizing Return Vs. Risk Can We Do Better Why Covariance Matters Mean Variance Optimization The Efficient Frontier">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Machine Learning for Trading--2-10 Portfolio Optimization and the Efficient Frontier">
+<meta property="og:url" content="http://example.com/2023/02/10/ML4T_02-10_TheEfficient_Frontier/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="What is Risk Visualizing Return Vs. Risk Can We Do Better Why Covariance Matters Mean Variance Optimization The Efficient Frontier">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/ML4T-0210_01.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0210_02.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0210_03.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0210_04.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0210_05.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0210_06.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0210_07.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0210_09.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0210_08.png">
+<meta property="article:published_time" content="2023-02-11T02:54:22.000Z">
+<meta property="article:modified_time" content="2023-04-27T18:14:00.847Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="ML4T">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/ML4T-0210_01.png">
+
+<link rel="canonical" href="http://example.com/2023/02/10/ML4T_02-10_TheEfficient_Frontier/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Machine Learning for Trading--2-10 Portfolio Optimization and the Efficient Frontier | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/10/ML4T_02-10_TheEfficient_Frontier/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Machine Learning for Trading--2-10 Portfolio Optimization and the Efficient Frontier
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-02-10 21:54:22" itemprop="dateCreated datePublished" datetime="2023-02-10T21:54:22-05:00">2023-02-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Machine-Learning-for-Trading/" itemprop="url" rel="index"><span itemprop="name">Machine Learning for Trading</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ul>
+<li>What is Risk</li>
+<li>Visualizing Return Vs. Risk</li>
+<li>Can We Do Better</li>
+<li>Why Covariance Matters</li>
+<li>Mean Variance Optimization</li>
+<li>The Efficient Frontier</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="What-is-Risk"><a href="#What-is-Risk" class="headerlink" title="What is Risk"></a>What is Risk</h1><p>If we are going to find a portfolio - an allocation of assets to different stocks - that minimizes risk, we have to consider first: what is risk?</p>
+<p>The standard measurement for risk is volatility, the standard deviation of historical daily returns.</p>
+<p>Let’s consider two stocks, XYZ and ABC, that have both gone up 10%. Since the price movements for XYZ have been significantly more volatile than those for ABC, we consider XYZ a riskier investment.</p>
+<p><img src="/../images/ML4T-0210_01.png" alt="What is Risk"></p>
+<h1 id="Visulizing-Return-Vs-Risk"><a href="#Visulizing-Return-Vs-Risk" class="headerlink" title="Visulizing Return Vs. Risk"></a>Visulizing Return Vs. Risk</h1><p>We often want to consider multiple stocks together and evaluate their relative risk versus their relative return. One way we can visualize this relationship is to plot each stock on a scatterplot, where the x-axis measures risk, and the y-axis measures return.</p>
+<p>With a plot like this, we can easily compare stocks along these two dimensions. For example, stocks situated closer to both axes have relatively lower risk and return than those further away.</p>
+<p>We build a portfolio by combining multiple assets, like the ones above, and weighting each asset by a particular weight that represents its allocation within the portfolio.</p>
+<p><img src="/../images/ML4T-0210_02.png" alt="Visulizing Return Vs. Risk"></p>
+<p>Notice that the risk and return of the aggregate portfolio is some weighted average of the constituent stocks. In other words, the portfolio risk is between that of the riskiest and safest stocks, and the portfolio return is between that of the highest- and lowest-returning stocks.</p>
+<h2 id="Building-a-Portfolio-Quiz"><a href="#Building-a-Portfolio-Quiz" class="headerlink" title="Building a Portfolio Quiz"></a>Building a Portfolio Quiz</h2><p>Let’s consider the three following portfolios.</p>
+<p>Each green dot represents an asset held in the portfolio, and the size of the dot represents the weight of that asset.</p>
+<p>If we were to aggregate the risk and return of the individual stocks into one value, which of the following plots - in orange below - would match which portfolio?</p>
+<p><img src="/../images/ML4T-0210_03.png" alt="Building a Portfolio Quiz"></p>
+<p><img src="/../images/ML4T-0210_04.png" alt="Building a Portfolio Quiz"></p>
+<h1 id="Can-We-Do-Better"><a href="#Can-We-Do-Better" class="headerlink" title="Can We Do Better"></a>Can We Do Better</h1><p>For a long time, people built portfolios in this manner. They would take a collection of assets, weight them relatively equally, and created a portfolio that averaged out the individual characteristics of each asset contained within.</p>
+<p>Can we do better than this “average” performance? In other words, given a collection of assets, can we derive allocations such that we create a high-return, low-risk portfolio?</p>
+<p><img src="/../images/ML4T-0210_05.png" alt="Can We Do Better"></p>
+<p>Harry Markowitz, who later won the Nobel Prize for his insight, showed that we could do better. What he uncovered, and what people had been overlooking, was the relationship between stocks in terms of covariance.</p>
+<p>The performance of a portfolio, especially in terms of risk, is not merely a weighted average of the various performances but must take into account how each asset interacts with one another on a daily basis.</p>
+<p>As a result, there exists an allocation for a collection of assets, which leverages these interactions, such that the resulting portfolio achieves a higher risk-adjusted return than any of the individual assets.</p>
+<p>Up until the time of Harry Markowitz’s discovery, many viewed bonds as the asset with the lowest risk. Markowitz showed that a blend of stocks and bonds is actually less risky than a portfolio containing either asset exclusively.</p>
+<h1 id="Why-Covariance-Matters"><a href="#Why-Covariance-Matters" class="headerlink" title="Why Covariance Matters"></a>Why Covariance Matters</h1><p>To illustrate the importance of covariance, let’s look at a few different stocks. We see the performance of ABC and GHI over time in the plot below. While both stocks have returned 10%, notice that GHI tends to “zig” when ABC “zags”.</p>
+<p>Consider also DEF, which moves practically in lockstep with ABC.</p>
+<p><img src="/../images/ML4T-0210_06.png" alt="Why Covariance Matters"></p>
+<p>What is the best portfolio we can build by combining ABC, DEF, and GHI? To answer this question, let’s think about the covariance between the assets.</p>
+<p>ABC and DEF move very similarly, and if we were to measure the covariance of the daily returns between these two stocks, we might see a value of 0.9.</p>
+<p>If we were to measure the covariance of daily returns between ABC and GHI, we would come up with a negative number; in other words, when ABC goes up, GHI tends to go down. We might expect a covariance value of -0.9 for these two assets.</p>
+<p>Let’s first consider a portfolio that is 50% ABC and 50% DEF. Since both assets move very similarly, a portfolio containing both of those assets would follow a very similar path.</p>
+<p>This portfolio is fine - it still returns 10% - but there is no real advantage in blending these two assets because the portfolio retains the same volatility as the individual assets.</p>
+<p>Consider instead of portfolio with the following allocation: 25% ABC, 25% DEF, and 50% GHI. What is the effect of putting an anti-correlated asset into our portfolio?</p>
+<p>We see that this portfolio again posts 10% returns, but has much less volatility since the component stocks tend to move in opposite directions.</p>
+<p>Thus, we have demonstrated at a high level what Markowitz proved: we can take a collection of stocks and, with a smart allocation, create a portfolio with higher - in this case, equal - return and lower risk than any component stock.</p>
+<h1 id="Mean-Variance-Optimization"><a href="#Mean-Variance-Optimization" class="headerlink" title="Mean Variance Optimization"></a>Mean Variance Optimization</h1><p>When Markowitz began to consider the covariance between individual stocks, he discovered that low-risk portfolios were possible by blending together anti-correlated assets.</p>
+<p>Out of his work grew several algorithms. Mean-variance optimization is one such algorithm, which examines the covariance between a potential set of assets to determine how a portfolio manager ought to blend them.</p>
+<p>A mean-variance optimization algorithm takes several inputs. For each stock, we have to provide the expected return and the historical volatility of the stock. Additionally, we have to supply a covariance matrix that contains the covariance of historical returns between every pair of stocks under consideration.</p>
+<p>Finally, we need to provide the target return we want to achieve, which can range from the return of the lowest-performing asset to that of the highest-performing asset. We can accomplish a return between the maximum and minimum values through blending.</p>
+<p>The optimizer outputs a set of weights - one per asset - that corresponds to the allocation that each asset deserves in the portfolio. According to the optimizer, such a portfolio provides the target return but minimizes risk.</p>
+<p><img src="/../images/ML4T-0210_07.png" alt="Mean Variance Optimization"></p>
+<h1 id="The-Efficient-Frontier"><a href="#The-Efficient-Frontier" class="headerlink" title="The Efficient Frontier"></a>The Efficient Frontier</h1><p>Consider the following assets.</p>
+<p>For any particular desired return, there exists an optimal - minimally risky - portfolio. For example, we can see the optimal portfolio for one value of return below.</p>
+<p>We can plot the optimal portfolio for each value of desired return and connect the points to form a line.</p>
+<p><img src="/../images/ML4T-0210_09.png" alt="The Efficient Frontier"></p>
+<p>Note that, as we reduce the return, the associated risk sometimes increases. Naturally, few people want low-return, high-risk portfolios, so we often don’t consider this portion of the curve.</p>
+<p>We call this curve the efficient frontier. The efficient frontier represents the ceiling for portfolio return, given a particular amount of risk. As a result, there are no portfolios “beyond” the efficient frontier, and any portfolio “behind” the frontier is insufficient in some way.</p>
+<p>For example, consider this portfolio. This portfolio is suboptimal; that is, for the amount of return it achieves, it assumes way too much risk. Said another way, this portfolio achieves too little return for the amount of risk it bears.</p>
+<p>Given this level of risk and this collection of assets, there exists a portfolio that achieves a higher return. Conversely, given this level of return, there exists a portfolio that bears significantly less risk.</p>
+<p><img src="/../images/ML4T-0210_08.png" alt="The Efficient Frontier"></p>
+<p>One last thing to note about the efficient frontier is that, if we draw a tangent line on the frontier, originating from the origin, the slope of that line represents the maximum Sharpe ratio we can achieve with this collection of assets.</p>
+<p>The efficient frontier is primarily a theoretical device; however, some portfolio managers like to plot the frontier so that they can see where their portfolio lies relative to the assets it comprises and the efficiency it might achieve.</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/ML4T/" rel="tag"># ML4T</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/02/09/ML4T_02-09_TheFundamentalLawOfActivePortfolioManagement/" rel="prev" title="Machine Learning for Trading--2-9 The Fundamental Law Of Active Portfolio Management">
+      <i class="fa fa-chevron-left"></i> Machine Learning for Trading--2-9 The Fundamental Law Of Active Portfolio Management
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/02/13/Information_Systems_Chapter_14/" rel="next" title="Information System 14- Information and Knowledge for Business Decision-Making">
+      Information System 14- Information and Knowledge for Business Decision-Making <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#What-is-Risk"><span class="nav-number">1.</span> <span class="nav-text">What is Risk</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Visulizing-Return-Vs-Risk"><span class="nav-number">2.</span> <span class="nav-text">Visulizing Return Vs. Risk</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Building-a-Portfolio-Quiz"><span class="nav-number">2.1.</span> <span class="nav-text">Building a Portfolio Quiz</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Can-We-Do-Better"><span class="nav-number">3.</span> <span class="nav-text">Can We Do Better</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Why-Covariance-Matters"><span class="nav-number">4.</span> <span class="nav-text">Why Covariance Matters</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Mean-Variance-Optimization"><span class="nav-number">5.</span> <span class="nav-text">Mean Variance Optimization</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-Efficient-Frontier"><span class="nav-number">6.</span> <span class="nav-text">The Efficient Frontier</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

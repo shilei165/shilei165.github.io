@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Technical vs. Fundamental Analysis Characteristics of Technical Analysis When is Technical Analysis Effective A Few Good Indicators Normalization">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Machine Learning for Trading--2-6 Technical Analysis">
+<meta property="og:url" content="http://example.com/2023/02/06/ML4T_02-06_TechnicalAnalysis/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="Technical vs. Fundamental Analysis Characteristics of Technical Analysis When is Technical Analysis Effective A Few Good Indicators Normalization">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/ML4T-0206_01.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0206_02.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0206_03.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0206_04.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0206_05.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0206_06.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0206_07.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0206_08.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0206_09.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0206_10.png">
+<meta property="article:published_time" content="2023-02-07T02:54:22.000Z">
+<meta property="article:modified_time" content="2023-03-13T17:15:50.541Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="ML4T">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/ML4T-0206_01.png">
+
+<link rel="canonical" href="http://example.com/2023/02/06/ML4T_02-06_TechnicalAnalysis/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Machine Learning for Trading--2-6 Technical Analysis | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/06/ML4T_02-06_TechnicalAnalysis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Machine Learning for Trading--2-6 Technical Analysis
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-02-06 21:54:22" itemprop="dateCreated datePublished" datetime="2023-02-06T21:54:22-05:00">2023-02-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Machine-Learning-for-Trading/" itemprop="url" rel="index"><span itemprop="name">Machine Learning for Trading</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ul>
+<li>Technical vs. Fundamental Analysis</li>
+<li>Characteristics of Technical Analysis</li>
+<li>When is Technical Analysis Effective</li>
+<li>A Few Good Indicators</li>
+<li>Normalization</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="Technical-vs-Fundamental-Analysis"><a href="#Technical-vs-Fundamental-Analysis" class="headerlink" title="Technical vs. Fundamental Analysis"></a>Technical vs. Fundamental Analysis</h1><p>There are two broad categories of approaches to use when choosing stocks to buy or sell: fundamental analysis and technical analysis.</p>
+<ul>
+<li><strong>Fundamental analysis</strong> involves looking at aspects of a company in order to estimate its value. Fundamental investors typically look for situations where the price of a company is below its value.</li>
+<li><strong>Technical analysis</strong>, on the other hand, isn’t concerned with the underlying value of a company; instead, technicians look for patterns or trends in a stock’s price.</li>
+</ul>
+<h1 id="Characteristics-of-Technical-Analysis"><a href="#Characteristics-of-Technical-Analysis" class="headerlink" title="Characteristics of Technical Analysis"></a>Characteristics of Technical Analysis</h1><h2 id="What-it-is"><a href="#What-it-is" class="headerlink" title="What it is?"></a>What it is?</h2><ul>
+<li>One of the most important things to remember about technical analysis is that it considers only price and volume data, as opposed to fundamental analysis, which looks at factors such as earnings, dividends, cash flows, book value, and more.</li>
+<li>We look back at historical price and volume data to compute statistics, also known as indicators. These indicators serve as heuristics that might hint at buying or selling opportunities.</li>
+</ul>
+<h2 id="Why-it-might-work"><a href="#Why-it-might-work" class="headerlink" title="Why it might work?"></a>Why it might work?</h2><ul>
+<li>There is significant criticism of the technical approach, and many people consider it an inappropriate method for investing because it doesn’t consider the value of the company. Instead, we might think of technical analysis as a trading approach, rather than an investing approach.</li>
+<li>However, there are reasons to believe that technical analysis might have value. There is information in price and price change, as these data points reflect sentiments of buyers and sellers. Especially when the price for a particular stock is moving against the overall market, pricing data and volume can present trading opportunities.</li>
+<li>Additionally, while we know that heuristics cannot guarantee outcomes, we also know, from other domains of artificial intelligence, that heuristics are valuable and are frequently used to inform critical decisions.</li>
+</ul>
+<p><img src="/../images/ML4T-0206_01.png" alt="characteristics"></p>
+<h2 id="Potential-Indicator-Quiz"><a href="#Potential-Indicator-Quiz" class="headerlink" title="Potential Indicator Quiz"></a>Potential Indicator Quiz</h2><p>Let’s look at the following four factors. Which of these are fundamental, and which are technical?</p>
+<p><img src="/../images/ML4T-0206_02.png" alt="quiz"></p>
+<p>P&#x2F;E ratio considers both price and earnings, making it a fundamental factor, as well as intrinsic value, which is based on dividends.</p>
+<h1 id="When-is-Technical-Analysis-Effective"><a href="#When-is-Technical-Analysis-Effective" class="headerlink" title="When is Technical Analysis Effective?"></a>When is Technical Analysis Effective?</h1><p>Back in the 1980s and 1990s, when many of the well-known indicators were developed, they may have had reliable predictive power. Since that time, however, more people have been trading according to these indicators. Generally, the more people that follow a particular investing approach, the less value any one investor realizes. As a result, individual indicators are only weakly predictive today.</p>
+<p>That being said, combining multiple indicators still adds value. Combinations of three to five technical indicators, in a machine learning context, may provide a much stronger predictive system than just a single indicator.</p>
+<p>Technical analysis can also be useful at highlighting contrast; in other words, revealing when two stocks - or one stock and the market - have widely different values for a particular indicator. Such a contrast might be indicative of an actionable opportunity.</p>
+<p>Finally, technical analysis generally works better over the short term than over the long term.</p>
+<p><img src="/../images/ML4T-0206_03.png" alt="effective"></p>
+<p>To understand the value of technical analysis as compared to fundamental analysis, we need to consider the trading horizon: the amount of time that elapses between buying and selling a stock. Trading horizons can vary from milliseconds to years.</p>
+<p>When we are rapidly executing trade orders, the only factors that matter are those present on the stock exchange, such as price movement and trading volume. For these very short trading horizons, fundamental factors have quite low value.</p>
+<p>For a trading horizon of days, fundamental factors may have some value; in general, the longer the trading horizon, the more valuable fundamental factors are.</p>
+<p>Let’s now consider technical factors. How valuable is a technical indicator, such as a 20-day momentum, in determining the price of a stock years later? Such indicators have little value when considering a trading horizon of years.</p>
+<p>For a very short trading horizon, however, technical analysis can shine. In the span of a few milliseconds, the only factors about a stock that have changed are technical factors, and, as a result, technical analysis can potentially have high value over trading horizons of this size.</p>
+<p>For a trading horizon of days, technical factors may have some value; in general, the longer the trading horizon, the less valuable technical factors are.</p>
+<p>Let’s consider the value of decision complexity and decision speed across the range of trading horizons.</p>
+<p>Over a period of years, a lot can happen to a company, and, correspondingly, its stock price. As a result, we can appreciate a complex decision-making process for investments with a trading horizon of this length.</p>
+<p>Decision speed is not as important when considering investments that we plan to hold for years. Relative to this investment horizon, it doesn’t so much matter if it takes us a minute or a day to make an investment decision.</p>
+<p>When considering a much shorter trading horizon, decision speed is of utmost importance. If we want to buy and sell stock over the period of milliseconds, we can’t take seconds to make decisions. Correspondingly, we also value decision complexity less at a trading horizon of this size.</p>
+<p>When trading at very high frequencies, we need to leverage technical analysis to make many simple decisions very quickly. Thankfully, these decisions are often simple enough to capture in computer code. As a result, we often see computers trading over these shorter trading horizons.</p>
+<p>Let’s think about the different types of hedge funds we might find in the wild. On the one hand, we might see an HFT-based fund using technical analysis to trade over a millisecond horizon. On the other hand, we might find an insight-driven, human-based hedge fund holding positions for much longer. In between, we often see humans and computers working together.</p>
+<p><img src="/../images/ML4T-0206_04.png" alt="value"></p>
+<h1 id="A-Few-Good-Indicators"><a href="#A-Few-Good-Indicators" class="headerlink" title="A Few Good Indicators"></a>A Few Good Indicators</h1><h2 id="Momentum"><a href="#Momentum" class="headerlink" title="Momentum"></a>Momentum</h2><p>Momentum refers to the relative change in price for a stock over a certain number of days.</p>
+<p>The slope of the line connecting the two points indicates the strength of the momentum, either positive or negative.</p>
+<p>Generally, if we want to quantitatively calculate the n-day momentum,at day t, using a sequence of prices, we can use the following formula.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">momentum[t] = (price[t] / price[t-n]) - 1</span><br></pre></td></tr></table></figure>
+
+<p>This formula gives us a number indicating how much the price of a stock has risen or fallen between day t−n and day t. We typically see numbers for momentum between -0.5, for a significant price drop, and 0.5, for a significant price jump.</p>
+<p><img src="/../images/ML4T-0206_05.png" alt="indicators"></p>
+<h2 id="Simple-Moving-Average"><a href="#Simple-Moving-Average" class="headerlink" title="Simple Moving Average"></a>Simple Moving Average</h2><p>Our next indicator is simple moving average (SMA), which, given n, computes the average price over the previous n days, known as an n-day window.We don’t have to compute the SMA for only a single day. Instead, we can repeatedly slide our window forward one day to compute the n-day SMA for every day from n to today. The plot of such an SMA (red line) is shown below.</p>
+<p><img src="/../images/ML4T-0206_06.png" alt="indicators"></p>
+<p>There are at least two different ways that technicians use simple moving averages in their trading strategies. First, they look for places where the current price crosses through the SMA, as seen below.</p>
+<p><img src="/../images/ML4T-0206_07.png" alt="indicators"></p>
+<p>Such crossovers tend to be significant events, especially when n is quite large. Coupled with supporting momentum, a crossover might constitute a strong buy or sell signal.</p>
+<p>Technicians might also use simple moving average as a proxy for underlying value. In other words, if we calculate the average price over a large enough window, we might be able to estimate the true value of the company.</p>
+<p>If we see a large excursion from such a simple moving average, we should expect that the price is going to regress toward that average. Given that knowledge, excursions may present trading opportunities.</p>
+<p>Generally, if we want to quantitatively calculate the n-day simple moving average, SMA, at day t, using a sequence of prices, p, we can use the following formula.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SMA[t] = (price[t] / price[t-n:t].mean()) - 1</span><br></pre></td></tr></table></figure>
+<p>We can also quantify buy and sell signals. If SMA[t] &gt; 0, it is a buy signal, and if SMA[t] &lt; 0, it is a sell signal.</p>
+<p>Similar to momentum, values for SMA typically range from -0.5 to 0.5.</p>
+<h2 id="Bollinger-Bands"><a href="#Bollinger-Bands" class="headerlink" title="Bollinger Bands"></a>Bollinger Bands</h2><p>John Bollinger observed that, for a stock experiencing low volatility, we should use a relatively smaller value for our signal, and, for a stock experiencing high volatility, we should use a relatively larger value.</p>
+<p>We can accomplish such dynamic signaling using a statistic, derived from the pricing data itself, that captures volatility. Specifically, that statistic is standard deviation. For each day, we can take the standard deviation of the prices that constitute the simple moving average for that day. Given this standard deviation, we typically create Bollinger Bands two standard deviations above and below the simple moving average.</p>
+<p> The bands are tighter for periods of low volatility, and a relatively smaller excursion is enough to break out of the bands. In periods of higher volatility, the bands are much wider, and we only see crossovers for more aggressive deviations.</p>
+<p> We can use Bollinger Bands in our trading strategies. A general rule of thumb is: look for times when the price crosses from the outside of a band to the inside.</p>
+<p> Conversely, when we see price crossing over from the outside to the inside of the bottom band, we might consider buying.</p>
+<p> Generally, if we want to quantitatively calculate the Bollinger Bands, BB, on a given day, t, from a sequence of prices, using an n-day moving average, SMA, we can use the following formula.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BB[t] = (price[t] - SMA[t]) / (2 * std[t])</span><br></pre></td></tr></table></figure>
+<p>We typically see values for BB[t] between -1.0 and 1.0. In other words, the price rarely breaks out of the Bollinger Bands. Of course, this makes sense, as they are placed two standard deviations outside of the mean.</p>
+<p>By comparing the value of BB over two consecutive days, B[t] and B[t-1], we can quantify buy and sell signals. Specifically, if B[t-1] &lt; -1.0 &amp; B[t] &gt; -1.0, it is a buy signal. Conversely, when B[t-1] &gt; 1.0 &amp; B[t] &lt; 1.0, it is a sell signal.</p>
+<p><img src="/../images/ML4T-0206_08.png" alt="indicators"></p>
+<h2 id="Buy-or-Sell-Quiz"><a href="#Buy-or-Sell-Quiz" class="headerlink" title="Buy or Sell Quiz"></a>Buy or Sell Quiz</h2><p>Let’s consider how we might trade using Bollinger Bands. Consider the four events below, each of which involves the price of a stock crossing over a Bollinger Band. For each event, determine if the event demonstrates a buying opportunity, a selling opportunity, or no opportunity at all.</p>
+<p><img src="/../images/ML4T-0206_09.png" alt="quiz"></p>
+<h1 id="Normalization"><a href="#Normalization" class="headerlink" title="Normalization"></a>Normalization</h1><p>The technical indicators that we have discussed so far - simple moving averages, momentum, and Bollinger Bands - each have ranges of values over which they typically operate. For example, we might expect to see values between -0.5 and 0.5 for both simple moving averages and momentum, while we typically see values for Bollinger bands between -1.0 to 1.0.</p>
+<p>If we were to plug these indicators into a machine learning algorithm, we might see the algorithm placing more importance on the Bollinger Bands because this indicator can take on values of a larger magnitude than the other indicators.</p>
+<p>This undue overweighting of a particular factor might be even more visible if we include a fundamental indicator, like P&#x2F;E ratio, which can range from 1 to 300.</p>
+<p>The solution to this problem is normalization, which takes each of these parameters and compresses or stretches them so that they vary, on average, from -1 to 1, with a mean of 0. </p>
+<p>Normalizing values is simple. Given a set of original values, we can calculate the normalized values as follows. </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">normed = (values - mean) / values.std()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/ML4T-0206_10.png" alt="Normalization"></p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/ML4T/" rel="tag"># ML4T</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/02/06/Information_Systems_Chapter_12/" rel="prev" title="Information System 12- Enterprise Information Systems">
+      <i class="fa fa-chevron-left"></i> Information System 12- Enterprise Information Systems
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/02/07/ML4T_02-07_DealingWithData/" rel="next" title="Machine Learning for Trading--2-7 Dealing With Data">
+      Machine Learning for Trading--2-7 Dealing With Data <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Technical-vs-Fundamental-Analysis"><span class="nav-number">1.</span> <span class="nav-text">Technical vs. Fundamental Analysis</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Characteristics-of-Technical-Analysis"><span class="nav-number">2.</span> <span class="nav-text">Characteristics of Technical Analysis</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#What-it-is"><span class="nav-number">2.1.</span> <span class="nav-text">What it is?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Why-it-might-work"><span class="nav-number">2.2.</span> <span class="nav-text">Why it might work?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Potential-Indicator-Quiz"><span class="nav-number">2.3.</span> <span class="nav-text">Potential Indicator Quiz</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#When-is-Technical-Analysis-Effective"><span class="nav-number">3.</span> <span class="nav-text">When is Technical Analysis Effective?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#A-Few-Good-Indicators"><span class="nav-number">4.</span> <span class="nav-text">A Few Good Indicators</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Momentum"><span class="nav-number">4.1.</span> <span class="nav-text">Momentum</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Simple-Moving-Average"><span class="nav-number">4.2.</span> <span class="nav-text">Simple Moving Average</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bollinger-Bands"><span class="nav-number">4.3.</span> <span class="nav-text">Bollinger Bands</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Buy-or-Sell-Quiz"><span class="nav-number">4.4.</span> <span class="nav-text">Buy or Sell Quiz</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Normalization"><span class="nav-number">5.</span> <span class="nav-text">Normalization</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

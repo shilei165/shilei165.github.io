@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本篇将介绍股市中的一些基本概念以及如何使用pandas和matplotlib库来对股票信息进行统计分析。  对全局数据进行统计分析–Compute Global Statistics 计算滚动的统计数据–Computing Rolling Statistics 布林带–Bollinger Bands 计算单日回报率-Compute daily returns">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Machine Learning for Trading--1-4 Statistical Analysis and Stock Basics">
+<meta property="og:url" content="http://example.com/2023/01/20/ML4T_01-04_StatisticalAnalysisOfTimeSeries/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="本篇将介绍股市中的一些基本概念以及如何使用pandas和matplotlib库来对股票信息进行统计分析。  对全局数据进行统计分析–Compute Global Statistics 计算滚动的统计数据–Computing Rolling Statistics 布林带–Bollinger Bands 计算单日回报率-Compute daily returns">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-01-21T02:54:22.000Z">
+<meta property="article:modified_time" content="2023-02-27T16:56:14.804Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="Pandas">
+<meta property="article:tag" content="ML4T">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2023/01/20/ML4T_01-04_StatisticalAnalysisOfTimeSeries/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Machine Learning for Trading--1-4 Statistical Analysis and Stock Basics | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/20/ML4T_01-04_StatisticalAnalysisOfTimeSeries/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Machine Learning for Trading--1-4 Statistical Analysis and Stock Basics
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-01-20 21:54:22" itemprop="dateCreated datePublished" datetime="2023-01-20T21:54:22-05:00">2023-01-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Machine-Learning-for-Trading/" itemprop="url" rel="index"><span itemprop="name">Machine Learning for Trading</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本篇将介绍股市中的一些基本概念以及如何使用pandas和matplotlib库来对股票信息进行统计分析。</p>
+<ul>
+<li>对全局数据进行统计分析–Compute Global Statistics</li>
+<li>计算滚动的统计数据–Computing Rolling Statistics</li>
+<li>布林带–Bollinger Bands</li>
+<li>计算单日回报率-Compute daily returns</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="对全局数据进行统计分析–Compute-Global-Statistics"><a href="#对全局数据进行统计分析–Compute-Global-Statistics" class="headerlink" title="对全局数据进行统计分析–Compute Global Statistics"></a>对全局数据进行统计分析–Compute Global Statistics</h1><ul>
+<li>将DataFrame中的所有列数据plot在同一个表格中 – df.plot()</li>
+<li>计算所有列的平均数，中位数和方差 – df.mean(), de.median(), df.std()</li>
+</ul>
+<p>Example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import pandas as pd</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line"></span><br><span class="line">def symbol_to_path(symbol, base_dir=&quot;data&quot;):</span><br><span class="line">    &quot;&quot;&quot;Return CSV file path given ticker symbol.&quot;&quot;&quot;</span><br><span class="line">    return os.path.join(base_dir, &quot;&#123;&#125;.csv&quot;.format(str(symbol)))</span><br><span class="line"></span><br><span class="line">def get_data(symbols, dates):</span><br><span class="line">    &quot;&quot;&quot;Read stock data (adjusted close) for given symbols from CSV files.&quot;&quot;&quot;</span><br><span class="line">    df = pd.DataFrame(index=dates)</span><br><span class="line">    if &#x27;SPY&#x27; not in symbols:  # add SPY for reference, if absent</span><br><span class="line">        symbols.insert(0, &#x27;SPY&#x27;)</span><br><span class="line"></span><br><span class="line">    for symbol in symbols:</span><br><span class="line">        df_temp = pd.read_csv(symbol_to_path(symbol), index_col=&#x27;Date&#x27;,</span><br><span class="line">                parse_dates=True, usecols=[&#x27;Date&#x27;, &#x27;Adj Close&#x27;], na_values=[&#x27;nan&#x27;])</span><br><span class="line">        df_temp = df_temp.rename(columns=&#123;&#x27;Adj Close&#x27;: symbol&#125;)</span><br><span class="line">        df = df.join(df_temp)</span><br><span class="line">        if symbol == &#x27;SPY&#x27;:  # drop dates SPY did not trade</span><br><span class="line">            df = df.dropna(subset=[&quot;SPY&quot;])</span><br><span class="line">    return df</span><br><span class="line">  </span><br><span class="line">def plot_data(df, title=&quot;Stock prices&quot;):</span><br><span class="line">    &quot;&quot;&quot;Plot stock prices with a custom title and meaningful axis labels.&quot;&quot;&quot;</span><br><span class="line">    ax = df.plot(title=title, fontsize=12)</span><br><span class="line">    ax.set_xlabel(&quot;Date&quot;)</span><br><span class="line">    ax.set_ylabel(&quot;Price&quot;)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">def test_run():</span><br><span class="line">  # Read data</span><br><span class="line">  dates = pd.date_range(&#x27;2010-01-01&#x27;, &#x27;2012-12-31&#x27;)</span><br><span class="line">  symbols = [&#x27;SPY&#x27;, &#x27;XOM&#x27;, &#x27;GOOG&#x27;, &#x27;GLD&#x27;]</span><br><span class="line">  df = get_data(symbols, dates)</span><br><span class="line">  plot_data(df)</span><br><span class="line">  </span><br><span class="line">  # Compute global statistics for each stock</span><br><span class="line">  print (df.mean())</span><br><span class="line">  print (df.median())</span><br><span class="line">  print (df.std())</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    test_run()</span><br></pre></td></tr></table></figure>
+<h1 id="计算滚动的统计数据–Computing-Rolling-Statistics"><a href="#计算滚动的统计数据–Computing-Rolling-Statistics" class="headerlink" title="计算滚动的统计数据–Computing Rolling Statistics"></a>计算滚动的统计数据–Computing Rolling Statistics</h1><ul>
+<li>以20天的window计算滚动平均值 – rm_SPY&#x3D;df[‘SPY’].rolling( window&#x3D;20).mean()</li>
+<li>将rolling mean添加到现有数据的图中 – rm_SPY.plot()</li>
+</ul>
+<p>Example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import pandas as pd</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">  </span><br><span class="line">def symbol_to_path(symbol, base_dir=&quot;data&quot;):</span><br><span class="line">    &quot;&quot;&quot;Return CSV file path given ticker symbol.&quot;&quot;&quot;</span><br><span class="line">    return os.path.join(base_dir, &quot;&#123;&#125;.csv&quot;.format(str(symbol)))</span><br><span class="line"></span><br><span class="line">def get_data(symbols, dates):</span><br><span class="line">    &quot;&quot;&quot;Read stock data (adjusted close) for given symbols from CSV files.&quot;&quot;&quot;</span><br><span class="line">    df = pd.DataFrame(index=dates)</span><br><span class="line">    if &#x27;SPY&#x27; not in symbols:  # add SPY for reference, if absent</span><br><span class="line">        symbols.insert(0, &#x27;SPY&#x27;)</span><br><span class="line"></span><br><span class="line">    for symbol in symbols:</span><br><span class="line">        df_temp = pd.read_csv(symbol_to_path(symbol), index_col=&#x27;Date&#x27;,</span><br><span class="line">                parse_dates=True, usecols=[&#x27;Date&#x27;, &#x27;Adj Close&#x27;], na_values=[&#x27;nan&#x27;])</span><br><span class="line">        df_temp = df_temp.rename(columns=&#123;&#x27;Adj Close&#x27;: symbol&#125;)</span><br><span class="line">        df = df.join(df_temp)</span><br><span class="line">        if symbol == &#x27;SPY&#x27;:  # drop dates SPY did not trade</span><br><span class="line">            df = df.dropna(subset=[&quot;SPY&quot;])</span><br><span class="line">    return df </span><br><span class="line"></span><br><span class="line">def test_run():</span><br><span class="line">  # Read data</span><br><span class="line">  dates = pd.date_range(&#x27;2010-01-01&#x27;, &#x27;2012-12-31&#x27;)</span><br><span class="line">  symbols = [&#x27;SPY&#x27;, &#x27;XOM&#x27;, &#x27;GOOG&#x27;, &#x27;GLD&#x27;]</span><br><span class="line">  df = get_data(symbols, dates)</span><br><span class="line">  </span><br><span class="line">  # Plot SPY, retain matplotlib axis object</span><br><span class="line">  ax = df[&#x27;SPY&#x27;].plot(title=&quot;SPY rolling mean&quot;, label=&#x27;SPY&#x27;)</span><br><span class="line">  </span><br><span class="line">  # Compute rolling mean using a 20-day window</span><br><span class="line">  rm_SPY = df[&#x27;SPY&#x27;].rolling( window=20).mean()</span><br><span class="line">  </span><br><span class="line">  # Add rolling mean to same plot</span><br><span class="line">  rm_SPY.plot(label=&#x27;Rolling mean&#x27;, ax=ax)</span><br><span class="line">  </span><br><span class="line">  # Add axis labels and legend</span><br><span class="line">  ax.set_xlabel(&quot;Date&quot;)</span><br><span class="line">  ax.set_ylabel(&quot;Price&quot;)</span><br><span class="line">  ax.legend(loc=&#x27;upper left&#x27;)</span><br><span class="line">  plt.show()</span><br><span class="line">  </span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    test_run()</span><br></pre></td></tr></table></figure>
+<h1 id="布林带–Bollinger-Bands"><a href="#布林带–Bollinger-Bands" class="headerlink" title="布林带–Bollinger Bands"></a>布林带–Bollinger Bands</h1><ul>
+<li>布林带 – 其基本的型态是由三条轨道线组成的带状通道（中轨和上、下轨各一条）。“中轨”为股价的平均成本，“上轨”和“下轨”可分别视为股价的压力线和支撑线。</li>
+<li>布林带中轨 – 滚动平均值 rolling mean</li>
+<li>布林带上轨和下轨 – 平均值+&#x2F;-二倍方差  rolling mean +&#x2F;- rstd * 2</li>
+</ul>
+<p>Example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import pandas as pd</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line"></span><br><span class="line">def symbol_to_path(symbol, base_dir=&quot;data&quot;):</span><br><span class="line">    &quot;&quot;&quot;Return CSV file path given ticker symbol.&quot;&quot;&quot;</span><br><span class="line">    return os.path.join(base_dir, &quot;&#123;&#125;.csv&quot;.format(str(symbol)))</span><br><span class="line"></span><br><span class="line">def get_data(symbols, dates):</span><br><span class="line">    &quot;&quot;&quot;Read stock data (adjusted close) for given symbols from CSV files.&quot;&quot;&quot;</span><br><span class="line">    df = pd.DataFrame(index=dates)</span><br><span class="line">    if &#x27;SPY&#x27; not in symbols:  # add SPY for reference, if absent</span><br><span class="line">        symbols.insert(0, &#x27;SPY&#x27;)</span><br><span class="line"></span><br><span class="line">    for symbol in symbols:</span><br><span class="line">        df_temp = pd.read_csv(symbol_to_path(symbol), index_col=&#x27;Date&#x27;,</span><br><span class="line">                parse_dates=True, usecols=[&#x27;Date&#x27;, &#x27;Adj Close&#x27;], na_values=[&#x27;nan&#x27;])</span><br><span class="line">        df_temp = df_temp.rename(columns=&#123;&#x27;Adj Close&#x27;: symbol&#125;)</span><br><span class="line">        df = df.join(df_temp)</span><br><span class="line">        if symbol == &#x27;SPY&#x27;:  # drop dates SPY did not trade</span><br><span class="line">            df = df.dropna(subset=[&quot;SPY&quot;])</span><br><span class="line"></span><br><span class="line">    return df</span><br><span class="line"></span><br><span class="line">def plot_data(df, title=&quot;Stock prices&quot;):</span><br><span class="line">    &quot;&quot;&quot;Plot stock prices with a custom title and meaningful axis labels.&quot;&quot;&quot;</span><br><span class="line">    ax = df.plot(title=title, fontsize=12)</span><br><span class="line">    ax.set_xlabel(&quot;Date&quot;)</span><br><span class="line">    ax.set_ylabel(&quot;Price&quot;)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">def get_rolling_mean(values, windows):</span><br><span class="line">    &quot;&quot;&quot;Return rolling mean of given values, using specified window size.&quot;&quot;&quot;</span><br><span class="line">    return values.rolling( window=windows).mean()</span><br><span class="line"></span><br><span class="line">def get_rolling_std(values, windows):</span><br><span class="line">    &quot;&quot;&quot;Return rolling standard deviation of given values, using specified window size.&quot;&quot;&quot;</span><br><span class="line">    # Quiz: Compute and return rolling standard deviation</span><br><span class="line">    return values.rolling(window=windows).std()</span><br><span class="line"></span><br><span class="line">def get_bollinger_bands(rm, rstd):</span><br><span class="line">    &quot;&quot;&quot;Return upper and lower Bollinger Bands.&quot;&quot;&quot;</span><br><span class="line">    # Quiz: Compute upper_band and lower_band</span><br><span class="line">    upper_band = rm + rstd * 2</span><br><span class="line">    lower_band = rm - rstd * 2</span><br><span class="line">    return upper_band, lower_band</span><br><span class="line"></span><br><span class="line">def test_run():</span><br><span class="line">    # Read data</span><br><span class="line">    dates = pd.date_range(&#x27;2012-01-01&#x27;, &#x27;2012-12-31&#x27;)</span><br><span class="line">    symbols = [&#x27;SPY&#x27;]</span><br><span class="line">    df = get_data(symbols, dates)</span><br><span class="line"></span><br><span class="line">    # Compute Bollinger Bands</span><br><span class="line">    # 1. Compute rolling mean</span><br><span class="line">    rm_SPY = get_rolling_mean(df[&#x27;SPY&#x27;], windows=20)</span><br><span class="line"></span><br><span class="line">    # 2. Compute rolling standard deviation</span><br><span class="line">    rstd_SPY = get_rolling_std(df[&#x27;SPY&#x27;], windows=20)</span><br><span class="line"></span><br><span class="line">    # 3. Compute upper and lower bands</span><br><span class="line">    upper_band, lower_band = get_bollinger_bands(rm_SPY, rstd_SPY)</span><br><span class="line">    </span><br><span class="line">    # Plot raw SPY values, rolling mean and Bollinger Bands</span><br><span class="line">    ax = df[&#x27;SPY&#x27;].plot(title=&quot;Bollinger Bands&quot;, label=&#x27;SPY&#x27;)</span><br><span class="line">    rm_SPY.plot(label=&#x27;Rolling mean&#x27;, ax=ax)</span><br><span class="line">    upper_band.plot(label=&#x27;upper band&#x27;, ax=ax)</span><br><span class="line">    lower_band.plot(label=&#x27;lower band&#x27;, ax=ax)</span><br><span class="line"></span><br><span class="line">    # Add axis labels and legend</span><br><span class="line">    ax.set_xlabel(&quot;Date&quot;)</span><br><span class="line">    ax.set_ylabel(&quot;Price&quot;)</span><br><span class="line">    ax.legend(loc=&#x27;upper left&#x27;)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    test_run()</span><br></pre></td></tr></table></figure>
+
+<h1 id="计算单日回报率-Compute-daily-returns"><a href="#计算单日回报率-Compute-daily-returns" class="headerlink" title="计算单日回报率-Compute daily returns"></a>计算单日回报率-Compute daily returns</h1><ul>
+<li>回报率计算公式 – daily_ret[t] &#x3D; (price[t]&#x2F;prict[t-1]) - 1</li>
+<li>Pandas有两种方式计算回报率：<ul>
+<li>daily_returns[1:] &#x3D; (df[1:] &#x2F; df[:-1].values) - 1</li>
+<li>daily_returns &#x3D; (df &#x2F; df.shift(1)) - 1</li>
+</ul>
+</li>
+</ul>
+<p>Example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import pandas as pd</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line"></span><br><span class="line">def symbol_to_path(symbol, base_dir=&quot;data&quot;):</span><br><span class="line">    &quot;&quot;&quot;Return CSV file path given ticker symbol.&quot;&quot;&quot;</span><br><span class="line">    return os.path.join(base_dir, &quot;&#123;&#125;.csv&quot;.format(str(symbol)))</span><br><span class="line"></span><br><span class="line">def get_data(symbols, dates):</span><br><span class="line">    &quot;&quot;&quot;Read stock data (adjusted close) for given symbols from CSV files.&quot;&quot;&quot;</span><br><span class="line">    df = pd.DataFrame(index=dates)</span><br><span class="line">    if &#x27;SPY&#x27; not in symbols:  # add SPY for reference, if absent</span><br><span class="line">        symbols.insert(0, &#x27;SPY&#x27;)</span><br><span class="line"></span><br><span class="line">    for symbol in symbols:</span><br><span class="line">        df_temp = pd.read_csv(symbol_to_path(symbol), index_col=&#x27;Date&#x27;,</span><br><span class="line">                parse_dates=True, usecols=[&#x27;Date&#x27;, &#x27;Adj Close&#x27;], na_values=[&#x27;nan&#x27;])</span><br><span class="line">        df_temp = df_temp.rename(columns=&#123;&#x27;Adj Close&#x27;: symbol&#125;)</span><br><span class="line">        df = df.join(df_temp)</span><br><span class="line">        if symbol == &#x27;SPY&#x27;:  # drop dates SPY did not trade</span><br><span class="line">            df = df.dropna(subset=[&quot;SPY&quot;])</span><br><span class="line"></span><br><span class="line">    return df</span><br><span class="line"></span><br><span class="line">def plot_data(df, title=&quot;Stock prices&quot;, xlabel=&quot;Date&quot;, ylabel=&quot;Price&quot;):</span><br><span class="line">    &quot;&quot;&quot;Plot stock prices with a custom title and meaningful axis labels.&quot;&quot;&quot;</span><br><span class="line">    ax = df.plot(title=title, fontsize=12)</span><br><span class="line">    ax.set_xlabel(xlabel)</span><br><span class="line">    ax.set_ylabel(ylabel)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">def compute_daily_returns(df):</span><br><span class="line">    &quot;&quot;&quot;Compute and return the daily return values.&quot;&quot;&quot;</span><br><span class="line">    # Quiz: Your code here</span><br><span class="line">    # Note: Returned DataFrame must have the same number of rows</span><br><span class="line">    daily_returns = df.copy()</span><br><span class="line">    # daily_returns[1:] = (df[1:] / df[:-1].values) - 1 # compute daily returns for row 1 onwards</span><br><span class="line">    daily_returns = (df / df.shift(1)) - 1 # much easier with Pandas!</span><br><span class="line">    daily_returns.iloc[0, :] = 0 # Pandas leaves the 0th row full of Nans</span><br><span class="line">    return daily_returns</span><br><span class="line"></span><br><span class="line">def test_run():</span><br><span class="line">    # Read data</span><br><span class="line">    dates = pd.date_range(&#x27;2012-07-01&#x27;, &#x27;2012-07-31&#x27;)  # one month only</span><br><span class="line">    symbols = [&#x27;SPY&#x27;,&#x27;XOM&#x27;]</span><br><span class="line">    df = get_data(symbols, dates)</span><br><span class="line">    plot_data(df)</span><br><span class="line"></span><br><span class="line">    # Compute daily returns</span><br><span class="line">    daily_returns = compute_daily_returns(df)</span><br><span class="line">    plot_data(daily_returns, title=&quot;Daily returns&quot;, ylabel=&quot;Daily returns&quot;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    test_run()</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/Pandas/" rel="tag"># Pandas</a>
+              <a href="/tags/ML4T/" rel="tag"># ML4T</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/01/20/Information_Systems_Chapter_6/" rel="prev" title="Information System 6- Analyzing Information for Business Decision-Making">
+      <i class="fa fa-chevron-left"></i> Information System 6- Analyzing Information for Business Decision-Making
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/01/21/Information_Systems_Chapter_7/" rel="next" title="Information System 7- Transmitting Information">
+      Information System 7- Transmitting Information <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%B9%E5%85%A8%E5%B1%80%E6%95%B0%E6%8D%AE%E8%BF%9B%E8%A1%8C%E7%BB%9F%E8%AE%A1%E5%88%86%E6%9E%90%E2%80%93Compute-Global-Statistics"><span class="nav-number">1.</span> <span class="nav-text">对全局数据进行统计分析–Compute Global Statistics</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%BB%9A%E5%8A%A8%E7%9A%84%E7%BB%9F%E8%AE%A1%E6%95%B0%E6%8D%AE%E2%80%93Computing-Rolling-Statistics"><span class="nav-number">2.</span> <span class="nav-text">计算滚动的统计数据–Computing Rolling Statistics</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%83%E6%9E%97%E5%B8%A6%E2%80%93Bollinger-Bands"><span class="nav-number">3.</span> <span class="nav-text">布林带–Bollinger Bands</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E5%8D%95%E6%97%A5%E5%9B%9E%E6%8A%A5%E7%8E%87-Compute-daily-returns"><span class="nav-number">4.</span> <span class="nav-text">计算单日回报率-Compute daily returns</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

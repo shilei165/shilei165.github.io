@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Learning Objectives What is neural network? Supervised Learning Parametric Learning Performance Measurement Linear Algebra Review DL v ML differences Logistic Regression and Gradient Descent">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Deep Learning-1-1 Linear Classfiers and Gradient Descent">
+<meta property="og:url" content="http://example.com/2023/05/23/DL_01-01_IntroToDeepLearning/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="Learning Objectives What is neural network? Supervised Learning Parametric Learning Performance Measurement Linear Algebra Review DL v ML differences Logistic Regression and Gradient Descent">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/DL_01-01_01.svg">
+<meta property="og:image" content="http://example.com/images/DL_01-01_02.png">
+<meta property="og:image" content="http://example.com/images/DL_01-01_03.png">
+<meta property="og:image" content="http://example.com/images/DL_01-01_04.png">
+<meta property="og:image" content="http://example.com/images/DL_01-01_05.png">
+<meta property="og:image" content="http://example.com/images/DL_01-01_06.png">
+<meta property="og:image" content="http://example.com/images/DL_01-01_07.png">
+<meta property="og:image" content="http://example.com/images/DL_01-01_08.png">
+<meta property="og:image" content="http://example.com/images/DL_01-01_09.png">
+<meta property="og:image" content="http://example.com/images/DL_01-01_10.png">
+<meta property="og:image" content="http://example.com/images/DL_01-01_11.png">
+<meta property="og:image" content="http://example.com/images/DL_01-01_13.png">
+<meta property="og:image" content="http://example.com/images/DL_01-01_12.png">
+<meta property="article:published_time" content="2023-05-23T12:14:22.000Z">
+<meta property="article:modified_time" content="2023-05-31T01:29:34.966Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="Deep Learning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/DL_01-01_01.svg">
+
+<link rel="canonical" href="http://example.com/2023/05/23/DL_01-01_IntroToDeepLearning/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Deep Learning-1-1 Linear Classfiers and Gradient Descent | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/05/23/DL_01-01_IntroToDeepLearning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Deep Learning-1-1 Linear Classfiers and Gradient Descent
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-05-23 08:14:22" itemprop="dateCreated datePublished" datetime="2023-05-23T08:14:22-04:00">2023-05-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Learning-Objectives"><a href="#Learning-Objectives" class="headerlink" title="Learning Objectives"></a>Learning Objectives</h1><ul>
+<li>What is neural network?</li>
+<li>Supervised Learning</li>
+<li>Parametric Learning</li>
+<li>Performance Measurement</li>
+<li>Linear Algebra Review</li>
+<li>DL v ML differences</li>
+<li>Logistic Regression and Gradient Descent</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="What-is-neural-network"><a href="#What-is-neural-network" class="headerlink" title="What is neural network?"></a>What is neural network?</h1><p>Neural network is a powerful learning algorithm inspired by how the brain works. The definition from mathworks is as follow:</p>
+<blockquote>
+<p>A neural network (also called an artificial neural network) is an adaptive system that learns by using interconnected nodes or neurons in a layered structure that resembles a human brain. A neural network can learn from data—so it can be trained to recognize patterns, classify data, and forecast future events.<br>A neural network breaks down the input into layers of abstraction. It can be trained using many examples to recognize patterns in speech or images, for example, just as the human brain does. Its behavior is defined by the way its individual elements are connected and by the strength, or weights, of those connections. These weights are automatically adjusted during training according to a specified learning rule until the artificial neural network performs the desired task correctly.<br>A neural network combines several processing layers, using simple elements operating in parallel and inspired by biological nervous systems. It consists of an input layer, one or more hidden layers, and an output layer. In each layer there are several nodes, or neurons, with each layer using the output of the previous layer as its input, so neurons interconnect the different layers. Each neuron typically has weights that are adjusted during the learning process, and as the weight decreases or increases, it changes the strength of the signal of that neuron.</p>
+</blockquote>
+<p><img src="/../images/DL_01-01_01.svg" alt="neural network"></p>
+<h1 id="Supervised-Learning"><a href="#Supervised-Learning" class="headerlink" title="Supervised Learning"></a>Supervised Learning</h1><p>In supervised learning, we are given a data set and already know what our correct output should look like, having the idea that there is a relationship between the input and the output.</p>
+<p>Supervised learning problems are categorized into “regression” and “classification” problems. In a regression problem, we are trying to predict results within a continuous output, meaning that we are trying to map input variables to some continuous function. In a classification problem, we are instead trying to predict results in a discrete output. In other words, we are trying to map input variables into discrete categories.</p>
+<p>Examples of supervised learning applications:</p>
+<table>
+<thead>
+<tr>
+<th>Input (X)</th>
+<th>Outout (y)</th>
+<th>Application</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Home features</td>
+<td>Price</td>
+<td>Real estate</td>
+</tr>
+<tr>
+<td>Ad, user info</td>
+<td>Click on ad? (0&#x2F;1)</td>
+<td>Online advertising</td>
+</tr>
+<tr>
+<td>Image</td>
+<td>Object</td>
+<td>Photo taging</td>
+</tr>
+<tr>
+<td>Audio</td>
+<td>Test transcript</td>
+<td>Speech recognition</td>
+</tr>
+<tr>
+<td>English</td>
+<td>Chinese</td>
+<td>Machine translation</td>
+</tr>
+<tr>
+<td>Image, Radar info</td>
+<td>Position of other cars</td>
+<td>Autonomous driving</td>
+</tr>
+</tbody></table>
+<h2 id="Structured-vs-unstructured-data"><a href="#Structured-vs-unstructured-data" class="headerlink" title="Structured vs. unstructured data"></a>Structured vs. unstructured data</h2><ul>
+<li>Structured data is highly specific and is stored in a predefined format</li>
+<li>Unstructured data is a compilation of many varied types of data that are stored in their native formats</li>
+</ul>
+<h2 id="Why-is-deep-learning-taking-off"><a href="#Why-is-deep-learning-taking-off" class="headerlink" title="Why is deep learning taking off?"></a>Why is deep learning taking off?</h2><p>Deep learning is taking off due to a large amount of data available through the digitization of the society, faster computation and innovation in the development of neural network algorithm.</p>
+<p>Two things have to be considered to get to the high level of performance:</p>
+<ul>
+<li>Being able to train a big enough neural network</li>
+<li>Huge amount of labeled data</li>
+</ul>
+<h1 id="Parametric-Learning"><a href="#Parametric-Learning" class="headerlink" title="Parametric Learning"></a>Parametric Learning</h1><p>Supervised learning can be NonParametric Model which have no explicit mathematical formula, examples of this include decision trees and Knn classifiers. They can also be parametric, which have an explicit formula, examples include logistic regression and neural networks. Linear Classifiers fall into the parametric umbrella. These can face challenges though as the number of dimensions increases.</p>
+<p>Let’s now dive deeper into parametric learning algorithms.<br><strong>Components</strong>: 1. Input (Representation) 2. Functional Form of the model (Including parameters) 3. Performance measure to improve (Loss, or objective, function) 4. Algorithm for finding the best parameters (Optimization Algorithm)</p>
+<p><strong>Function form</strong>: $f(x,w)&#x3D;y$, where f is the classifier, x is the input vector, w is the weights, y is the output.</p>
+<p>One of the simplest example of this is the equation of a line $y&#x3D;mx+b$. If the output is continuous then we can apply a secondary function in order to turn it into a Binary classifier.<br>$$f(x)&#x3D;<br>\begin{cases}<br>0&amp; f(x,w)&gt;0\\<br>1&amp; Otherwise<br>\end{cases}$$</p>
+<p><img src="/../images/DL_01-01_02.png" alt="Parametric Models"></p>
+<p>For a multi-class classifier we take the class with the highest (max) score: $f(x,W)&#x3D;Wx+b$, where W is a matrix and each row represents a class.</p>
+<p><img src="/../images/DL_01-01_03.png" alt="Parametric Models"></p>
+<p>Linear Classifiers are models that try to find a line, or hyperplane, that can seperate the data elements into distinct groups. While simple they’re highly versatile and have many applications. However, in order to compute them we will often require a higher dimension and this presents some difficulties.</p>
+<p><img src="/../images/DL_01-01_04.png" alt="Parametric Models"></p>
+<p>For more complex functions like XOR and Circles it becomes more difficult, if not impossible to discover a linear seperation. For this we will need none linear activators.</p>
+<h1 id="Performance-Measurement"><a href="#Performance-Measurement" class="headerlink" title="Performance Measurement"></a>Performance Measurement</h1><p>Performance Measure to improve the loss or score function. For binary we could take 1 when the score is greater than one and for a multi-class we could take the maximum. However scores suffer from some issues. Difficult to interpret, no bounds and hard to compare to other classifiers. To remedy some of these issues we will use the softmax function to turn scores into probabilities.</p>
+<p>For a score function of the form $s&#x3D;f(x,W)$, we would take the following <strong>softmax function</strong> to calculate the probability for each class K</p>
+<p>$$P(Y&#x3D;k|X&#x3D;x)&#x3D;\frac{e^{s_k}}{\sum_je^{s_j}}$$</p>
+<p>In order to optimize this we need a function to optimize. This is often called our loss or objective function. It should have the following properties:</p>
+<ul>
+<li>Penalize model for being wrong</li>
+<li>Allows modification (so we can reduce the penalty)</li>
+</ul>
+<p>In ML we will often use empirical risk minimization: Reduce the loss over the training dataset, then average the loss over the training data.<br>Given${(x_i,y_i)}_{i&#x3D;1}^N$, we can define the loss as<br>$$<br>L&#x3D;\frac{1}{N}\sum L_i(f(x_i,W), y_i)<br>$$<br>where, $x_i$ is an image and $y_i$ is a label (usually an integer).</p>
+<p>Consider the example of Support Vector Machines (SVMs), the SVM loss has the form:<br>$$<br>L_i&#x3D;\sum_{j\neq y_i}<br>\begin{cases}<br>0&amp; if s_{yi}\geq s_j + 1\\<br>s_j-s_{yi} + 1&amp; Otherwise<br>\end{cases}\\<br>&#x3D;\sum_{j\neq y_i}max(0,s_j-s_{yi} + 1)<br>$$</p>
+<p><img src="/../images/DL_01-01_05.png" alt="Performance Measurement"></p>
+<p>We want to have a score that is higher by some margin for the ground truth label. When this is not the case we penalize this by how different it is from the margin. To do thie we take the max over all the classes that are not the ground truth, and penalize the model whenever the score for the ground truth itself is not bigger by a particular margin. This is called a hinge loss.</p>
+<p>Simple example, suppose we are trying to classify a picture into 1 of three categories: cat, frog, or car.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Picture 1 : Ground truth : CAT</span><br><span class="line">Model Scores</span><br><span class="line">    CAT    CAR    FROG</span><br><span class="line">    3.2    5.1    -1.7</span><br><span class="line">Using our loss function: Li = sum max(0,sj-syi+1) from above </span><br><span class="line">Li = max(0,5.1-3.2+1) + max(0,-1.7-3.2+1)</span><br><span class="line">   = max(0,2.9)+max(0,-3.9)</span><br><span class="line">   = 2.9 + 0</span><br><span class="line">   = 2.9</span><br></pre></td></tr></table></figure>
+<p>If we use the softmax function to convert scores to probabilities, the following loss function to use is <strong>cross-entropy</strong>:<br>$$<br>L_i&#x3D;-log P(Y&#x3D;y_i|X&#x3D;x_i)<br>$$</p>
+<p>It can be derived by looking at the distance between two probability distributions and also could be derived from a maxim likehood estimation perspective. Maximum Likelihood Estimation: choose the probabilities to maximize the likelihood of the observerd data.</p>
+<p>Let’s re-examine our example above using the cross entropy</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Recall the ground truth is CAT</span><br><span class="line">CAT    CAR    FROG</span><br><span class="line">3.2    5.1    -1.70     &lt;- These are our un-normalized log probabilities (logits)</span><br><span class="line">24.5   164.0  0.18      &lt;- exponentiated np.exp(sk)</span><br><span class="line">0.13   0.87   0.00      &lt;- divided by the sum of the exponentiated (row 2) </span><br><span class="line"></span><br><span class="line">\* at this point the model thinks it&#x27;s a car</span><br></pre></td></tr></table></figure>
+<p><strong>If we are performing regression, we can directly optimize to match the ground truth value.</strong><br>Example of house price prediction<br>$L_i&#x3D;|y-Wx_i|$ – is the L1 loss</p>
+<p>$L_i&#x3D;|y-Wx_i|^2$ – is the L2 loss</p>
+<p>For probabilities:<br>$L_i&#x3D;|y-Wx_i|&#x3D;\frac{e^{s_k}}{\sum_je^{s_j}}$ – is Logistic</p>
+<p>In some cases we add a regularization term to the loss function to encourage smaller weights, and penalize higher weights which would over emphasis a feature.</p>
+<p>$L_i&#x3D;|y-Wx_i|+|W|$ – is an L1 regularized loss function</p>
+<p><img src="/../images/DL_01-01_06.png" alt="loss function"><br>The illustration above shows the characteristics of different loss functions.</p>
+<h1 id="Linear-Algebra-Review"><a href="#Linear-Algebra-Review" class="headerlink" title="Linear Algebra Review"></a>Linear Algebra Review</h1><p>In general we will be working with Matrices W, and X. Where x is the vector.</p>
+<h2 id="Size-of-W-X-and-x"><a href="#Size-of-W-X-and-x" class="headerlink" title="Size of W, X, and x"></a>Size of W, X, and x</h2><ul>
+<li>Let $c$ be the number of classes, or targets, and $d$ be the dimensionality, or number of features.</li>
+<li>W is the size of ($c, d+1$), here we add 1 for the bias term</li>
+<li>x is a row vector of size $d+1$</li>
+</ul>
+<p>For our discussion, assume <em>s</em> is a scalar $s \in \mathbb{R}^1$, <em>v</em> is a vector $v \in \mathbb{R}^m$, and M is a matrix $M \in \mathbb{R}^{k \times 1}$, then</p>
+<ul>
+<li><p>$\frac{\partial v}{\partial s}$ is of size $\mathbb{R}^{m \times 1}$</p>
+</li>
+<li><p>$\frac{\partial s}{\partial v}$ is of size $\mathbb{R}^{1 \times m}$</p>
+</li>
+<li><p>$\frac{\partial v_1}{\partial v_2}$ is of size $\mathbb{R}^{m \times m}$ This is a <strong>Jacobian matrix</strong> shown as follow.<br><img src="/../images/DL_01-01_07.png" alt="Jacobian matrix"></p>
+</li>
+<li><p>What is the size of $\frac{\partial s}{\partial M}$?<br><img src="/../images/DL_01-01_08.png" alt="ds/dM"></p>
+</li>
+<li><p>What is the size of $\frac{\partial L}{\partial W}$?  By the previous question this should result in a matrix of partials (Jacobian).<br><img src="/../images/DL_01-01_09.png" alt="dL/dW"></p>
+</li>
+</ul>
+<p>Often times our algorithms (like gradient descent) are implemented in batches, which can also be thought of as matrices and tensors.</p>
+<h1 id="DL-vs-ML"><a href="#DL-vs-ML" class="headerlink" title="DL vs ML"></a>DL vs ML</h1><p>Deep Learning employs a few key concepts generally expects raw data and learns a feature representation. Neural Networks are the most popular form but there are a few others like probabilistic learning.</p>
+<p><img src="/../images/DL_01-01_10.png" alt="DL"></p>
+<h2 id="“Shallow”-vs-Deep-Learning"><a href="#“Shallow”-vs-Deep-Learning" class="headerlink" title="“Shallow” vs. Deep Learning"></a>“Shallow” vs. Deep Learning</h2><p><img src="/../images/DL_01-01_11.png" alt="&quot;Shallow&quot; vs. Deep Learning"></p>
+<h2 id="Distributed-Representation"><a href="#Distributed-Representation" class="headerlink" title="Distributed Representation"></a>Distributed Representation</h2><p>Recall that: 1) No single neuron encodes everything; 2) Groups of neurons need to work together</p>
+<ul>
+<li>Local representation: a concept is represented by a single node.</li>
+<li>Distributed representation: a concept is represented by the pattern of activation across many nodes.</li>
+</ul>
+<p><img src="/../images/DL_01-01_13.png" alt="Distributed Representation"></p>
+<h1 id="Logistic-Regression-and-Gradient-Descent"><a href="#Logistic-Regression-and-Gradient-Descent" class="headerlink" title="Logistic Regression and Gradient Descent"></a>Logistic Regression and Gradient Descent</h1><h2 id="Logistic-Regression"><a href="#Logistic-Regression" class="headerlink" title="Logistic Regression"></a>Logistic Regression</h2><blockquote>
+<p>Logistic regression is useful for situations in which you want to be able to predict the presence or absence of a characteristic or outcome based on values of a set of predictor variables. It is similar to a linear regression model but is suited to models where the dependent variable is dichotomous. Logistic regression coefficients can be used to estimate odds ratios for each of the independent variables in the model. Logistic regression is applicable to a broader range of research situations than discriminant analysis. (from ibm knowledge center)</p>
+</blockquote>
+<p>A detailed guide on <a target="_blank" rel="noopener" href="https://machinelearningmastery.com/logistic-regression-for-machine-learning/">Logistic Regression for Machine Learning</a> by Jason Brownlee is the best summary of this topic for data science engineers.</p>
+<p>Andrew Ng’s course on Logistic Regression focuses more on LR as the simplest neural network, as its programming implementation is a good starting point for the deep neural networks that will be covered later.</p>
+<h2 id="Logistic-Regression-Cost-Function"><a href="#Logistic-Regression-Cost-Function" class="headerlink" title="Logistic Regression Cost Function"></a>Logistic Regression Cost Function</h2><p>In Logistic regression, we want to train the parameters $w$ and $b$, we need to define a cost function.</p>
+<p>$$\widehat{y}^{(i)}&#x3D;\sigma(w^Tx^{(i)}+b)$$,<br>where $$\sigma(z^{(i)})&#x3D;\frac{1}{1+e^{-z^{(i)}}}$$<br>Given ${(x^{(1)},y^{(1)}),…, x^{(m)},y^{(m)})}$, we want $\widehat{y}^{(i)}\approx y^{(i)}$</p>
+<p>The loss function measures the difference between the prediction $\widehat{y}^{(i)}$ and the desired output $y^{(i)}$. In other words, the loss function computes the error for a single training example.</p>
+<p>$$L(\widehat{y}^{(i)}, y^{(i)}) &#x3D; -(y^{(i)}*log(y^{(i)}) + (1-y^{(i)})*log(1-y^{(i)}))$$</p>
+<p>So,<br>$$<br>L(\widehat{y}^{(i)}, y^{(i)}) &#x3D; \begin{cases}<br>-log(y^{(i)})&amp; if\ \ y &#x3D; 1\\<br>-log(1-y^{(i)})&amp; if\ \ y &#x3D; 0<br>\end{cases}<br>$$</p>
+<p>The cost function is the average of the loss function of the entire training set. We are going to find the parameters $w$ and $b$ that minimize the overall cost function.</p>
+<p>$$<br>J(w,b) &#x3D; \frac{1}{m}\sum_{i&#x3D;1}^{m}L(\widehat{y}^{(i)}, y^{(i)})\\<br>&#x3D; -\frac{1}{m}[\sum_{i&#x3D;1}^{m}y^{(i)}log(y^{(i)}) + (1-y^{(i)})log(1-y^{(i)}))]<br>$$<br>The loss function measures how well the model is doing on the single training example, whereas the cost function measures how well the parameters $w$ and $b$ are doing on the entire training set.</p>
+<h2 id="Gradient-Descent"><a href="#Gradient-Descent" class="headerlink" title="Gradient Descent"></a>Gradient Descent</h2><p>As you go through any course on machine learning or deep learning, gradient descent the concept that comes up most often. It is used when training models, can be combined with every algorithm and is easy to understand and implement.</p>
+<p>The goal of the training model is to minimize the loss function, usually with randomly initialized parameters, and using a gradient descent method with the following main steps. Randomization of parameters initialization is not necessary in logistic regression (zero initialization is fine), but it is necessary in multilayer neural networks.</p>
+<ol>
+<li>Start calculating the cost and gradient for the given training set of (x,y) with the parameters w and b.</li>
+<li>Update parameters w and b with pre-set learning rate: w_new &#x3D;w_old – learning_rate * gradient_of_at(w_old) </li>
+<li>Repeat these steps until you reach the minimal values of cost function.</li>
+</ol>
+<p><img src="/../images/DL_01-01_12.png" alt="Gradient Descient"></p>
+<h2 id="Derivatives"><a href="#Derivatives" class="headerlink" title="Derivatives"></a>Derivatives</h2><p>Derivatives are crucial in backpropagation during neural network training, which uses the concept of computational graphs and the chain rule of derivatives to make the computation of thousands of parameters in neural networks more efficient.</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/Deep-Learning/" rel="tag"># Deep Learning</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/03/03/ML4T_03-07_Dyna/" rel="prev" title="Machine Learning for Trading--3-7 Dyna">
+      <i class="fa fa-chevron-left"></i> Machine Learning for Trading--3-7 Dyna
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/05/23/DL_01-02_NeuralNetworkBasics/" rel="next" title="Deep Learning-1-2 Neural Networks">
+      Deep Learning-1-2 Neural Networks <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Learning-Objectives"><span class="nav-number">1.</span> <span class="nav-text">Learning Objectives</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#What-is-neural-network"><span class="nav-number">2.</span> <span class="nav-text">What is neural network?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Supervised-Learning"><span class="nav-number">3.</span> <span class="nav-text">Supervised Learning</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Structured-vs-unstructured-data"><span class="nav-number">3.1.</span> <span class="nav-text">Structured vs. unstructured data</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Why-is-deep-learning-taking-off"><span class="nav-number">3.2.</span> <span class="nav-text">Why is deep learning taking off?</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Parametric-Learning"><span class="nav-number">4.</span> <span class="nav-text">Parametric Learning</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Performance-Measurement"><span class="nav-number">5.</span> <span class="nav-text">Performance Measurement</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Linear-Algebra-Review"><span class="nav-number">6.</span> <span class="nav-text">Linear Algebra Review</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Size-of-W-X-and-x"><span class="nav-number">6.1.</span> <span class="nav-text">Size of W, X, and x</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DL-vs-ML"><span class="nav-number">7.</span> <span class="nav-text">DL vs ML</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E2%80%9CShallow%E2%80%9D-vs-Deep-Learning"><span class="nav-number">7.1.</span> <span class="nav-text">“Shallow” vs. Deep Learning</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Distributed-Representation"><span class="nav-number">7.2.</span> <span class="nav-text">Distributed Representation</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Logistic-Regression-and-Gradient-Descent"><span class="nav-number">8.</span> <span class="nav-text">Logistic Regression and Gradient Descent</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Logistic-Regression"><span class="nav-number">8.1.</span> <span class="nav-text">Logistic Regression</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Logistic-Regression-Cost-Function"><span class="nav-number">8.2.</span> <span class="nav-text">Logistic Regression Cost Function</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gradient-Descent"><span class="nav-number">8.3.</span> <span class="nav-text">Gradient Descent</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Derivatives"><span class="nav-number">8.4.</span> <span class="nav-text">Derivatives</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

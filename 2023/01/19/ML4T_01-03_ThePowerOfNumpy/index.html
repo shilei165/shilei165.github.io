@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="创建一个numpy阵列–Creating NumPy Arrays 生成随机数–Generating Random Numbers 阵列属性–Array Attributes 阵列运算–Operations on Arrays 最大值的index–Locate maximum value 使用time函数–Using time function 获取阵列中的元素–Accessing Array">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Machine Learning for Trading--1-3 The Power of Numpy">
+<meta property="og:url" content="http://example.com/2023/01/19/ML4T_01-03_ThePowerOfNumpy/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="创建一个numpy阵列–Creating NumPy Arrays 生成随机数–Generating Random Numbers 阵列属性–Array Attributes 阵列运算–Operations on Arrays 最大值的index–Locate maximum value 使用time函数–Using time function 获取阵列中的元素–Accessing Array">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-01-19T23:14:22.000Z">
+<meta property="article:modified_time" content="2023-02-27T18:30:56.390Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="ML4T">
+<meta property="article:tag" content="Numpy">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2023/01/19/ML4T_01-03_ThePowerOfNumpy/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Machine Learning for Trading--1-3 The Power of Numpy | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/19/ML4T_01-03_ThePowerOfNumpy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Machine Learning for Trading--1-3 The Power of Numpy
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-01-19 18:14:22" itemprop="dateCreated datePublished" datetime="2023-01-19T18:14:22-05:00">2023-01-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Machine-Learning-for-Trading/" itemprop="url" rel="index"><span itemprop="name">Machine Learning for Trading</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ul>
+<li>创建一个numpy阵列–Creating NumPy Arrays</li>
+<li>生成随机数–Generating Random Numbers</li>
+<li>阵列属性–Array Attributes</li>
+<li>阵列运算–Operations on Arrays</li>
+<li>最大值的index–Locate maximum value</li>
+<li>使用time函数–Using time function</li>
+<li>获取阵列中的元素–Accessing Array Elements</li>
+<li>数学运算-Arithmetic Operations</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="创建一个numpy阵列–Creating-NumPy-Arrays"><a href="#创建一个numpy阵列–Creating-NumPy-Arrays" class="headerlink" title="创建一个numpy阵列–Creating NumPy Arrays"></a>创建一个numpy阵列–Creating NumPy Arrays</h1><ul>
+<li>一维阵列–np.array([2, 3, 4])</li>
+<li>二维阵列–(np.array([(2, 3, 4), (5, 6, 7)])</li>
+<li>空阵列–1D: np.empty(5), 2D: np.empty((5,4)), 3D: np.empty((5,4,3))</li>
+<li>单位阵列–np.ones((5, 4))</li>
+<li>指定数据类型–np.ones((5, 4), dtype&#x3D;np.int_)</li>
+</ul>
+<p>Example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line"></span><br><span class="line">def test_run():</span><br><span class="line">    # List to 1D array</span><br><span class="line">    print (np.array([2, 3, 4]))</span><br><span class="line">    </span><br><span class="line">    # List of tuples to 2D array</span><br><span class="line">    print (np.array([(2, 3, 4), (5, 6, 7)]))</span><br><span class="line">    </span><br><span class="line">    # Empty array</span><br><span class="line">    print (np.empty(5))</span><br><span class="line">    print (np.empty((5,4)))</span><br><span class="line">    print (np.empty((5,4,3)))</span><br><span class="line">    </span><br><span class="line">    # Array of 1s</span><br><span class="line">    print (np.ones((5, 4)))</span><br><span class="line">    </span><br><span class="line">    # Specifying the datatype</span><br><span class="line">    print (np.ones((5, 4), dtype=np.int_))</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    test_run()</span><br></pre></td></tr></table></figure>
+
+<h1 id="生成随机数–Generating-Random-Numbers"><a href="#生成随机数–Generating-Random-Numbers" class="headerlink" title="生成随机数–Generating Random Numbers"></a>生成随机数–Generating Random Numbers</h1><ul>
+<li>生成0和1之间的随机数–np.random.random((5, 4))或者np.random.rand(5, 4) </li>
+<li>生成随机数并且符合正态分布–np.random.normal(50, 10, size&#x3D;(2, 3)) 注：50为平均值，10为方差</li>
+<li>生成0到10之间随机的整数–np.random.randint(1) 或者np.random.randint(0, 10)</li>
+<li>生成多个0到10之间的随机数–1D: np.random.randint(0, 10, size&#x3D;5),  2D: np.random.randint(0, 10, size&#x3D;(2, 3))</li>
+</ul>
+<p>Example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">def test_run():</span><br><span class="line">    # Generate an array full of random numbers, uniformly samples from [0.0, 1.0)</span><br><span class="line">    print (np.random.random((5, 4))) # pass in a size tuple</span><br><span class="line">    </span><br><span class="line">    # Generate an array full of random numbers, uniformly samples from [0.0, 1.0)</span><br><span class="line">    print (np.random.rand(5, 4)) # function arguments (not a tuple)</span><br><span class="line">    </span><br><span class="line">    # Sample numbers from a Gaussian (normal) distribution</span><br><span class="line">    print (np.random.normal(size=(2, 3))) # &quot;standard normal&quot; (mean = 0, s.d. = 1)</span><br><span class="line">    </span><br><span class="line">    # Sample numbers from a Gaussian (normal) distribution</span><br><span class="line">    print (np.random.normal(50, 10, size=(2, 3))) # change mean to 50 and s.d. to 10</span><br><span class="line">    </span><br><span class="line">    # Random integers</span><br><span class="line">    print (np.random.randint(1)) # a single integer in [0, 10)</span><br><span class="line">    print (np.random.randint(0, 10)) # same as above, specifying [low, high) explicit</span><br><span class="line">    print (np.random.randint(0, 10, size=5)) # 5 random integers as a 1D array</span><br><span class="line">    print (np.random.randint(0, 10, size=(2, 3))) # 2x3 array of random integers</span><br><span class="line">    </span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    test_run()</span><br></pre></td></tr></table></figure>
+<h1 id="阵列属性–Array-Attributes"><a href="#阵列属性–Array-Attributes" class="headerlink" title="阵列属性–Array Attributes"></a>阵列属性–Array Attributes</h1><ul>
+<li>阵列的行列数–a.shape,  行数：a.shape[0]， 列数：a.shape[1]</li>
+<li>阵列维度–len(a.shape)</li>
+<li>阵列元素数–a.size</li>
+<li>数据类型–a.dtype</li>
+</ul>
+<p>Example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line"></span><br><span class="line">def test_run():</span><br><span class="line"></span><br><span class="line">    a = np.random.random((5, 4))  # 5x4 array of random numbers</span><br><span class="line">    print (a)</span><br><span class="line">    print (a.shape)</span><br><span class="line">    </span><br><span class="line">    print (a.shape[0])  # number of rows</span><br><span class="line">    print (a.shape[1])  # number of columns</span><br><span class="line">    </span><br><span class="line">    print (len(a.shape))  # returns 2 --&gt; 2D</span><br><span class="line">    print (a.size)  # returns number of rows * number of columns --&gt; 20 total elements in the array</span><br><span class="line">    print (a.dtype)  # check the date type</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    test_run()</span><br></pre></td></tr></table></figure>
+<h1 id="阵列运算–Operations-on-Arrays"><a href="#阵列运算–Operations-on-Arrays" class="headerlink" title="阵列运算–Operations on Arrays"></a>阵列运算–Operations on Arrays</h1><ul>
+<li>求和–a.sum()</li>
+<li>最小值–a.min()</li>
+<li>最大值–a.max()</li>
+<li>平均值–a.mean()</li>
+</ul>
+<p>Example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line"></span><br><span class="line">def test_run():</span><br><span class="line"></span><br><span class="line">    np.random.seed(693)  # seed the random number generator</span><br><span class="line">    a = np.random.randint(0, 10, size=(5, 4)) # 5x4 random integers in [0, 10)</span><br><span class="line">    print (&quot;Array:\n&quot;, a)</span><br><span class="line">    </span><br><span class="line">    # Sum of all elements</span><br><span class="line">    print (&quot;Sum of all elements:&quot;, a.sum())</span><br><span class="line">    </span><br><span class="line">    # Iterate over rows, to compute sum of each columns</span><br><span class="line">    print (&quot;Sum of each column:\n&quot;, a.sum(axis=0))</span><br><span class="line">    </span><br><span class="line">    # Iterate over columns to compute sume of each rows</span><br><span class="line">    print (&quot;Sum of each row:\n&quot;, a.sum(axis=1))</span><br><span class="line">    </span><br><span class="line">    # Statistics: min, max, mean (across rows, cols, and overall)</span><br><span class="line">    print (&quot;Minimum of each colulmn:\n&quot;, a.min(axis=0))</span><br><span class="line">    print (&quot;Maximum of each row:\n&quot;, a.max(axis=1))</span><br><span class="line">    print (&quot;Mean of all elements:&quot;, a.mean()) # leave out axis arg.</span><br><span class="line">    </span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    test_run()</span><br></pre></td></tr></table></figure>
+
+<h1 id="最大值的index–Locate-maximum-value"><a href="#最大值的index–Locate-maximum-value" class="headerlink" title="最大值的index–Locate maximum value"></a>最大值的index–Locate maximum value</h1><ul>
+<li>返回最大值的index–a.argmax()</li>
+</ul>
+<p>Example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line"></span><br><span class="line">def get_max_index(a):</span><br><span class="line">    &quot;&quot;&quot;Return the index of the maximum value in given 1D array.&quot;&quot;&quot;</span><br><span class="line">    # Quiz: Your code here</span><br><span class="line">    return np.argmax(a)</span><br><span class="line"></span><br><span class="line">def test_run():</span><br><span class="line">    a = np.array([9, 6, 2, 3, 12, 14, 7, 10], dtype=np.int32)  # 32-bit integer array</span><br><span class="line">    print( &quot;Array:&quot;, a)</span><br><span class="line">    </span><br><span class="line">    # Find the maximum and its index in array</span><br><span class="line">    print (&quot;Maximum value:&quot;, a.max())</span><br><span class="line">    print (&quot;Index of max.:&quot;, get_max_index(a))</span><br><span class="line">    </span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    test_run()</span><br></pre></td></tr></table></figure>
+
+<h1 id="使用time函数–Using-time-function"><a href="#使用time函数–Using-time-function" class="headerlink" title="使用time函数–Using time function"></a>使用time函数–Using time function</h1><p>time函数–time.time()</p>
+<p>Example 1:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">import time </span><br><span class="line">    </span><br><span class="line">def test_run():</span><br><span class="line">    t1 = time.time()</span><br><span class="line">    print (&quot;ML4T&quot;)</span><br><span class="line">    t2 = time.time()</span><br><span class="line">    print (&quot;The time taken by print statement is &quot;, t2 - t1, &quot; seconds&quot;)</span><br><span class="line">    </span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    test_run()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>Example 2:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">from time import time</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def how_long(func, *args):</span><br><span class="line">    &quot;&quot;&quot;Execute function with given arguments, and measure execution time.&quot;&quot;&quot;</span><br><span class="line">    t0 = time()</span><br><span class="line">    result = func(*args) # all argument are passed in as-is</span><br><span class="line">    t1 = time()</span><br><span class="line">    return result, t1 - t0</span><br><span class="line"></span><br><span class="line">def manual_mean(arr):</span><br><span class="line">    &quot;&quot;&quot;Compute mean (average) of all elements in the given 2D array.&quot;&quot;&quot;</span><br><span class="line">    sum = 0</span><br><span class="line">    for i in range(0, arr.shape[0]):</span><br><span class="line">        for j in range(0, arr.shape[1]):</span><br><span class="line">            sum = sum + arr[i, j]</span><br><span class="line">    return sum / arr.size</span><br><span class="line"></span><br><span class="line">def numpy_mean(arr):</span><br><span class="line">    &quot;&quot;&quot;Compute mean(average) using Numpy&quot;&quot;&quot;</span><br><span class="line">    return arr.mean()</span><br><span class="line"></span><br><span class="line">def test_run():</span><br><span class="line">    &quot;&quot;&quot;Function called by Test Run.&quot;&quot;&quot;</span><br><span class="line">    nd1 = np.random.random((1000, 10000)) # use a sufficiently large array</span><br><span class="line"></span><br><span class="line">    # Time the two functions, retrieving results and execution times</span><br><span class="line">    res_manual, t_manual = how_long(manual_mean, nd1)</span><br><span class="line">    res_numpy, t_numpy = how_long(numpy_mean, nd1)</span><br><span class="line">    print (&quot;Manual: &#123;:.6f&#125; (&#123;:.3f&#125; secs.) vs. Numpy: &#123;:.6f&#125; (&#123;:.3f&#125; secs.)&quot;.format(res_manual, t_manual, res_numpy, t_numpy))</span><br><span class="line"></span><br><span class="line">    # Make sure both give us the same answer (upto some precision)</span><br><span class="line">    assert abs(res_manual - res_numpy) &lt;= 10e-6, &quot;Results aren&#x27;t equal!&quot;</span><br><span class="line"></span><br><span class="line">    # Compute speedup</span><br><span class="line">    speedup = t_manual / t_numpy</span><br><span class="line">    print (&quot;Numpy mean is&quot;, speedup, &quot;times faster than manual for loops.&quot;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    test_run()</span><br></pre></td></tr></table></figure>
+<h1 id="获取阵列中的元素–Accessing-Array-Elements"><a href="#获取阵列中的元素–Accessing-Array-Elements" class="headerlink" title="获取阵列中的元素–Accessing Array Elements"></a>获取阵列中的元素–Accessing Array Elements</h1><ul>
+<li>获取特定元素–a[3, 2]</li>
+<li>获取特定范围内的元素–a[0, 1:3], a[:, 0:3:2]</li>
+<li>使用包含指针的list来获取元素–indices &#x3D; np.array([1,2,3,3]) –&gt; a[indices]</li>
+<li>使用mask对数据进行处理—-a[a&lt;mean]</li>
+</ul>
+<p>Example 1:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line"></span><br><span class="line">def test_run():</span><br><span class="line">    a = np.random.rand(5, 4)</span><br><span class="line">    print (&quot;array:\n&quot;, a)</span><br><span class="line"></span><br><span class="line">    # Accessing element at position (3, 2)</span><br><span class="line">    element = a[3, 2]</span><br><span class="line">    print (element)</span><br><span class="line"></span><br><span class="line">    # Element in defined range</span><br><span class="line">    print (a[0, 1:3])</span><br><span class="line"></span><br><span class="line">    # Top-left corner</span><br><span class="line">    print (a[0:2, 0:2])</span><br><span class="line"></span><br><span class="line">    # Slicing</span><br><span class="line">    # Note: Slice n:m:t specifies a range that starts n, and stops before m, in</span><br><span class="line">    print( a[:, 0:3:2]) # will select columns 0, 2 for every row</span><br><span class="line"></span><br><span class="line">    # Assigning a value to a particular location</span><br><span class="line">    a[0, 0] = 1</span><br><span class="line">    print (&quot;\nModified (replaced one element):\n&quot;, a)</span><br><span class="line"></span><br><span class="line">    # Assigning a single value to an entire row</span><br><span class="line">    a[0,:] = 2</span><br><span class="line">    print (&quot;\nModified (replaced a row with a single value):\n&quot;, a)</span><br><span class="line"></span><br><span class="line">    # Assigning a list to a column in an array</span><br><span class="line">    a[:, 3] = [1, 2, 3, 4, 5]</span><br><span class="line">    print (&quot;\nModified (replaced a column with a list):\n&quot;, a)</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    test_run()</span><br></pre></td></tr></table></figure>
+
+<p>Example 2:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line"></span><br><span class="line">def test_run():</span><br><span class="line">    a = np.random.rand(5)</span><br><span class="line">    </span><br><span class="line">    # accessing using list of indices</span><br><span class="line">    indices = np.array([1,2,3,3])</span><br><span class="line">    print (a[indices])</span><br><span class="line">    </span><br><span class="line">    a = np.array([(20,25,10,23,26,32,10,5,0),(0,2,50,20,0,1,28,5,0)])</span><br><span class="line">    print (a)</span><br><span class="line">    </span><br><span class="line">    # calculating mean</span><br><span class="line">    mean = a.mean()</span><br><span class="line">    print (mean)</span><br><span class="line">    </span><br><span class="line">    # masking</span><br><span class="line">    print (a[a&lt;mean])</span><br><span class="line">    </span><br><span class="line">    # masking2</span><br><span class="line">    a[a&lt;mean]= mean</span><br><span class="line">    print (a)</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    test_run()</span><br></pre></td></tr></table></figure>
+
+<h1 id="数学运算-Arithmetic-Operations"><a href="#数学运算-Arithmetic-Operations" class="headerlink" title="数学运算-Arithmetic Operations"></a>数学运算-Arithmetic Operations</h1><p>Example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line"></span><br><span class="line">def test_run():</span><br><span class="line">    a = np.array([(1, 2, 3, 4, 5), (10, 20, 30, 40, 50)])</span><br><span class="line">    print (&quot;Original array a:\n&quot;, a)</span><br><span class="line">    </span><br><span class="line">    # Multiple a by 2</span><br><span class="line">    print (&quot;\nMultiply a by 2:\n&quot;, 2 * a)</span><br><span class="line">    </span><br><span class="line">    # Divide a by 2</span><br><span class="line">    print (&quot;\nDivide a by 2:\n&quot;, a / 2)</span><br><span class="line">    </span><br><span class="line">    # Divide a by 2</span><br><span class="line">    print (&quot;\nDivide a by 2:\n&quot;, a / 2.0)</span><br><span class="line">    </span><br><span class="line">    b = np.array([(100, 200, 300, 400, 500), (1, 2, 3, 4, 5)])</span><br><span class="line">    print (&quot;\nOriginal array b:\n&quot;, b)</span><br><span class="line">    </span><br><span class="line">    # Add the two arrays</span><br><span class="line">    print (&quot;\nAdd a + b:\n&quot;, a + b)</span><br><span class="line">    </span><br><span class="line">    # Multiply a and b</span><br><span class="line">    print (&quot;\nMultiply a and b:\n&quot;, a * b)</span><br><span class="line">    </span><br><span class="line">    # Divide a by b</span><br><span class="line">    print (&quot;\nDivide a by b:\n&quot;, a / b)</span><br><span class="line">    </span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    test_run()</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/ML4T/" rel="tag"># ML4T</a>
+              <a href="/tags/Numpy/" rel="tag"># Numpy</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/01/19/Information_Systems_Chapter_5/" rel="prev" title="Information System 5- Storing and Organizing Information">
+      <i class="fa fa-chevron-left"></i> Information System 5- Storing and Organizing Information
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/01/20/Information_Systems_Chapter_6/" rel="next" title="Information System 6- Analyzing Information for Business Decision-Making">
+      Information System 6- Analyzing Information for Business Decision-Making <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AAnumpy%E9%98%B5%E5%88%97%E2%80%93Creating-NumPy-Arrays"><span class="nav-number">1.</span> <span class="nav-text">创建一个numpy阵列–Creating NumPy Arrays</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E9%9A%8F%E6%9C%BA%E6%95%B0%E2%80%93Generating-Random-Numbers"><span class="nav-number">2.</span> <span class="nav-text">生成随机数–Generating Random Numbers</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%98%B5%E5%88%97%E5%B1%9E%E6%80%A7%E2%80%93Array-Attributes"><span class="nav-number">3.</span> <span class="nav-text">阵列属性–Array Attributes</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%98%B5%E5%88%97%E8%BF%90%E7%AE%97%E2%80%93Operations-on-Arrays"><span class="nav-number">4.</span> <span class="nav-text">阵列运算–Operations on Arrays</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%80%E5%A4%A7%E5%80%BC%E7%9A%84index%E2%80%93Locate-maximum-value"><span class="nav-number">5.</span> <span class="nav-text">最大值的index–Locate maximum value</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8time%E5%87%BD%E6%95%B0%E2%80%93Using-time-function"><span class="nav-number">6.</span> <span class="nav-text">使用time函数–Using time function</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E9%98%B5%E5%88%97%E4%B8%AD%E7%9A%84%E5%85%83%E7%B4%A0%E2%80%93Accessing-Array-Elements"><span class="nav-number">7.</span> <span class="nav-text">获取阵列中的元素–Accessing Array Elements</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E5%AD%A6%E8%BF%90%E7%AE%97-Arithmetic-Operations"><span class="nav-number">8.</span> <span class="nav-text">数学运算-Arithmetic Operations</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

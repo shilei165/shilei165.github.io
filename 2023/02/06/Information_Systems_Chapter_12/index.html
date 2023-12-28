@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Learning Objectives Identify the main characteristics and types of enterprise systems Discuss the purposes of enterprise resource planning (ERP) systems Explain the purposes and functioning of supply">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Information System 12- Enterprise Information Systems">
+<meta property="og:url" content="http://example.com/2023/02/06/Information_Systems_Chapter_12/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="Learning Objectives Identify the main characteristics and types of enterprise systems Discuss the purposes of enterprise resource planning (ERP) systems Explain the purposes and functioning of supply">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-02-06T15:38:00.000Z">
+<meta property="article:modified_time" content="2023-02-09T15:45:16.739Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Information Systems">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2023/02/06/Information_Systems_Chapter_12/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Information System 12- Enterprise Information Systems | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/06/Information_Systems_Chapter_12/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Information System 12- Enterprise Information Systems
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-02-06 10:38:00" itemprop="dateCreated datePublished" datetime="2023-02-06T10:38:00-05:00">2023-02-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Information-Systems/" itemprop="url" rel="index"><span itemprop="name">Information Systems</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Learning-Objectives"><a href="#Learning-Objectives" class="headerlink" title="Learning Objectives"></a><strong>Learning Objectives</strong></h1><ul>
+<li>Identify the main characteristics and types of enterprise systems</li>
+<li>Discuss the purposes of enterprise resource planning (ERP) systems</li>
+<li>Explain the purposes and functioning of supply chain management (SCM) systems</li>
+<li>Identify the components of customer relationship management (CRM) systems</li>
+<li>Apply the customer life cycle concepts to CRM</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="Enterprise-Systems"><a href="#Enterprise-Systems" class="headerlink" title="Enterprise Systems"></a>Enterprise Systems</h1><h2 id="Personal-versus-Enterprise-Systems"><a href="#Personal-versus-Enterprise-Systems" class="headerlink" title="Personal versus Enterprise Systems"></a>Personal versus Enterprise Systems</h2><p><strong>Enterprise systems</strong> are information systems that serve the needs of the organization or parts of the organization.</p>
+<p>Three perspectives on developing enterprise systems have emerged:</p>
+<ol>
+<li>Hierarchical perspective<ul>
+<li>Information systems mirror the organization</li>
+<li>Meet the needs of a level within the organization</li>
+</ul>
+</li>
+<li>Functional perspective<ul>
+<li>Meet the needs of a functional area – such as human resources or marketing</li>
+</ul>
+</li>
+<li>Process prospective<ul>
+<li>Support the process at hand regardless of the organizational level or functional area</li>
+<li>It is a series of steps required to perform a task</li>
+</ul>
+</li>
+</ol>
+<h2 id="Integration-and-Enterprise-Systems"><a href="#Integration-and-Enterprise-Systems" class="headerlink" title="Integration and Enterprise Systems"></a>Integration and Enterprise Systems</h2><ul>
+<li>Main issues: Redundancy and lack of communication across department</li>
+<li>The process perspective focuses on integration to solve those issues.</li>
+<li><strong>Business integration</strong> is the unification of business processes previously performed as separate activities to create cohesive and streamlined business processes. (Performed the best way they can be without barriers)<ul>
+<li>Examples: CRM – Customer Relationship Management</li>
+</ul>
+</li>
+<li><strong>Systems integration</strong> is the unification of information systems and databases that were previously operating as separate systems. It focuses on the technological components of information systems. <ul>
+<li>Examples: ERP – Enterprise Resource Planning; CMSs – Content Management Systems; SCM – Supply Chain Management</li>
+</ul>
+</li>
+</ul>
+<h1 id="Enterprise-Resource-Planning-EPR"><a href="#Enterprise-Resource-Planning-EPR" class="headerlink" title="Enterprise Resource Planning (EPR)"></a>Enterprise Resource Planning (EPR)</h1><p>An <strong>enterprise resource planning (ERP) system</strong> is a set of information systems tools that are used to manage an organization’s resources and enable information to flow within and between processes (and departments).</p>
+<ul>
+<li>Before ERP systems, different applications for different functions.</li>
+<li>With ERP, various modules offer integrated management of these resources.</li>
+</ul>
+<p>Features:</p>
+<ul>
+<li>ERP applications are built on a centralized database</li>
+<li>It offers system and business integration (data integration)</li>
+<li>Module based</li>
+<li>Customizable</li>
+</ul>
+<h2 id="Benefits-and-Disadvantages-of-ERP-Systems"><a href="#Benefits-and-Disadvantages-of-ERP-Systems" class="headerlink" title="Benefits and Disadvantages of ERP Systems"></a>Benefits and Disadvantages of ERP Systems</h2><p><strong>Benefits</strong></p>
+<ul>
+<li>Efficiency – reduce data redundancy</li>
+<li>Responsiveness – provide more accurate information and more rapid responses to demands</li>
+<li>Adaptable – can be configured to fit the organization’s needs</li>
+<li>Benefit from the expertise of ERP software vendors and consultants</li>
+</ul>
+<p>** Disadvantages**</p>
+<ul>
+<li>Enormous amount of work and very high cost</li>
+<li>Users accustomed to the old way of doing business may offer significant resistance to an ERP implementation.</li>
+</ul>
+<h1 id="Supply-Chain-Management-Systems"><a href="#Supply-Chain-Management-Systems" class="headerlink" title="Supply Chain Management Systems"></a>Supply Chain Management Systems</h1><p>The typical supply chain involves the flow of goods from the manufacturer to the wholesaler to the retailer and to the consumer.</p>
+<ul>
+<li>A well-managed supply chain can result in a reduction in inventory costs</li>
+<li>It can also reduce the number of returned items through better inventory information</li>
+<li>SCM can also improve a company’s overall relationships with partners through more accurate and timely communication about the flow of products, information, and payments.</li>
+<li>A good SCM system also allows companies to offer just-in-time inventory – maintain the lowest level of inventory</li>
+</ul>
+<h1 id="Customer-Relationship-Management-Systems"><a href="#Customer-Relationship-Management-Systems" class="headerlink" title="Customer Relationship Management Systems"></a>Customer Relationship Management Systems</h1><p><strong>Customer relationship management (CRM)</strong> refers to an organization-wide strategy for managing an organization’s multiple interactions with customers.</p>
+<ul>
+<li>CRM involves a set of activities and technologies meant to help companies understand the needs of current and potential customers.</li>
+<li>CRM allows to attract and retain customers and manage customer relationships</li>
+<li>It also allows company to analyze customer data</li>
+</ul>
+<p>CRM includes three main goals:</p>
+<ol>
+<li>Manage multiple channels of interaction with customer</li>
+<li>Provide unified view of each customer across enterprise</li>
+<li>Analyze information about customers</li>
+</ol>
+<h2 id="Customer-Service-Life-Cycle"><a href="#Customer-Service-Life-Cycle" class="headerlink" title="Customer Service Life Cycle"></a>Customer Service Life Cycle</h2><p>The customer service life cycle (CSLC) is a framework to help us understand the various tasks a CRM system can be useful for.</p>
+<p>Four phases:</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Engage</td>
+<td>Creating customer awareness of the product or service. The goal of the engage stage is to generate leads and then convert those leads into customers.</td>
+<td>Campaign management; Email marketing; Lead processing; Sales force automation; Web-based catalogs</td>
+</tr>
+<tr>
+<td>Transact</td>
+<td>All activities associated with the purchase process. The goal of this phase is to efficiently and effectively complete the purchase process so that customers do not abandon the purchase process.</td>
+<td>Order management; Payment process and options; Product configuration; Product pricing</td>
+</tr>
+<tr>
+<td>Fulfill</td>
+<td>Delivery of the product or service to the customer.</td>
+<td>Order tracking; Supply chain integration</td>
+</tr>
+<tr>
+<td>Service</td>
+<td>Supporting the customer during the ownership of a product or service.</td>
+<td>Call center automation; Customer issues management; Self-service</td>
+</tr>
+</tbody></table>
+<h2 id="Components-of-CRM-Systems"><a href="#Components-of-CRM-Systems" class="headerlink" title="Components of CRM Systems"></a>Components of CRM Systems</h2><p>CRM systems have three main components: operational, collaborative, and analytical.</p>
+<ul>
+<li>Operational components of a CRM system – help the organization improve day-to-day interactions with customers.<ul>
+<li>They are involved with the operations of the company, such as sales or repairs.</li>
+</ul>
+</li>
+<li>Collaborative components of a CRM system – help the organization interact and collaborate with its customers.<ul>
+<li>Email, and automated response systems</li>
+<li>Interactive voice response (IVR) systems and voice over IP (VoIP) to allows live talk.</li>
+</ul>
+</li>
+<li>Analytical components of CRM – consist of technologies and processes organizations can use to analyze customer data.<ul>
+<li>Data mining technologies and methods are often used to discover patterns and groups in the data stored in a data warehouse.</li>
+</ul>
+</li>
+</ul>
+<h2 id="CRM-Implementation-Options"><a href="#CRM-Implementation-Options" class="headerlink" title="CRM Implementation Options"></a>CRM Implementation Options</h2><p>There are two main ways that CRM can be implemented: on premise or on demand.</p>
+<ul>
+<li>On-premise CRM implementation means that the CRM system is acquired, leased, or developed by the organization and installed on tis local servers.</li>
+<li>On-demand CRM, also known as software-as-a-server (SaaS) CRM, refers to the remote use of CRM provider’s applications through the Internet.</li>
+</ul>
+<h2 id="Benefts-and-Disadvantages-of-CRM"><a href="#Benefts-and-Disadvantages-of-CRM" class="headerlink" title="Benefts and Disadvantages of CRM"></a>Benefts and Disadvantages of CRM</h2><p><strong>Benefits</strong></p>
+<ul>
+<li>CRM provides greater customer satisfaction – personalized services &amp; products, faster response time to questions, more streamlined interactions.</li>
+<li>CRM can help an organization maximize its profits by reducing the costs for acquiring and servicing customers, and increase the overall revenus.<br><strong>Disadvantages</strong></li>
+<li>The implementation of a CRM system requires more than simply installing the software application. </li>
+<li>An organization must look beyond purely technical issues and ensure that all customer-facing employees are customer minded.</li>
+<li>There are complicated technological issues myust be addressed. – scalable</li>
+</ul>
+<h1 id="Customer-Managed-Interactions-CMI"><a href="#Customer-Managed-Interactions-CMI" class="headerlink" title="Customer-Managed Interactions (CMI)"></a>Customer-Managed Interactions (CMI)</h1><p><strong>Customer-managed interactions (CMI)</strong> involve letting customers store and manage data about themselves.</p>
+<ul>
+<li>Create a wish list</li>
+<li>Giving a specific discount</li>
+</ul>
+<h1 id="Warehouse-Automation-and-Robotics"><a href="#Warehouse-Automation-and-Robotics" class="headerlink" title="Warehouse Automation and Robotics"></a>Warehouse Automation and Robotics</h1><ul>
+<li>Enabled by advancement of warehouse technology and capabilities of robotics.  <ul>
+<li>Robot completes tedious and physically taxing jobs.</li>
+<li>Human warehouse worker focuses on less physically demanding aspects of warehouse operations.</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Information-Systems/" rel="tag"># Information Systems</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/02/05/ML4T_02-05_HowHedgeFundsUseTheCAPM/" rel="prev" title="Machine Learning for Trading--2-5 How Hedge Funds Use the CAPM?">
+      <i class="fa fa-chevron-left"></i> Machine Learning for Trading--2-5 How Hedge Funds Use the CAPM?
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/02/06/ML4T_02-06_TechnicalAnalysis/" rel="next" title="Machine Learning for Trading--2-6 Technical Analysis">
+      Machine Learning for Trading--2-6 Technical Analysis <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Learning-Objectives"><span class="nav-number">1.</span> <span class="nav-text">Learning Objectives</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Enterprise-Systems"><span class="nav-number">2.</span> <span class="nav-text">Enterprise Systems</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Personal-versus-Enterprise-Systems"><span class="nav-number">2.1.</span> <span class="nav-text">Personal versus Enterprise Systems</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Integration-and-Enterprise-Systems"><span class="nav-number">2.2.</span> <span class="nav-text">Integration and Enterprise Systems</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Enterprise-Resource-Planning-EPR"><span class="nav-number">3.</span> <span class="nav-text">Enterprise Resource Planning (EPR)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Benefits-and-Disadvantages-of-ERP-Systems"><span class="nav-number">3.1.</span> <span class="nav-text">Benefits and Disadvantages of ERP Systems</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Supply-Chain-Management-Systems"><span class="nav-number">4.</span> <span class="nav-text">Supply Chain Management Systems</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Customer-Relationship-Management-Systems"><span class="nav-number">5.</span> <span class="nav-text">Customer Relationship Management Systems</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Customer-Service-Life-Cycle"><span class="nav-number">5.1.</span> <span class="nav-text">Customer Service Life Cycle</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Components-of-CRM-Systems"><span class="nav-number">5.2.</span> <span class="nav-text">Components of CRM Systems</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CRM-Implementation-Options"><span class="nav-number">5.3.</span> <span class="nav-text">CRM Implementation Options</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Benefts-and-Disadvantages-of-CRM"><span class="nav-number">5.4.</span> <span class="nav-text">Benefts and Disadvantages of CRM</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Customer-Managed-Interactions-CMI"><span class="nav-number">6.</span> <span class="nav-text">Customer-Managed Interactions (CMI)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Warehouse-Automation-and-Robotics"><span class="nav-number">7.</span> <span class="nav-text">Warehouse Automation and Robotics</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

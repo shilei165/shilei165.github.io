@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="How Data Is Aggregated Stock Splits Dividends Survior Bias">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Machine Learning for Trading--2-7 Dealing With Data">
+<meta property="og:url" content="http://example.com/2023/02/07/ML4T_02-07_DealingWithData/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="How Data Is Aggregated Stock Splits Dividends Survior Bias">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/ML4T-0207_01.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0207_02.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0207_03.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0207_04.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0207_05.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0207_06.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0207_07.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0207_08.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0207_09.png">
+<meta property="article:published_time" content="2023-02-08T02:54:22.000Z">
+<meta property="article:modified_time" content="2023-03-14T01:34:23.636Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="Pandas">
+<meta property="article:tag" content="ML4T">
+<meta property="article:tag" content="Numpy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/ML4T-0207_01.png">
+
+<link rel="canonical" href="http://example.com/2023/02/07/ML4T_02-07_DealingWithData/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Machine Learning for Trading--2-7 Dealing With Data | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/07/ML4T_02-07_DealingWithData/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Machine Learning for Trading--2-7 Dealing With Data
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-02-07 21:54:22" itemprop="dateCreated datePublished" datetime="2023-02-07T21:54:22-05:00">2023-02-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Machine-Learning-for-Trading/" itemprop="url" rel="index"><span itemprop="name">Machine Learning for Trading</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ul>
+<li>How Data Is Aggregated</li>
+<li>Stock Splits</li>
+<li>Dividends</li>
+<li>Survior Bias</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="How-Data-Is-Aggregated"><a href="#How-Data-Is-Aggregated" class="headerlink" title="How Data Is Aggregated?"></a>How Data Is Aggregated?</h1><p>The finest resolution of data is a tick. A tick represents a successful match between a buyer and a seller: in other words, a successful transaction.</p>
+<p>Consider the following plot, which shows share price along with share volume over time.</p>
+<p><img src="/../images/ML4T-0207_01.png" alt="data_aggregation"></p>
+<p>Keep in mind that none of these transactions happens at a specific time or during a specific time slice. There is no guarantee regarding the number of ticks during any particular minute or hour. An exchange only records a tick when a successful transaction occurs.</p>
+<p>Each exchange provides its own data feed regarding these transactions, and we can subscribe to multiple feeds to see ticks across different markets. Let’s add in the ticks from another exchange, shown in red, to our plot. Remember that all of these transactions are happening simultaneously, and prices at different exchanges aren’t guaranteed to be the same.</p>
+<p><img src="/../images/ML4T-0207_02.png" alt="data_aggregation"></p>
+<p>Highly liquid stocks might experience hundreds of thousands of transactions occurring every second. Collecting ticks across all of the exchanges over a long period of time for stocks like these might result in an incomprehensible amount of data.</p>
+<p>As a result, exchanges usually consolidate tick data into time slices - minute-by-minute or hour-by-hour, for example - and we can see such slices, demarcated by the dotted lines, in our plot.</p>
+<p><img src="/../images/ML4T-0207_03.png" alt="data_aggregation"></p>
+<p>We can describe each chunk using five data points: open, high, low, close, and volume. Let’s consider the first chunk.</p>
+<p>The open is the price of the first transaction within the chunk, which is \$100.00. The high is the highest transaction price within the chunk, which is also \$100.00. The low is the lowest transaction price within the chunk, which is \$99.05. The close is the price of the last transaction within the chunk, which is \$95.50. Finally, the volume represents the total number of shares transacted within the chunk, which is 600.</p>
+<p>The data that we are going to work with is daily data; in other words, we are working with chunks that aggregate ticks on a daily frequency.</p>
+<h2 id="Price-Anomaly-Quiz"><a href="#Price-Anomaly-Quiz" class="headerlink" title="Price Anomaly Quiz"></a>Price Anomaly Quiz</h2><p>Consider the following plot of IBM stock prices over time. </p>
+<p>Notice the sudden drops in price. In one example, the price drops from \$300 per share to \$75 per share; in another, the price drops from $250 per share to \$125 per share. These drops represent a 75% and a 50% price decline, respectively.</p>
+<p>Undoubtedly, the value of IBM did not drop that much in one day, so, which of the following reasons might explain the sudden drop in stock price?</p>
+<p><img src="/../images/ML4T-0207_04.png" alt="quiz"></p>
+<p>What we see here is a stock split, whereby a single share becomes n shares, and the price of each share is divided by n.</p>
+<h1 id="Stock-Splits"><a href="#Stock-Splits" class="headerlink" title="Stock Splits"></a>Stock Splits</h1><p>The most common reason for a company to issue a stock split is to drive down the share price. </p>
+<p>Naturally, that begs the question: why is a high share price a problem?</p>
+<p>Consider a stock with a high share price, such as \$500. Investors generally buy stocks in groups of one hundred - referred to as a lot. At \$500 per share, a lot costs \$50,000, and some investors might find this price prohibitively expensive. Additionally, share price impacts derivative securities, like stock options, which typically control lots, and can make them more expensive and less liquid.</p>
+<p>As well, investors often strive to build portfolios with finely-tuned proportions allocated to each stock. If some of the stock in the portfolio have very high share prices, such fine resolution may be difficult to achieve.</p>
+<p><img src="/../images/ML4T-0207_05.png" alt="splits"></p>
+<p>If we want to trade using the actual close data, we need to account for these splits.</p>
+<p>The solution to this problem is to use adjusted close instead of close. Adjusted close retroactively accounts for stock splits and provides a measure of split-adjusted price movement that gives investors - and computers - a less turbulent view of the share price over time.</p>
+<p>Here’s how it works. We walk back in time, day by day, setting adjusted close equal to actual close until we encounter the most recent n:1 stock split. From that point back to the beginning of time, we set the adjusted close equal to the actual close divided by n.</p>
+<p>By computing the adjusted close, we now have a smooth line representing the split-adjusted stock price, and we no longer have to account for stock splits explicitly. Additionally, we can look back into the past - several splits ago - and accurately understand the accumulation of value between then and now.</p>
+<h2 id="Split-Adjustment-Quiz"><a href="#Split-Adjustment-Quiz" class="headerlink" title="Split Adjustment Quiz"></a>Split Adjustment Quiz</h2><p>Consider the following plot of close prices for a particular stock over time. Notice the 2:1 stock split. For each of the three days identified below, what is the adjusted close price for this stock?</p>
+<p><img src="/../images/ML4T-0207_06.png" alt="splits"></p>
+<h1 id="Dividends"><a href="#Dividends" class="headerlink" title="Dividends"></a>Dividends</h1><p>Many companies regularly pay dividends to their shareholders. For example, a company might pay a 1-2% dividend per share per year. For a stock trading at \$100 per share, this dividend equals \$1-2.</p>
+<p>Dividend payments can have significant effects on a stock’s price. Consider a company whose stock is currently trading at around \$100 per share and for which investors have derived a fundamental value of exactly \$100 per share. Let’s suppose that this stock has an upcoming dividend payment of \$1.</p>
+<h2 id="Dividends-Quiz"><a href="#Dividends-Quiz" class="headerlink" title="Dividends Quiz"></a>Dividends Quiz</h2><p>What share price do we expect to see the day before the dividend is paid? How about after the dividend is paid?</p>
+<p><img src="/../images/ML4T-0207_07.png" alt="Dividends"></p>
+<p>The day before the dividend is paid, we should expect to see the stock price rise to \$101. A share price of \$101 reflects the underlying value of \$100 per share, for which there is consensus, plus the expected \$1 dividend payment.</p>
+<h2 id="Adjusting-for-Dividends"><a href="#Adjusting-for-Dividends" class="headerlink" title="Adjusting for Dividends"></a>Adjusting for Dividends</h2><p>Between the date that the dividend is announced and the date it is paid, we see the share price generally rise from the consensus price - \$100 - to accommodate the value of the dividend. After the dividend is paid, we see the share price immediately drop back \$100.</p>
+<p>Let’s consider now how we might adjust historical prices to account for dividends. Remember that the adjusted price as of today is always the same as the actual price. As we move backward in time, these two values remain the same until we encounter a dividend.</p>
+<p>Once we encounter a dividend, we adjust all of the preceding prices downward by the proportion of the dividend payment. In this case, with a 1% dividend - \$1 paid on a \$100 share - we reduce all prices before the dividend date by 1%.</p>
+<p><img src="/../images/ML4T-0207_08.png" alt="Dividends"></p>
+<h1 id="Survior-Bias"><a href="#Survior-Bias" class="headerlink" title="Survior Bias"></a>Survior Bias</h1><p>One of the activities we do in this class is simulate strategies that we are developing. To do this, we roll back time, trade according to our strategy, and analyze the results.</p>
+<p>Before we can simulate our strategy, however, we first have to consider the universe of candidate stocks that we can buy or sell as we execute our strategy. The most common universe of stocks is the S&amp;P 500.</p>
+<p>A very common mistake that people make is to use the membership of that universe as it stands today and trade according to this universe at the beginning of their simulation.</p>
+<p>We can see the strong performance of such a biased strategy below in blue.</p>
+<p>The problem here is that we are selecting from a collection of stocks in the relative past that we know exists in the relative future. Since all of these stocks survived the trading period, any trading strategy exclusively considering them is likely to show unrealistically optimistic results. In other words, there is a built-in survivorship bias in our selection.</p>
+<p>What if we used the S&amp;P 500 universe as it existed in 2007? The performance of our strategy now is less biased and might look like the red line below.</p>
+<p><img src="/../images/ML4T-0207_09.png" alt="Bias"></p>
+<p>If we consider the universe of stocks as it existed in 2007, we are considering those stocks that didn’t make it to the present day. Specifically, our strategy might advise investments in one of the sixty-eight stocks that disappeared from the S&amp;P 500 between 2007 and 2009.</p>
+<p>If this is the case, our strategy is likely to show much worse performance than had we just considered the biased universe. However, the performance of our strategy using the unbiased universe is going to be more realistic, which is what matters.</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/Pandas/" rel="tag"># Pandas</a>
+              <a href="/tags/ML4T/" rel="tag"># ML4T</a>
+              <a href="/tags/Numpy/" rel="tag"># Numpy</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/02/06/ML4T_02-06_TechnicalAnalysis/" rel="prev" title="Machine Learning for Trading--2-6 Technical Analysis">
+      <i class="fa fa-chevron-left"></i> Machine Learning for Trading--2-6 Technical Analysis
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/02/08/ML4T_02-08_EfficientMarketHypothesis/" rel="next" title="Machine Learning for Trading--2-8 Efficient Markets Hypothesis">
+      Machine Learning for Trading--2-8 Efficient Markets Hypothesis <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#How-Data-Is-Aggregated"><span class="nav-number">1.</span> <span class="nav-text">How Data Is Aggregated?</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Price-Anomaly-Quiz"><span class="nav-number">1.1.</span> <span class="nav-text">Price Anomaly Quiz</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Stock-Splits"><span class="nav-number">2.</span> <span class="nav-text">Stock Splits</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Split-Adjustment-Quiz"><span class="nav-number">2.1.</span> <span class="nav-text">Split Adjustment Quiz</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Dividends"><span class="nav-number">3.</span> <span class="nav-text">Dividends</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dividends-Quiz"><span class="nav-number">3.1.</span> <span class="nav-text">Dividends Quiz</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Adjusting-for-Dividends"><span class="nav-number">3.2.</span> <span class="nav-text">Adjusting for Dividends</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Survior-Bias"><span class="nav-number">4.</span> <span class="nav-text">Survior Bias</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Learning Objectives Explain the benefits of a software development methodology List and describe the phases in the traditional systems development life cycle Compare and contrast the traditional syste">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Information System 10- Developing Informaiton Systems">
+<meta property="og:url" content="http://example.com/2023/01/31/Information_Systems_Chapter_10/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="Learning Objectives Explain the benefits of a software development methodology List and describe the phases in the traditional systems development life cycle Compare and contrast the traditional syste">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-01-31T16:33:00.000Z">
+<meta property="article:modified_time" content="2023-02-03T01:06:53.379Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Information Systems">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2023/01/31/Information_Systems_Chapter_10/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Information System 10- Developing Informaiton Systems | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/31/Information_Systems_Chapter_10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Information System 10- Developing Informaiton Systems
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-01-31 11:33:00" itemprop="dateCreated datePublished" datetime="2023-01-31T11:33:00-05:00">2023-01-31</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Information-Systems/" itemprop="url" rel="index"><span itemprop="name">Information Systems</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Learning-Objectives"><a href="#Learning-Objectives" class="headerlink" title="Learning Objectives"></a><strong>Learning Objectives</strong></h1><ul>
+<li>Explain the benefits of a software development methodology</li>
+<li>List and describe the phases in the traditional systems development life cycle</li>
+<li>Compare and contrast the traditional systems development life cycle with alternative methodologies</li>
+<li>Explain factors that influence the decision to build custom software or purchase commercial, off-the-shelf software</li>
+<li>Define open source software</li>
+<li>Describe major outsourcing models</li>
+<li>List the benefits and risks of outsourcing</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="Time-Cost-and-Quality"><a href="#Time-Cost-and-Quality" class="headerlink" title="Time, Cost, and Quality"></a>Time, Cost, and Quality</h1><p>Every software development project faces a tension among time, cost, and quality. This reality is known by several names, including the project triangle, the engineering triangle, and the design triangle.</p>
+<p>The three constraints are as follows:</p>
+<ul>
+<li>Time: How long will the project take to complete?</li>
+<li>Cost: What resources are required to complete the project?</li>
+<li>Quality: How well does the completed project meet user requirements?</li>
+</ul>
+<p>There is an old saying:” You want it fast, good, and cheap? Pick any two.”</p>
+<h1 id="Software-Development-Methodologies"><a href="#Software-Development-Methodologies" class="headerlink" title="Software Development Methodologies"></a>Software Development Methodologies</h1><p>Developing software is a complex, time-consuming, and costly endeavor. So it often useful to have a framework for planning, structuring, and controlling software development projects.</p>
+<ul>
+<li>Such frameworks are called software development methodologies</li>
+<li>It provides discipline to the software development process by defining processes, roles, and deliverables related to software development.</li>
+<li>The methodologies break down software development into phases</li>
+<li>The standardized roles, processes, documentation, and deliverables make it easier for a new team member to become familiar with what has been done on the project.</li>
+</ul>
+<h1 id="Traditional-Systems-Development-Life-Cycle"><a href="#Traditional-Systems-Development-Life-Cycle" class="headerlink" title="Traditional Systems Development Life Cycle"></a>Traditional Systems Development Life Cycle</h1><ul>
+<li>Systems development life cycle (SDLC) provides a disciplined approach to systems development. Projects follow a well-defined set of phases that have related objectives, processes, and deliverables.</li>
+<li>The traditional SDLC is sometimes called the waterfall method.</li>
+<li>Sometimes you need to go back and refine an earlier phase based on new information that emerges.</li>
+</ul>
+<h2 id="Planning-Phase"><a href="#Planning-Phase" class="headerlink" title="Planning Phase"></a>Planning Phase</h2><ul>
+<li>The goal of the planning stage is to define the overall goal and scope of the system and determine the feasibility of the project.</li>
+<li>Answer the questions “Why build the system?”</li>
+<li>Several different aspects to feasibility:<ul>
+<li><strong>Technical feasibility</strong>: can the proposed system be completed from a technical standpoint? </li>
+<li><strong>Economic feasibility</strong>: is it affordable and worth the investment?</li>
+<li><strong>Organizational feasibility</strong>: does it fit with the organization’s strategies and practices?</li>
+<li><strong>Legal feasibility</strong>: does it violate any laws or regulations?</li>
+<li><strong>Ethical feasibility</strong>: does it fit within ethical guidelines and practices of the organization and its industry?</li>
+</ul>
+</li>
+</ul>
+<h2 id="Requirement-Phase"><a href="#Requirement-Phase" class="headerlink" title="Requirement Phase"></a>Requirement Phase</h2><ul>
+<li>The goal of the requirements phase is to uncover and document the functions that the system should provide and desired levels of performance.</li>
+<li>What the system should&#x2F;must do?</li>
+<li>Two types of requirements:<ul>
+<li>Functional requirements – how the system should interact with users and other systems; example: The system shall allow customers to look up the price of a product?</li>
+<li>Nonfunctional requirements – related to constraints on the system; example: how well it should perform, “the system shall be available at least 23 hours per day?”</li>
+</ul>
+</li>
+<li>The output of the requirements phase is a specification of the system’s functional and nonfunctional requirements. – a set of use cases, in either text or diagram form</li>
+<li>A <strong>use case</strong> describes a sequence of actions that results in an outcome for some actor.</li>
+</ul>
+<h2 id="Design-Phase"><a href="#Design-Phase" class="headerlink" title="Design Phase"></a>Design Phase</h2><ul>
+<li>The main goal of the design phase is to describe in detail how the system will meet the requirements specified earlier.</li>
+<li>How the system will satisfy the requirements</li>
+<li>Elements of the model: database diagrams, user interface, business rules, processing logic, plans for implementing and testing the system, and training plan</li>
+<li>Outcome: The system design document</li>
+</ul>
+<h2 id="Development-Phase"><a href="#Development-Phase" class="headerlink" title="Development Phase"></a>Development Phase</h2><ul>
+<li>Goal: convert the outputs of the design phase into the actual information system. </li>
+<li>Steps involved:<ul>
+<li>software is written</li>
+<li>databases are created</li>
+<li>hardware is installed</li>
+<li>system testing is performed (A critical step!)</li>
+</ul>
+</li>
+<li>Deliverables: application software, data and files for testing, and documentation.</li>
+</ul>
+<h2 id="Implementation-Phase"><a href="#Implementation-Phase" class="headerlink" title="Implementation Phase"></a>Implementation Phase</h2><ul>
+<li><p>Goal: make the system operational in a production environment. </p>
+</li>
+<li><p>Involves:</p>
+<ul>
+<li>notify users of rollout schedule, new processes, and responsibilities, and how to get technical support</li>
+<li>convert data to the new system (if needed)</li>
+<li>have users start using the new system</li>
+<li>provide user training</li>
+<li>conduct a post-implementation review</li>
+</ul>
+</li>
+<li><p>Deliverable: the system itself, installed and running correctly.</p>
+</li>
+<li><p>Four common approaches to system migration:</p>
+<ul>
+<li>Direct changeover – at a specific point in time, old system is no logner used and is replaced by the new system.</li>
+<li>Parallel operation – Both the old and new systems operate for some period of time.</li>
+<li>Phased implementation – The new system is implemented in stages.</li>
+<li>Pilot operation – The new system is implemented in a business unit or location.</li>
+</ul>
+</li>
+</ul>
+<h2 id="Maintenance-Phase"><a href="#Maintenance-Phase" class="headerlink" title="Maintenance Phase"></a>Maintenance Phase</h2><ul>
+<li>The final phase in the SDLC is the maintenance phase.</li>
+<li>The longest, most costly phase of the life cycle.</li>
+<li>Goal: ensuring that the system operates properly to meet current needs.</li>
+</ul>
+<h1 id="Alternative-Methodologies"><a href="#Alternative-Methodologies" class="headerlink" title="Alternative Methodologies"></a>Alternative Methodologies</h1><h2 id="Prototyping"><a href="#Prototyping" class="headerlink" title="Prototyping"></a>Prototyping</h2><ul>
+<li>Build a fast, high-level small-scale mock-up of the system (prototype) </li>
+<li>Flaws are pointed out and prototype is refined and reviewed</li>
+<li>This cycle repeats until the stakeholders are satisfied that all requirements are met. Then the full system is implemented.</li>
+<li>Advantages:<ul>
+<li>Stakeholder involvement – stakeholder know the particular business area; increase the satisfaction</li>
+<li>Uncovering requirements when unclear, ambiguous</li>
+</ul>
+</li>
+<li>Disadvantages:<ul>
+<li>Documentation may be difficult to write</li>
+<li>Can lead to poorly designed systems when scaled up for actual use.</li>
+<li>Difficult to estimate how many iterations are required, which makes it difficult to estimate costs and schedules.</li>
+</ul>
+</li>
+</ul>
+<h2 id="Rapid-Application-Development-RAD"><a href="#Rapid-Application-Development-RAD" class="headerlink" title="Rapid Application Development (RAD)"></a>Rapid Application Development (RAD)</h2><ul>
+<li>RAD is intended to develop systems more quickly than traditional methods.</li>
+<li>RAD typically breaks software development projects into smaller chunks to reduce overall project risk.</li>
+<li>Low cost, but low quality</li>
+<li>RAD process: Gather requirements -&gt; Design prototype -&gt; Develop prototype -&gt; Test prototype -&gt; Review with users -&gt; (continue to the first step)</li>
+</ul>
+<h2 id="DevOps"><a href="#DevOps" class="headerlink" title="DevOps"></a>DevOps</h2><ul>
+<li><p>DevOps is an approach to software development that focuses on rapid development of applications and services.</p>
+</li>
+<li><p>In development operations (DevOps), the operations of the software are no longer separated from the development of the software</p>
+</li>
+<li><p>Success of DevOps is based on:</p>
+<ul>
+<li>delivering frequent but small updates to the software</li>
+<li>microservices — building a set of small services to build an application </li>
+<li>continuous integration</li>
+</ul>
+</li>
+<li><p>The benefits of DevOps are numerous. </p>
+<ul>
+<li>First, because employees working within operations and within the development enterprise are jointly involved in the development, operations, and monitoring of the software, companies experience better collaboration and communication. </li>
+<li>Of course, the goals of DevOps being speed of development and rapid delivery are also benefits</li>
+</ul>
+</li>
+</ul>
+<h1 id="Build-or-Buy-Decision"><a href="#Build-or-Buy-Decision" class="headerlink" title="Build or Buy Decision"></a>Build or Buy Decision</h1><p>When the need arises for a new software-based system, managers face a long-standing decision: whether to create the software or purchase existing commercial, off-the-shelf (COTS) software.</p>
+<p><strong>Custom-built software</strong></p>
+<ul>
+<li>better fit with business requirements – create a competitive advatage</li>
+<li>greater control over adding or modifying functions after initial implementation</li>
+<li>take longer and more costly to develop</li>
+</ul>
+<p>** COST software**</p>
+<ul>
+<li>less expensive</li>
+<li>higher quality</li>
+<li>provided in a much shorter time frame</li>
+<li>downsides: 1. change existing business practice to fit the COST software; 2. need support from vendor or consultants.</li>
+</ul>
+<p><strong>Hybrid solutions</strong></p>
+<ul>
+<li>Customizing COST software by modifying programming code or adding scripts</li>
+<li>better fit business requirements and existing processes but less expensively and more quickly than custom solutions.</li>
+<li>difficult to find expertise to modify or combine the COST components.</li>
+</ul>
+<p>A number of questions must be addressed:</p>
+<ol>
+<li>Is there COST software that will meet the business’s needs?</li>
+<li>Will the software give your company a competitive advantage?</li>
+<li>Does the COST software fit with existing IT architecture and staff?</li>
+<li>Do you have the capability to create the required system?</li>
+<li>When is the system needed?</li>
+<li>What is total cost of ownership for each approach?</li>
+</ol>
+<h1 id="Using-Open-Source-Software-in-Business"><a href="#Using-Open-Source-Software-in-Business" class="headerlink" title="Using Open Source Software in Business"></a>Using Open Source Software in Business</h1><ul>
+<li>Open source software is software that allows users to access the underlying source code for an application.</li>
+<li>The licensing for open source software allows users to modify the program.</li>
+<li>Free of charge</li>
+<li>Examples: Mozilla Firefox, OpenOffice, Linux, Android…</li>
+</ul>
+<p>Pros and Cons:</p>
+<ul>
+<li>potential cost saving</li>
+<li>avoid being dependent on proprietary software vendors for ongoing development and support</li>
+<li>more reliable than proprietary software</li>
+<li>users have the ability to modify the software as needed – additional flexibility</li>
+</ul>
+<h1 id="Outsourcing-Information-Systems"><a href="#Outsourcing-Information-Systems" class="headerlink" title="Outsourcing Information Systems"></a>Outsourcing Information Systems</h1><p>Information technology <strong>outsourcing</strong> occurs when an organization goes to an outside company to provide IT services that were previously provided internally.</p>
+<h2 id="Outsourcing-Modeling"><a href="#Outsourcing-Modeling" class="headerlink" title="Outsourcing Modeling"></a>Outsourcing Modeling</h2><ul>
+<li><strong>Full or complete outsourcing</strong>: outside company handles all IT functions so the organization can focus on its core activities <ul>
+<li>may reduce IT costs.</li>
+</ul>
+</li>
+<li><strong>Selective or partial outsourcing</strong>: only certain aspects of IT are outsourced to a service provider. </li>
+<li><strong>Process-based outsourcing</strong>: organization outsources a particular function or business process (payroll, help desk, etc.)</li>
+<li><strong>Personnel outsourcing</strong>: hire staff without the long-term costs associated with hiring permanent workers.</li>
+<li><strong>Project-based outsourcing</strong>: contracting with a vendor for a specific project. </li>
+<li><strong>Application outsourcing</strong>: service provider handles activities related to a specific software application for a fee.</li>
+</ul>
+<h2 id="Benefits-and-Risks-or-Outsourcing"><a href="#Benefits-and-Risks-or-Outsourcing" class="headerlink" title="Benefits and Risks or Outsourcing"></a>Benefits and Risks or Outsourcing</h2><p><strong>Benefits</strong></p>
+<ol>
+<li>Access to expertise not available in-house</li>
+<li>Potential cost saving – vendor has lower cost structures through economies of scale or lower wage rates</li>
+<li>Shifting fixed costs to variable costs</li>
+<li>Effective way to manage capacity – additional expertise</li>
+<li>Focus on core activities</li>
+<li>Potential for 24-hour productivity<br><strong>Risks</strong></li>
+<li>Loss of internal competencies</li>
+<li>Dependence on service provider</li>
+<li>Opportunistic behavior by service provider</li>
+<li>Lower morale of remaining workers</li>
+<li>Compromises to confidentiality</li>
+</ol>
+<h2 id="Making-the-Outsourcing-Decision"><a href="#Making-the-Outsourcing-Decision" class="headerlink" title="Making the Outsourcing Decision"></a>Making the Outsourcing Decision</h2><p>Questions:</p>
+<ul>
+<li>How mature is the IT system in question?<ul>
+<li>Systems that have been around a long time are better candidates for outsourcing.</li>
+</ul>
+</li>
+<li>How significant is the system to the organization’s competitive advantage?<ul>
+<li>Outsource to concentrate on core activities.</li>
+</ul>
+</li>
+<li>How does the organization’s IT capability compare with competitors’?<ul>
+<li>If the organization has relatively weak IT capabilities, it may be better to outsource.</li>
+</ul>
+</li>
+<li>Are there cost advantages to outsourcing?<ul>
+<li>Even if there are not, it may still be a good idea to outsource if the organization can focus on critical areas.</li>
+</ul>
+</li>
+</ul>
+<h2 id="Geographic-Consideration"><a href="#Geographic-Consideration" class="headerlink" title="Geographic Consideration"></a>Geographic Consideration</h2><ul>
+<li><strong>Offshore outsourcing</strong>: using a vendor that provides services from a location outside the organization’s region<ul>
+<li>Reduces cost because of lower wages</li>
+<li>May create backlash (shipping jobs overseas, language barriers)</li>
+</ul>
+</li>
+<li>Nearshore outsourcing: close to the organization’s home location.</li>
+<li>Onshore outsourcing: outsourcing to a firm located in the same country</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Information-Systems/" rel="tag"># Information Systems</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/01/29/Information_Systems_Chapter_9/" rel="prev" title="Information System 9- Protecting the Confidentiality and Privacy of Information">
+      <i class="fa fa-chevron-left"></i> Information System 9- Protecting the Confidentiality and Privacy of Information
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/02/01/ML4T_02-01_HedgeFundManager/" rel="next" title="Machine Learning for Trading--2-1 Hedge Fund Manager">
+      Machine Learning for Trading--2-1 Hedge Fund Manager <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Learning-Objectives"><span class="nav-number">1.</span> <span class="nav-text">Learning Objectives</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Time-Cost-and-Quality"><span class="nav-number">2.</span> <span class="nav-text">Time, Cost, and Quality</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Software-Development-Methodologies"><span class="nav-number">3.</span> <span class="nav-text">Software Development Methodologies</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Traditional-Systems-Development-Life-Cycle"><span class="nav-number">4.</span> <span class="nav-text">Traditional Systems Development Life Cycle</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Planning-Phase"><span class="nav-number">4.1.</span> <span class="nav-text">Planning Phase</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Requirement-Phase"><span class="nav-number">4.2.</span> <span class="nav-text">Requirement Phase</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Design-Phase"><span class="nav-number">4.3.</span> <span class="nav-text">Design Phase</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Development-Phase"><span class="nav-number">4.4.</span> <span class="nav-text">Development Phase</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Implementation-Phase"><span class="nav-number">4.5.</span> <span class="nav-text">Implementation Phase</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Maintenance-Phase"><span class="nav-number">4.6.</span> <span class="nav-text">Maintenance Phase</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Alternative-Methodologies"><span class="nav-number">5.</span> <span class="nav-text">Alternative Methodologies</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Prototyping"><span class="nav-number">5.1.</span> <span class="nav-text">Prototyping</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rapid-Application-Development-RAD"><span class="nav-number">5.2.</span> <span class="nav-text">Rapid Application Development (RAD)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DevOps"><span class="nav-number">5.3.</span> <span class="nav-text">DevOps</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Build-or-Buy-Decision"><span class="nav-number">6.</span> <span class="nav-text">Build or Buy Decision</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Using-Open-Source-Software-in-Business"><span class="nav-number">7.</span> <span class="nav-text">Using Open Source Software in Business</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Outsourcing-Information-Systems"><span class="nav-number">8.</span> <span class="nav-text">Outsourcing Information Systems</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Outsourcing-Modeling"><span class="nav-number">8.1.</span> <span class="nav-text">Outsourcing Modeling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Benefits-and-Risks-or-Outsourcing"><span class="nav-number">8.2.</span> <span class="nav-text">Benefits and Risks or Outsourcing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Making-the-Outsourcing-Decision"><span class="nav-number">8.3.</span> <span class="nav-text">Making the Outsourcing Decision</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Geographic-Consideration"><span class="nav-number">8.4.</span> <span class="nav-text">Geographic Consideration</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

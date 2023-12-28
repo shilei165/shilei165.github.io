@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Learning Objectives Various sequence to sequence architectures Speech recognition - Audio data">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Deep Learning-3-3 Sequence models &amp; Attention mechanism">
+<meta property="og:url" content="http://example.com/2023/06/30/DL_03-03_Sequence%20modelsAndAttention%20mechanism%20-%20Copy/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="Learning Objectives Various sequence to sequence architectures Speech recognition - Audio data">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/DL_03-03_01.png">
+<meta property="og:image" content="http://example.com/images/DL_03-03_02.png">
+<meta property="og:image" content="http://example.com/images/DL_03-03_03.png">
+<meta property="og:image" content="http://example.com/images/DL_03-03_04.png">
+<meta property="og:image" content="http://example.com/images/DL_03-03_05.png">
+<meta property="og:image" content="http://example.com/images/DL_03-03_06.svg">
+<meta property="og:image" content="http://example.com/images/DL_03-03_07.svg">
+<meta property="og:image" content="http://example.com/images/DL_03-03_07.svg">
+<meta property="og:image" content="http://example.com/images/DL_03-03_08.png">
+<meta property="og:image" content="http://example.com/images/DL_03-03_09.png">
+<meta property="og:image" content="http://example.com/images/DL_03-03_10.png">
+<meta property="og:image" content="http://example.com/images/DL_03-03_11.png">
+<meta property="og:image" content="http://example.com/images/DL_03-03_12.svg">
+<meta property="og:image" content="http://example.com/images/DL_03-03_13.png">
+<meta property="og:image" content="http://example.com/images/DL_03-03_14.png">
+<meta property="og:image" content="http://example.com/images/DL_03-03_15.png">
+<meta property="og:image" content="http://example.com/images/DL_03-03_16.png">
+<meta property="og:image" content="http://example.com/images/DL_03-03_17.png">
+<meta property="og:image" content="http://example.com/images/DL_03-03_18.png">
+<meta property="article:published_time" content="2023-07-01T01:14:22.000Z">
+<meta property="article:modified_time" content="2023-07-01T02:12:34.432Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="Deep Learning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/DL_03-03_01.png">
+
+<link rel="canonical" href="http://example.com/2023/06/30/DL_03-03_Sequence%20modelsAndAttention%20mechanism%20-%20Copy/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Deep Learning-3-3 Sequence models & Attention mechanism | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/06/30/DL_03-03_Sequence%20modelsAndAttention%20mechanism%20-%20Copy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Deep Learning-3-3 Sequence models & Attention mechanism
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-06-30 21:14:22" itemprop="dateCreated datePublished" datetime="2023-06-30T21:14:22-04:00">2023-06-30</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Learning-Objectives"><a href="#Learning-Objectives" class="headerlink" title="Learning Objectives"></a>Learning Objectives</h1><ul>
+<li>Various sequence to sequence architectures</li>
+<li>Speech recognition - Audio data</li>
+</ul>
+<span id="more"></span>
+<hr>
+<p>Sequence models can be augmented using an attention mechanism. This algorithm will help your model understand where it should focus its attention given a sequence of inputs. Here, you will also learn about speech recognition and how to deal with audio data.</p>
+<h1 id="Various-sequence-to-sequence-architectures"><a href="#Various-sequence-to-sequence-architectures" class="headerlink" title="Various sequence to sequence architectures"></a>Various sequence to sequence architectures</h1><h2 id="Basic-Models"><a href="#Basic-Models" class="headerlink" title="Basic Models"></a>Basic Models</h2><p>Sequence-to-sequence models are useful for everything from machine translation to speech recognition.</p>
+<h3 id="Machine-translation"><a href="#Machine-translation" class="headerlink" title="Machine translation"></a>Machine translation</h3><p><strong>Papers:</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1409.3215">Sequence to Sequence Learning with Neural Networks</a> by Ilya Sutskever, Oriol Vinyals, Quoc V. Le.</li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1406.1078">Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation</a> by Kyunghyun Cho, Bart van Merrienboer, Caglar Gulcehre, Dzmitry Bahdanau, Fethi Bougares, Holger Schwenk, Yoshua Bengio.</li>
+</ul>
+<p>Input a French sentence: <code>Jane visite l’Afrique en septembre</code>, we want to translate it to the English sentence: <code>Jane is visiting Africa in September.</code></p>
+<ul>
+<li>First, let’s have a network, which we’re going to call the encoder network be built as a RNN, and this could be a GRU and LSTM, feed in the input French words one word at a time. And after ingesting the input sequence, the RNN then offers a vector that represents the input sentence.</li>
+<li>After that, you can build a decoder network which takes as input the encoding and then can be trained to output the translation one word at a time until eventually it outputs the end of sequence.</li>
+<li>The model simply uses an encoder network to find an encoding of the input French sentence and then use a decoder network to then generate the corresponding English translation.</li>
+</ul>
+<p><img src="/../images/DL_03-03_01.png" alt="Machine translation"></p>
+<h3 id="Image-Captioning"><a href="#Image-Captioning" class="headerlink" title="Image Captioning"></a>Image Captioning</h3><ul>
+<li>This architecture is very similar to the one of machine translation.</li>
+<li>Paper: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1412.6632">Deep Captioning with Multimodal Recurrent Neural Networks (m-RNN)</a> by Junhua Mao, Wei Xu, Yi Yang, Jiang Wang, Zhiheng Huang, Alan Yuille.</li>
+<li>In previous course, you’ve seen how you can input an image into a convolutional network, maybe a pre-trained AlexNet, and have that learn an encoding or learn a set of features of the input image.</li>
+<li>In the AlexNet architecture, if we get rid of this final Softmax unit, the pre-trained AlexNet can give you a 4096-dimensional feature vector of which to represent this picture of a cat. And so this pre-trained network can be the encoder network for the image and you now have a 4096-dimensional vector that represents the image. You can then take this and feed it to an RNN, whose job it is to generate the caption one word at a time.</li>
+</ul>
+<p><img src="/../images/DL_03-03_02.png" alt="Image Captioning"></p>
+<h2 id="Picking-the-most-likely-sentence"><a href="#Picking-the-most-likely-sentence" class="headerlink" title="Picking the most likely sentence"></a>Picking the most likely sentence</h2><p>There are some similarities between the sequence to sequence machine translation model and the language models that you have worked within the first section of this course, but there are some significant differences as well.</p>
+<ul>
+<li><p>The machine translation is very similar to a <strong>conditional</strong> language model.</p>
+<ul>
+<li>You can use a language model to estimate the probability of a sentence.</li>
+<li>The decoder network of the machine translation model looks pretty much identical to the language model, except that instead of always starting along with the vector of all zeros, it has an encoder network that figures out some representation for the input sentence.</li>
+<li>Instead of modeling the probability of any sentence, it is now modeling the probability of the output English translation conditioned on some input French sentence. In other words, you’re trying to estimate the probability of an English translation.</li>
+</ul>
+</li>
+</ul>
+<p><img src="/../images/DL_03-03_03.png" alt="Picking the most likely sentence"></p>
+<ul>
+<li>The difference between machine translation and the earlier language model problem is: rather than wanting to generate a sentence at random, you may want to try to <strong>find the most likely English translation</strong>.</li>
+<li>In developing a machine translation system, one of the things you need to do is come up with an algorithm that can actually find the value of y that maximizes <code>p(y&lt;1&gt;,...,y&lt;T_y&gt;|x&lt;1&gt;,...,x&lt;T_x&gt;)</code>. The most common algorithm for doing this is called <strong>beam search</strong>.<ul>
+<li>The set of all English sentences of a certain length is too large to exhaustively enumerate. The total number of combinations of words in the English sentence is exponentially larger. So it turns out that the greedy approach, where you just pick the best first word, and then, after having picked the best first word, try to pick the best second word, and then, after that, try to pick the best third word, that approach doesn’t really work.</li>
+<li>The most common thing to do is use an approximate search out of them. And, what an approximate search algorithm does, is it will try, it won’t always succeed, but it will to pick the sentence, y, that maximizes that conditional probability.</li>
+</ul>
+</li>
+</ul>
+<h2 id="Beam-Search"><a href="#Beam-Search" class="headerlink" title="Beam Search"></a>Beam Search</h2><p>In the example of the French sentence, <code>&quot;Jane, visite l&#39;Afrique en Septembre&quot;</code>.</p>
+<ul>
+<li><p><strong>Step 1</strong>: pick the first word of the English translation.</p>
+<ul>
+<li>Set beam <code>width B = 3</code>.</li>
+<li>Choose the most likely three possibilities for the first words in the English outputs. Then Beam search will store away in computer memory that it wants to try all of three of these words.</li>
+<li>Run the input French sentence through the encoder network and then this first step will then decode the network, this is a softmax output overall 10,000 possibilities (if we have a vocabulary of 10,000 words). Then you would take those 10,000 possible outputs p(y&lt;1&gt;|x) and keep in memory which were the top three.</li>
+<li>For example, after this step, we have the three words as in, <code>Jane, September</code>.</li>
+</ul>
+</li>
+</ul>
+<p><img src="/../images/DL_03-03_04.png" alt="Beam Search"></p>
+<ul>
+<li><p><strong>Step 2</strong>: consider the next word.</p>
+<ul>
+<li>Find the pair of the first and second words that is most likely it’s not just a second where is most likely. By the rules of conditional probability, it’s p(y&lt;1&gt;,y&lt;2&gt;|x) &#x3D; p(y&lt;1&gt;|x) * p(y&lt;2&gt;|x,y&lt;1&gt;).</li>
+<li>After this step, <code>in september, jane is, jane visit</code> is left. And notice that <code>September</code> has been rejected as a candidate for the first word.</li>
+<li>Because <code>beam width</code> is equal to 3, every step you instantiate three copies of the network to evaluate these partial sentence fragments and the output.</li>
+<li>Repeat this step until terminated by the end of sentence symbol.</li>
+</ul>
+</li>
+</ul>
+<p><img src="/../images/DL_03-03_05.png" alt="Beam Search"></p>
+<ul>
+<li>If beam width is 1, this essentially becomes the greedy search algorithm.</li>
+</ul>
+<h2 id="Refinements-to-Beam-Search"><a href="#Refinements-to-Beam-Search" class="headerlink" title="Refinements to Beam Search"></a>Refinements to Beam Search</h2><p><strong>Length normalization:</strong></p>
+<ul>
+<li><p>Beam search is to maximize the probability:</p>
+<p><img src="/../images/DL_03-03_06.svg" alt="Refinements to Beam Search"></p>
+</li>
+<li><p>But multiplying a lot of numbers less than 1 will result in a very tiny number, which can result in numerical underflow.</p>
+</li>
+<li><p>So instead, we maximizing a log version:</p>
+<p><img src="/../images/DL_03-03_07.svg" alt="Refinements to Beam Search"></p>
+</li>
+<li><p>If you have a very long sentence, the probability of that sentence is going to be low, because you’re multiplying many terms less than 1. And so the objective function (the original version as well as the log version) has an undesirable effect, that maybe it unnaturally tends to prefer very short translations. It tends to prefer very short outputs.</p>
+</li>
+<li><p>A normalized log-likelihood objective:</p>
+<p><img src="/../images/DL_03-03_07.svg" alt="Refinements to Beam Search"></p>
+<ul>
+<li>𝛼 is another hyperparameter</li>
+<li>𝛼&#x3D;0 no normalizing</li>
+<li>𝛼&#x3D;1 full normalization</li>
+</ul>
+</li>
+</ul>
+<p><strong>How to choose beam width B?</strong></p>
+<ul>
+<li>If beam width is large:<ul>
+<li>consider a lot of possibilities, so better result</li>
+<li>consuming a lot of different options, so slower and memory requirements higher</li>
+</ul>
+</li>
+<li>If beam width is small:<ul>
+<li>worse result</li>
+<li>faster, memory requirements lower</li>
+</ul>
+</li>
+<li>choice of beam width is application dependent and domain dependent<ul>
+<li>In practice, B&#x3D;10 is common in a production system, whereas B&#x3D;100 is uncommon.</li>
+<li>B&#x3D;1000 or B&#x3D;3000 is not uncommon for research systems.</li>
+<li>But when B gets very large, there is often diminishing returns.</li>
+</ul>
+</li>
+</ul>
+<p>Unlike exact search algorithms like BFS (Breadth First Search) or DFS (Depth First Search), Beam Search runs faster but is not guaranteed to find exact maximum for $argmax_y𝑃(𝑦|𝑥)$.</p>
+<h2 id="Error-analysis-in-beam-search"><a href="#Error-analysis-in-beam-search" class="headerlink" title="Error analysis in beam search"></a>Error analysis in beam search</h2><ul>
+<li>Beam search is an approximate search algorithm, also called a heuristic search algorithm. And so it doesn’t always output the most likely sentence.</li>
+<li>In order to know whether it is the beam search algorithm that’s causing problems and worth spending time on, or whether it might be the RNN model that’s causing problems and worth spending time on, we need to do error analysis with beam search.</li>
+<li>Getting more training data or increasing the beam width might not get you to the level of performance you want.</li>
+<li>You should break the problem down and figure out what’s actually a good use of your time.</li>
+<li>The error analysis process:<ul>
+<li><p>Problem:</p>
+<ul>
+<li>To translate: <code>Jane visite l’Afrique en septembre.</code> (x)</li>
+<li>Human: <code>Jane visits Africa in September.</code> (y*)</li>
+<li>Algorithm: <code>Jane visited Africa last September.</code> (ŷ) which has some error.</li>
+</ul>
+</li>
+<li><p>Analysis:</p>
+<ul>
+<li>Case 1:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Human</th>
+<th>Algorithm</th>
+<th>p(y*|x) vs p(ŷ|x)</th>
+<th>At fault?</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Jane visits Africa in September.</td>
+<td>Jane visited Africa last September.</td>
+<td>p(y*|x) &gt; p(ŷ|x)</td>
+<td>Beam search</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody></table>
+<ul>
+<li>Case 2:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Human</th>
+<th>Algorithm</th>
+<th>p(y*|x) vs p(ŷ|x)</th>
+<th>At fault?</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Jane visits Africa in September.</td>
+<td>Jane visited Africa last September.</td>
+<td>p(y*|x) ≤ p(ŷ|x)</td>
+<td>RNN</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Attention-Model-Intuition"><a href="#Attention-Model-Intuition" class="headerlink" title="Attention Model Intuition"></a>Attention Model Intuition</h2><p>Paper: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1409.0473">Neural Machine Translation by Jointly Learning to Align and Translate</a> by Dzmitry Bahdanau, Kyunghyun Cho, Yoshua Bengio.</p>
+<p>You’ve been using an Encoder-Decoder architecture for machine translation. Where one RNN reads in a sentence and then different one outputs a sentence. There’s a modification to this called the Attention Model that makes all this work much better.</p>
+<p>The French sentence:</p>
+<p><code>Jane s&#39;est rendue en Afrique en septembre dernier, a apprécié la culture et a rencontré beaucoup de gens merveilleux; elle est revenue en parlant comment son voyage était merveilleux, et elle me tente d&#39;y aller aussi.</code></p>
+<p>The English translation:</p>
+<p><code>Jane went to Africa last September, and enjoyed the culture and met many wonderful people; she came back raving about how wonderful her trip was, and is tempting me to go too.</code></p>
+<ul>
+<li><p>The way a human translator would translate this sentence is not to first read the whole French sentence and then memorize the whole thing and then regurgitate an English sentence from scratch. Instead, what the human translator would do is read the first part of it, maybe generate part of the translation, look at the second part, generate a few more words, look at a few more words, generate a few more words and so on.</p>
+<p><img src="/../images/DL_03-03_08.png" alt="Attention Model Intuition"></p>
+</li>
+<li><p>The Encoder-Decoder architecture above is that it works quite well for short sentences, so we might achieve a relatively high Bleu score, but for very long sentences, maybe longer than 30 or 40 words, the performance comes down. (The blue line)</p>
+<p><img src="/../images/DL_03-03_09.png" alt="Attention Model Intuition"></p>
+</li>
+<li><p>The Attention model which translates maybe a bit more like humans looking at part of the sentence at a time. With an Attention model, machine translation systems performance can look like the green line above.</p>
+<p><img src="/../images/DL_03-03_10.png" alt="Attention Model Intuition"></p>
+</li>
+<li><p>What the Attention Model would be computing is a set of attention weights and we’re going to use <code>𝛼&lt;1,1&gt;</code> to denote when you’re generating the first words, how much should you be paying attention to this first piece of information here and <code>𝛼&lt;1,2&gt;</code> which tells us what we’re trying to compute the first word of Jane, how much attention we’re paying to the second word from the inputs, and <code>𝛼&lt;1,3&gt;</code> and so on.</p>
+</li>
+<li><p>Together this will be exactly the context from, denoted as C, that we should be paying attention to, and that is input to the RNN unit to try to generate the first word.</p>
+</li>
+<li><p>In this way the RNN marches forward generating one word at a time, until eventually it generates maybe the <code>&lt;EOS&gt;</code> and at every step, there are attention weighs <code>𝛼&lt;t,t&#39;&gt;</code> that tells it, when you’re trying to generate the t-th English word, how much should you be paying attention to the t’-th French word.</p>
+</li>
+</ul>
+<h2 id="Attention-Model"><a href="#Attention-Model" class="headerlink" title="Attention Model"></a>Attention Model</h2><ul>
+<li><p>Assume you have an input sentence and you use a bidirectional RNN, or bidirectional GRU, or bidirectional LSTM to compute features on every word. In practice, GRUs and LSTMs are often used for this, maybe LSTMs be more common. The notation for the Attention model is shown below.</p>
+<p><img src="/../images/DL_03-03_11.png" alt="Attention Model"></p>
+</li>
+<li><p>Compute attention weights:</p>
+<p><img src="/../images/DL_03-03_12.svg" alt="Attention Model"></p>
+</li>
+<li><p>Compute <code>e&lt;t,t&#39;&gt;</code> using a small neural network:</p>
+<ul>
+<li>And the intuition is, if you want to decide how much attention to pay to the activation of t’, it seems like it should depend the most on is what is your own hidden state activation from the previous time step. And then <code>a&lt;t&#39;&gt;</code>, the features from time step t’, is the other input.</li>
+<li>So it seems pretty natural that <code>𝛼&lt;t,t&#39;&gt;</code> and <code>e&lt;t,t&#39;&gt;</code> should depend on <code>s&lt;t-1&gt;</code> and <code>a&lt;t&#39;&gt;</code> . But we don’t know what the function is. So one thing you could do is just train a very small neural network to learn whatever this function should be. And trust the backpropagation and trust gradient descent to learn the right function.</li>
+</ul>
+<p><img src="/../images/DL_03-03_13.png" alt="Attention Model"></p>
+</li>
+<li><p>One downside to this algorithm is that it does take quadratic time or quadratic cost to run this algorithm. If you have $T_x$ words in the input and $T_y$ words in the output then the total number of these attention parameters are going to be $T_x \times T_y$.</p>
+</li>
+<li><p>Visualize the attention weights <code>𝛼&lt;t,t&#39;&gt;</code>:</p>
+<p><img src="/../images/DL_03-03_14.png" alt="Attention Model"></p>
+</li>
+</ul>
+<p><strong>Implementation tips:</strong></p>
+<ul>
+<li>The diagram on the left shows the attention model.</li>
+<li>The diagram on the right shows what one “attention” step does to calculate the attention variables <code>𝛼&lt;t,t&#39;&gt;</code>.</li>
+<li>The attention variables <code>𝛼&lt;t,t&#39;&gt;</code> are used to compute the context variable <code>context&lt;t&gt;</code> for each timestep in the output (t&#x3D;1, …, Ty).</li>
+</ul>
+<p><img src="/../images/DL_03-03_15.png" alt="Attention Model"></p>
+<h1 id="Speech-recognition-Audio-data"><a href="#Speech-recognition-Audio-data" class="headerlink" title="Speech recognition - Audio data"></a>Speech recognition - Audio data</h1><h2 id="Speech-recognition"><a href="#Speech-recognition" class="headerlink" title="Speech recognition"></a>Speech recognition</h2><ul>
+<li>What is the speech recognition problem? You’re given an audio clip, x, and your job is to automatically find a text transcript, y.</li>
+<li>So, one of the most exciting trends in speech recognition is that, once upon a time, speech recognition systems used to be built using <em>phonemes</em> and this were, I want to say, hand-engineered basic units of cells.<ul>
+<li>Linguists use to hypothesize that writing down audio in terms of these basic units of sound called phonemes would be the best way to do speech recognition.</li>
+</ul>
+</li>
+<li>But with end-to-end deep learning, we’re finding that phonemes representations are no longer necessary. But instead, you can built systems that input an audio clip and directly output a transcript without needing to use hand-engineered representations like these.<ul>
+<li>One of the things that made this possible was going to much larger data sets.</li>
+<li>Academic data sets on speech recognition might be as a 300 hours, and in academia, 3000 hour data sets of transcribed audio would be considered reasonable size.</li>
+<li>But, the best commercial systems are now trains on over 10,000 hours and sometimes over a 100,000 hours of audio.</li>
+</ul>
+</li>
+</ul>
+<p><strong>How to build a speech recognition?</strong></p>
+<ul>
+<li><strong>Attention model for speech recognition</strong>: one thing you could do is actually do that, where on the horizontal axis, you take in different time frames of the audio input, and then you have an attention model try to output the transcript like, “the quick brown fox”.</li>
+</ul>
+<p><img src="/../images/DL_03-03_16.png" alt="Attention Model"></p>
+<ul>
+<li><p><strong>CTC cost for speech recognition</strong>: Connectionist Temporal Classification</p>
+<ul>
+<li><p>Paper: <a target="_blank" rel="noopener" href="https://www.cs.toronto.edu/~graves/icml_2006.pdf">Connectionist Temporal Classification: Labelling Unsegmented Sequence Data with Recurrent Neural Networks</a> by Alex Graves, Santiago Fernandes, Faustino Gomez, and Jürgen Schmidhuber.<br><img src="/../images/DL_03-03_17.png" alt="Attention Model"></p>
+</li>
+<li><p>For simplicity, this is a simple of what uni-directional for the RNN, but in practice, this will usually be a bidirectional LSTM and bidirectional GRU and usually, a deeper model. But notice that the number of time steps here is very large and in speech recognition, usually the number of input time steps is much bigger than the number of output time steps.</p>
+<ul>
+<li>For example, if you have 10 seconds of audio and your features come at a 100 hertz so 100 samples per second, then a 10 second audio clip would end up with a thousand inputs. But your output might not have a thousand alphabets, might not have a thousand characters.</li>
+</ul>
+</li>
+<li><p>The CTC cost function allows the RNN to generate an output like <code>ttt_h_eee___[]___qqq__</code>, here <code>_</code> is for “blank”, <code>[]</code> for “space”.</p>
+</li>
+<li><p>The basic rule for the CTC cost function is to collapse repeated characters not separated by “blank”.</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Trigger-Word-Detection"><a href="#Trigger-Word-Detection" class="headerlink" title="Trigger Word Detection"></a>Trigger Word Detection</h2><ul>
+<li>With the rise of speech recognition, there have been more and more devices. You can wake up with your voice, and those are sometimes called trigger word detection systems.</li>
+</ul>
+<p><img src="/../images/DL_03-03_18.png" alt="Attention Model"></p>
+<ul>
+<li><p>The literature on triggered detection algorithm is still evolving, so there isn’t wide consensus yet, on what’s the best algorithm for trigger word detection.</p>
+</li>
+<li><p>With a RNN what we really do, is to take an audio clip, maybe compute spectrogram features, and that generates audio features <code>x&lt;1&gt;</code>, <code>x&lt;2&gt;</code>, <code>x&lt;3&gt;</code>, that you pass through an RNN. So, all that remains to be done, is to define the target labels y.</p>
+<ul>
+<li><p>In the training set, you can set the target labels to be zero for everything before that point, and right after that, to set the target label of one. Then, if a little bit later on, the trigger word was said again at this point, then you can again set the target label to be one.</p>
+</li>
+<li><p>Actually it just won’t actually work reasonably well. One slight disadvantage of this is, it creates a very imbalanced training set, so we have a lot more zeros than we want.</p>
+</li>
+<li><p>One other thing you could do, that it’s little bit of a hack, but could make the model a little bit easier to train, is instead of setting only a single time step to operate one, you could actually make it to operate a few ones for several times. Guide to label the positive&#x2F;negative words):</p>
+<ul>
+<li>Assume labels <code>y&lt;t&gt;</code> represent whether or not someone has just finished saying “activate.”<ul>
+<li><code>y&lt;t&gt;</code> &#x3D; 1 when that that clip has finished saying “activate”.</li>
+<li>Given a background clip, we can initialize <code>y&lt;t&gt;</code> &#x3D; 0 for all t, since the clip doesn’t contain any “activates.”</li>
+</ul>
+</li>
+<li>When you insert or overlay an “activate” clip, you will also update labels for <code>y&lt;t&gt;</code>.<ul>
+<li>Rather than updating the label of a single time step, we will update 50 steps of the output to have target label 1.</li>
+<li>Recall from the lecture on trigger word detection that updating several consecutive time steps can make the training data more balanced.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Implementation tips:</strong></p>
+<ul>
+<li>Data synthesis is an effective way to create a large training set for speech problems, specifically trigger word detection.</li>
+<li>Using a spectrogram and optionally a 1D conv layer is a common pre-processing step prior to passing audio data to an RNN, GRU or LSTM.</li>
+<li>An end-to-end deep learning approach can be used to build a very effective trigger word detection system.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/Deep-Learning/" rel="tag"># Deep Learning</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/06/29/DL_03-02_NLPandWordEmbeddings/" rel="prev" title="Deep Learning-3-2 Natual Language Processing & Word Embeddings">
+      <i class="fa fa-chevron-left"></i> Deep Learning-3-2 Natual Language Processing & Word Embeddings
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/07/23/DL_04-01_DeepReinforcementLearning/" rel="next" title="Deep Learning-4-1 Deep Reinforcement Learning">
+      Deep Learning-4-1 Deep Reinforcement Learning <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Learning-Objectives"><span class="nav-number">1.</span> <span class="nav-text">Learning Objectives</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Various-sequence-to-sequence-architectures"><span class="nav-number">2.</span> <span class="nav-text">Various sequence to sequence architectures</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Basic-Models"><span class="nav-number">2.1.</span> <span class="nav-text">Basic Models</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Machine-translation"><span class="nav-number">2.1.1.</span> <span class="nav-text">Machine translation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Image-Captioning"><span class="nav-number">2.1.2.</span> <span class="nav-text">Image Captioning</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Picking-the-most-likely-sentence"><span class="nav-number">2.2.</span> <span class="nav-text">Picking the most likely sentence</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Beam-Search"><span class="nav-number">2.3.</span> <span class="nav-text">Beam Search</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Refinements-to-Beam-Search"><span class="nav-number">2.4.</span> <span class="nav-text">Refinements to Beam Search</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Error-analysis-in-beam-search"><span class="nav-number">2.5.</span> <span class="nav-text">Error analysis in beam search</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Attention-Model-Intuition"><span class="nav-number">2.6.</span> <span class="nav-text">Attention Model Intuition</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Attention-Model"><span class="nav-number">2.7.</span> <span class="nav-text">Attention Model</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Speech-recognition-Audio-data"><span class="nav-number">3.</span> <span class="nav-text">Speech recognition - Audio data</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Speech-recognition"><span class="nav-number">3.1.</span> <span class="nav-text">Speech recognition</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Trigger-Word-Detection"><span class="nav-number">3.2.</span> <span class="nav-text">Trigger Word Detection</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

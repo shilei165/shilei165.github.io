@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="The RL Problem Mapping Trading to RL Markov Decision Problems Unknown Transitions and Rewards What to Optimize RL Summary">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Machine Learning for Trading--3-5 Reinforcement Learning">
+<meta property="og:url" content="http://example.com/2023/03/01/ML4T_03-05_ReinforcementLearning/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="The RL Problem Mapping Trading to RL Markov Decision Problems Unknown Transitions and Rewards What to Optimize RL Summary">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/ML4T-0305_01.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0305_02.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0305_03.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0305_04.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0305_05.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0305_06.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0305_07.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0305_08.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0305_09.png">
+<meta property="article:published_time" content="2023-03-02T02:54:22.000Z">
+<meta property="article:modified_time" content="2023-04-26T18:29:44.115Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="ML4T">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/ML4T-0305_01.png">
+
+<link rel="canonical" href="http://example.com/2023/03/01/ML4T_03-05_ReinforcementLearning/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Machine Learning for Trading--3-5 Reinforcement Learning | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/03/01/ML4T_03-05_ReinforcementLearning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Machine Learning for Trading--3-5 Reinforcement Learning
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-03-01 21:54:22" itemprop="dateCreated datePublished" datetime="2023-03-01T21:54:22-05:00">2023-03-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Machine-Learning-for-Trading/" itemprop="url" rel="index"><span itemprop="name">Machine Learning for Trading</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ul>
+<li>The RL Problem</li>
+<li>Mapping Trading to RL</li>
+<li>Markov Decision Problems</li>
+<li>Unknown Transitions and Rewards</li>
+<li>What to Optimize</li>
+<li>RL Summary</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="The-RL-Problem"><a href="#The-RL-Problem" class="headerlink" title="The RL Problem"></a>The RL Problem</h1><p>To demonstrate one possible algorithm, let’s consider a robot interacting with the environment.</p>
+<p>First, the robot observe the environment; more specifically, it reads in some representation of the environment. We call this representation the <strong>state</strong>, which we denote as S.</p>
+<p>The robot has to process S to determine what action to take and does so by consulting a <strong>policy</strong>, which we denote as π. The robot considers S with regard to π and outputs an action a.</p>
+<p>The action a changes the environment in some way, and we can use a <strong>transition function</strong>, denoted as T, to derive a new environment from the current environment and a particular action.</p>
+<p>Naturally, the robot reads in the updated environment as a new S, against which it consults π to generate a new a. We refer to this circular process as the sense, think, act cycle.</p>
+<p>To understand how the robot arrives at the policy π, we have to consider another component of this cycle: the reward, r. For any action that the robot takes, in any particular state, there is an associated reward.</p>
+<p>As an example, if a navigation robot senses a cliff ahead and chooses to accelerate, the associated reward might be very negative. If, however, the robot chooses to turn around, the reward might be very positive.</p>
+<p>In our case, we can imagine that our robot has a little wallet where it keeps its cash. The reward for a particular action might be how much cash that action adds to the wallet. The objective of this robot is to execute actions that maximize this reward.</p>
+<p>Somewhere within the robot, there is an algorithm that synthesizes information about S, r, and a over time to generate π.</p>
+<p><img src="/../images/ML4T-0305_01.png" alt="RL Problem"></p>
+<h2 id="Trading-as-an-RL-Problem-Quiz"><a href="#Trading-as-an-RL-Problem-Quiz" class="headerlink" title="Trading as an RL Problem Quiz"></a>Trading as an RL Problem Quiz</h2><p>We want to use reinforcement learning algorithms to trade; to do so, we have to translate the trading problem into a reinforcement learning problem.</p>
+<p>Consider the following items. For each item, select whether the item corresponds to a component of the external state S, an action a we might take within the environment, or a reward r that we might use to inform our policy π.</p>
+<p><img src="/../images/ML4T-0305_02.png" alt="RL Problem Quiz"></p>
+<p><img src="/../images/ML4T-0305_03.png" alt="RL Problem Quiz"></p>
+<p>To be noticed here, daily return could be either a component of the state - a factor we consider before generating an action - but it could also be a reward.</p>
+<h1 id="Mapping-Trading-to-RL"><a href="#Mapping-Trading-to-RL" class="headerlink" title="Mapping Trading to RL"></a>Mapping Trading to RL</h1><p>Let’s think about how we can frame stock trading as an RL problem. In trading, our environment is the market. The state that we process considers, among other factors: market features, price information, and whether we are holding a particular stock. The actions we can execute within the environment are, generally, buy, sell, or do nothing.</p>
+<p>In the context of buying a particular stock, we might process certain technical features - like Bollinger Bands - to determine what action to take. Suppose that we decide to buy a stock. Once we buy a stock, that holding becomes part of our state.</p>
+<p>We have transitioned from a state of not holding to holding long through executing the buy action. We can transition from a state of holding long to not holding by executing the sell action.</p>
+<p>Suppose the price increases, and we decide to execute a sell. The money that we made, or lost, is the reward that corresponds to the actions we took. We can use this reward and its relationship to the actions and the state to refine our policy, thus adjusting how we act in the environment.</p>
+<p><img src="/../images/ML4T-0305_04.png" alt="Mapping Trading to RL"></p>
+<h1 id="Markov-Decision-Problems"><a href="#Markov-Decision-Problems" class="headerlink" title="Markov Decision Problems"></a>Markov Decision Problems</h1><p>A problem parameterized by set of states S, set of actions A, Transition function T, and reward funciton R is known as a Markov decision process.</p>
+<p>The problem for a reinforcement learning algorithm is to find a policy π that maximizes reward over time. We refer to the theoretically optimal policy, which the learning algorithm may or may not find, as π∗.</p>
+<p><img src="/../images/ML4T-0305_05.png" alt="Markov Decision Problem"></p>
+<h1 id="Unknown-Transitions-and-Rewards"><a href="#Unknown-Transitions-and-Rewards" class="headerlink" title="Unknown Transitions and Rewards"></a>Unknown Transitions and Rewards</h1><p>Most of the time, we don’t know the transition function, T, or the reward function, R, a priori. As a result, the reinforcement learning agent has to interact with the world, observe what happens, and work with the experience it gains to build an effective policy.</p>
+<p>Let’s say our agent observed state $s_1$, took action $a_1$, which resulted in state $s_1^{‘}$ and reward $r_1$. We refer to the object $(s_1, a_1, S_1^{‘}, r_1)$ as an experience tuple.</p>
+<p>The agent iterates through this sense-think-act cycle over and over again, gathering experience tuples along the way. Once we have collected a significant number of these tuples, we can use two main types of approaches to find the appropriate policy,<br>π.</p>
+<p>The first set of approaches is model-based reinforcement learning. In model-based reinforcement learning, we look at the experience tuples over time and build a model of T and R by examining the transitions statistically. For example, for each state, action pair $s_i, a_i$, we can look at the distributions of the observed next state and reward, $s_i^{‘}$ and $a_i^{‘}$, respectively. Once we have these models, we can use value iteration or policy iteration to find the policy.</p>
+<p>The second set of approaches is model-free reinforcement learning. Model-free reinforcement learning methods derive a policy directly from the data. We are going to focus on Q-learning in this class, which is a specific type of model-free learning.</p>
+<p><img src="/../images/ML4T-0305_06.png" alt="Unknown Transitions and Rewards"></p>
+<h1 id="What-to-Optimize"><a href="#What-to-Optimize" class="headerlink" title="What to Optimize"></a>What to Optimize</h1><p>We haven’t gone into much detail about what exactly we are trying to optimize; currently, we have a vague idea that we are trying to maximize the sum of our rewards. To make our discussion of optimization more concrete, consider our robot navigating the following maze.</p>
+<p><img src="/../images/ML4T-0305_07.png" alt="What to Optimize"></p>
+<p>Let’s say we wanted to optimize the sum of the robot’s rewards from now until infinity. We refer to this timeframe as an infinite horizon. In this case, we don’t particularly care if the robot exclusively grabs the 1 dolloar ad infinitum, or if it first grabs the 1 million dolloars before returning to the 1 dolloar. With regard to the reward, either strategy is sufficient since both result in an infinite reward.</p>
+<p>More often than not, we have a finite horizon. We might, for example, want to optimize our reward over the next three moves. If we take three steps towards the 1 million reward, we are going to experience three penalties of -1, for a total penalty of -3. If we take three steps towards the 1 dolloar, however, we experience a reward of zero, a reward of 1 dolloar, and a reward of 0, for a total reward of 1 dolloar.</p>
+<p>If we extend our horizon out to eight moves, we see that the optimal path changes. Instead of retrieving the 1 dolloar reward four times, we can incur seven penalties of -1 in exchange for the 1 million reward.</p>
+<p>We can now articulate the expression that we want to maximize as shown in the figure.</p>
+<p>The value of γ is greater than zero and less than or equal to one. The closer it is to one, the more we value rewards in the future (the less we discount them). The closer it is to zero, the less we value rewards in the future (the more we discount them).</p>
+<h2 id="Which-Approach-Gets-1M-Quiz"><a href="#Which-Approach-Gets-1M-Quiz" class="headerlink" title="Which Approach Gets $1M Quiz"></a>Which Approach Gets $1M Quiz</h2><p>Which of the following approaches leads our robot to a policy that causes it to reach the $1 million reward?</p>
+<p><img src="/../images/ML4T-0305_08.png" alt="Quiz"></p>
+<p><img src="/../images/ML4T-0305_09.png" alt="Quiz"></p>
+<p>To be noticed here, in the discounted scenario, each reward in the future is successively devalued by 5%. Even so, the $1 million reward is so large that seeking this reward is still the optimal strategy.</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/ML4T/" rel="tag"># ML4T</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/02/18/ML4T_03-04_EnsembleLearners-BaggingAndBoosting/" rel="prev" title="Machine Learning for Trading--3-4 Ensemble Learners- Bagging and Boosting">
+      <i class="fa fa-chevron-left"></i> Machine Learning for Trading--3-4 Ensemble Learners- Bagging and Boosting
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/03/02/ML4T_03-06_Q-Learning/" rel="next" title="Machine Learning for Trading--3-6 Q-Learning">
+      Machine Learning for Trading--3-6 Q-Learning <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#The-RL-Problem"><span class="nav-number">1.</span> <span class="nav-text">The RL Problem</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Trading-as-an-RL-Problem-Quiz"><span class="nav-number">1.1.</span> <span class="nav-text">Trading as an RL Problem Quiz</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Mapping-Trading-to-RL"><span class="nav-number">2.</span> <span class="nav-text">Mapping Trading to RL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Markov-Decision-Problems"><span class="nav-number">3.</span> <span class="nav-text">Markov Decision Problems</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Unknown-Transitions-and-Rewards"><span class="nav-number">4.</span> <span class="nav-text">Unknown Transitions and Rewards</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#What-to-Optimize"><span class="nav-number">5.</span> <span class="nav-text">What to Optimize</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Which-Approach-Gets-1M-Quiz"><span class="nav-number">5.1.</span> <span class="nav-text">Which Approach Gets $1M Quiz</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

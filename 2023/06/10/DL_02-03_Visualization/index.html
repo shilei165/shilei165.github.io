@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Learning Objectives Visualization of Neural Networks Gradient-Based Visualizations Optimizing the Input Images Testing Robustness Style Transfer">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Deep Learning-2-3 Visualization">
+<meta property="og:url" content="http://example.com/2023/06/10/DL_02-03_Visualization/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="Learning Objectives Visualization of Neural Networks Gradient-Based Visualizations Optimizing the Input Images Testing Robustness Style Transfer">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/DL_02-03_01.png">
+<meta property="og:image" content="http://example.com/images/DL_02-03_02.png">
+<meta property="og:image" content="http://example.com/images/DL_02-03_03.png">
+<meta property="og:image" content="http://example.com/images/DL_02-03_04.png">
+<meta property="og:image" content="http://example.com/images/DL_02-03_05.png">
+<meta property="og:image" content="http://example.com/images/DL_02-03_06.png">
+<meta property="og:image" content="http://example.com/images/DL_02-03_07.png">
+<meta property="og:image" content="http://example.com/images/DL_02-03_08.png">
+<meta property="og:image" content="http://example.com/images/DL_02-03_09.png">
+<meta property="og:image" content="http://example.com/images/DL_02-03_10.png">
+<meta property="og:image" content="http://example.com/images/DL_02-03_11.png">
+<meta property="og:image" content="http://example.com/images/DL_02-03_12.png">
+<meta property="og:image" content="http://example.com/images/DL_02-03_13.png">
+<meta property="og:image" content="http://example.com/images/DL_02-03_14.png">
+<meta property="og:image" content="http://example.com/images/DL_02-03_15.png">
+<meta property="og:image" content="http://example.com/images/DL_02-03_16.png">
+<meta property="og:image" content="http://example.com/images/DL_02-03_17.png">
+<meta property="og:image" content="http://example.com/images/DL_02-03_18.png">
+<meta property="article:published_time" content="2023-06-10T22:14:22.000Z">
+<meta property="article:modified_time" content="2023-06-11T01:06:02.282Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="Deep Learning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/DL_02-03_01.png">
+
+<link rel="canonical" href="http://example.com/2023/06/10/DL_02-03_Visualization/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Deep Learning-2-3 Visualization | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/06/10/DL_02-03_Visualization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Deep Learning-2-3 Visualization
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-06-10 18:14:22" itemprop="dateCreated datePublished" datetime="2023-06-10T18:14:22-04:00">2023-06-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Learning-Objectives"><a href="#Learning-Objectives" class="headerlink" title="Learning Objectives"></a>Learning Objectives</h1><ul>
+<li>Visualization of Neural Networks</li>
+<li>Gradient-Based Visualizations</li>
+<li>Optimizing the Input Images</li>
+<li>Testing Robustness</li>
+<li>Style Transfer</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="Visualization-of-Neural-Networks"><a href="#Visualization-of-Neural-Networks" class="headerlink" title="Visualization of Neural Networks"></a>Visualization of Neural Networks</h1><p>Given a model we would like to understand what it has learned. Given some random initialization values what values has it arrived at, or converged, or trained, to? After optimization it should have found set of optimal values. For Linear classifiers we can take the learned weights, reshape them into images, and then plot them in a normalized way. This gives us a picture of the weight template used to classify objects.</p>
+<p>For convoutional layers the kernels are the weights. Recall that the kernel is convolved with the image in a repeated process of step size &#x3D; stride. So high response values from the covolution are indicative of similarity.</p>
+<p>We can also plot the activations after running a kernel across an image. Each activation layer yields an output map (aka feature map, activation map). These maps represent spatial location with high values that highly correlate with the kernel. think of an edge map for example.</p>
+<p>Using Gradients and gradient stats let us understand wht the model is learning.</p>
+<p>Finally we can look at the robustness of the Network to determine any weak points.</p>
+<p>For FC layers, if the nodes are connected to the image itself, then you can simply reshape the weights, normalize(0-255) and view as an image.</p>
+<p><img src="/../images/DL_02-03_01.png" alt="Visualization of Neural Networks"></p>
+<p>What’s interesting about these are that they began life as purely random values, ie at initialization they would look like a speckled image for example. By now they begin to resemble patterns, or templates, with colour and textures. of course the smaller the kernel the smaller the image so they can be difficult at times.</p>
+<p>Visualizing activation&#x2F;filter maps can be a lot trickier.</p>
+<p>:warning: <strong>Problem</strong>: Small convolution outputs are hard to visualize&#x2F;interpret.</p>
+<p>We can take the activations of any layer (FC, conv, etc) and perfrom dimensionality reduction.</p>
+<ul>
+<li>This can be used to reduced to two dimensions for ploting.</li>
+<li>One option is to use Principle Component Analysis (PCA). <ul>
+<li>PCA is a dimensionality reduction method that is often used to reduce the dimensionality of large data sets, by transforming a large set of variables into a smaller one that still contains most of the information in the large set.</li>
+</ul>
+</li>
+<li>The other option is tSNE, which performs a nonlinear mapping while preserving pair-wise distances.</li>
+</ul>
+<p><img src="/../images/DL_02-03_02.png" alt="Visualization of Neural Networks"></p>
+<p>The better that these groups are seperated the better the classifier will perform.</p>
+<h2 id="Summary-and-Caveats"><a href="#Summary-and-Caveats" class="headerlink" title="Summary and Caveats"></a>Summary and Caveats</h2><p>While these methods provide some visual interpretation this is highly biased on the interpreter and can often be misleading, or simply uninformative.</p>
+<ol>
+<li>Assessing interpretability is difficult</li>
+</ol>
+<ul>
+<li>It requires user studies to show usefulness</li>
+<li>E.g. they allow a user to predict mistakes beforehand</li>
+</ul>
+<ol start="2">
+<li>Neural Networks learn distributed representation</li>
+</ol>
+<ul>
+<li>That means they don’t learn a feature&#x2F;point. The nodes don’t really represent any feature either. A node that is activated for a face may also be activated for bird (silly example), the point being that a node that is good for one trait may also effect other traits. </li>
+<li>This adds to the difficulty of interpretation.</li>
+</ul>
+<p>In a nutshell: Visualizations help provide some guidance and direction. They are not conclusive on their own.</p>
+<h1 id="Gradient-Based-Visualizations"><a href="#Gradient-Based-Visualizations" class="headerlink" title="Gradient-Based Visualizations"></a>Gradient-Based Visualizations</h1><h2 id="Gradient-of-Loss-w-r-t-Image"><a href="#Gradient-of-Loss-w-r-t-Image" class="headerlink" title="Gradient of Loss w.r.t. Image"></a>Gradient of Loss w.r.t. Image</h2><p>Recall that the backwards pass gives us the gradients for all layers: How the loss changes as we change the different parts of the input. This is useful not only for optimization but also to understand what was learned.</p>
+<ul>
+<li>Gradient of the loss w.r.t all layers ( including the input!).</li>
+<li>Gradient of any layer w.r.t. input (by cutting off the computation graph)</li>
+</ul>
+<p><img src="/../images/DL_02-03_03.png" alt="Gradient-Based Visualizations"></p>
+<p>Here is the <strong>idea</strong>:</p>
+<ul>
+<li>It helps us to understand the sensitivity of the loss to the input</li>
+<li>Large sensitivity implies a high pixel importance (<strong>Saliency Maps</strong>)</li>
+</ul>
+<p><strong>In practice:</strong></p>
+<ul>
+<li>Instead of the loss, we find the gradient of classifier scores (pre softmax). <ul>
+<li>It should be noted that the softmax introduces some complexity which can affect the loss gradients, hence why we take the scores before the softmax.</li>
+</ul>
+</li>
+<li>Take the absolute value of the gradient.</li>
+<li>Sum across all the channels (channels don’t matter).</li>
+</ul>
+<h2 id="Object-Segmentation"><a href="#Object-Segmentation" class="headerlink" title="Object Segmentation"></a>Object Segmentation</h2><p>Applying traditional computer vision (CV) methods and algorithms on the gradients can get us object segmentation for free. </p>
+<p>Surprising because this is not really part of the supervision process.</p>
+<p>This can be used to detect dataset bias. For example the presence of snow might be used by a model to detect the presence of a wolf. And so even a missclassification or incorrect prediction can be informative. Looking at the gradients and using them to create a segmentation would yield the presence of snow, indicating the bias.</p>
+<h2 id="Gradient-of-Activation-w-r-t-Input"><a href="#Gradient-of-Activation-w-r-t-Input" class="headerlink" title="Gradient of Activation w.r.t. Input"></a>Gradient of Activation w.r.t. Input</h2><p>Rather than loss or score, we can pick a neuron somewhere deep in the network and compute the gradient of the activation w.r.t. the input.</p>
+<p><strong>Setps</strong>:</p>
+<ul>
+<li>Pick a neuron – somewhere in the network say 3rd conv layer</li>
+<li>Find the gradient of its activation wrt the input image – run the forward pass up until that point&#x2F;layer</li>
+<li>Can first find the highest activated image patches using it’s corresponding neuron (based on the receptive field)</li>
+</ul>
+<p>:warning: It should be stressed that the way we’ve been using backprop up until now may not be good for visualizing. </p>
+<p>For example, when visualizing we may get parts of an image that decrease the feature activation. So you can get parts of an image with negative gradients. You want to focus on areas with a positive influence&#x2F;gradients</p>
+<h3 id="Guided-backprop"><a href="#Guided-backprop" class="headerlink" title="Guided backprop"></a>Guided backprop</h3><p>Guided backprop can be used to improve visualizations.</p>
+<p><img src="/../images/DL_02-03_04.png" alt="Gradient-Based Visualizations"></p>
+<p>In the above figure: </p>
+<ul>
+<li>Forward pass: positive values remain, negatives get zero’d out</li>
+<li>Backwards pass: “deconvnet” (composed of deconvolution and unpooling layers), only positve values are passed back and negative influence are removed</li>
+<li>Backwards pass: Guided backprop, this is both the forward pass and the deconvnet applied, and only positive influences remain and get propogated</li>
+</ul>
+<p><img src="/../images/DL_02-03_05.png" alt="Gradient-Based Visualizations"></p>
+<h3 id="VGG-Layer-by-Layer-Visualization"><a href="#VGG-Layer-by-Layer-Visualization" class="headerlink" title="VGG Layer-by-Layer Visualization"></a>VGG Layer-by-Layer Visualization</h3><p>VGG is another method also which can produce similar results.</p>
+<p>VGG stands for <strong>Visual Geometry Group</strong>; it is a standard deep Convolutional Neural Network (CNN) architecture with multiple layers. The “deep” refers to the number of layers with VGG-16 or VGG-19 consisting of 16 and 19 convolutional layers.</p>
+<p>In the first layer of a neural network, it produces what could best be described as edge orientation outputs. It may also learn things like color or textual patterns. In general, however, it tends to find low level features.</p>
+<p><img src="/../images/DL_02-03_06.png" alt="Gradient-Based Visualizations"></p>
+<p>In the second layer we’ll see that these low level features such as edges are combined in order to find higher level features such as motifs, (Corners, circles, shapes, etc), as well as more interesting patterns and textures.</p>
+<p><img src="/../images/DL_02-03_07.png" alt="Gradient-Based Visualizations"></p>
+<p>In layer 3 we get more abstract. We find things like wheels of a car or different parts of people.</p>
+<p><img src="/../images/DL_02-03_08.png" alt="Gradient-Based Visualizations"></p>
+<p>By layer 4 and 5 we are nearing our templates. Here we may have the entire object being detected, or at the very least more than just one part as may have been located using layer 3.</p>
+<p><img src="/../images/DL_02-03_09.png" alt="Gradient-Based Visualizations"></p>
+<h2 id="Guided-Grad-CAM"><a href="#Guided-Grad-CAM" class="headerlink" title="Guided Grad-CAM"></a>Guided Grad-CAM</h2><p>As researchers began plotting more and more saliency maps, more and more sophisticated methods began to emerge to understand what neural networks consider to be important. One of these methods is the Grad-CAM.</p>
+<p><img src="/../images/DL_02-03_10.png" alt="Gradient-Based Visualizations"></p>
+<p>GradCAM trys to determine where a CNN is looking at in order to come to a decision. It can be used for</p>
+<ul>
+<li><strong>Weakly supervised localization</strong>: Determining the location of an object using a model trained on whole image labels rather than explicit location annotations</li>
+<li><strong>Weakly supervised segmentation</strong>: Where the model predicts all the pixels that belong to an particular object without requiring pixel level labels for training.</li>
+</ul>
+<p>GradCAM is a form of post-hoc attention. Meaning that it is a method for producing heatmaps that are applied to an already trained (pretrained&#x2F;prebuilt) neural network after training is complete and the parameters are fixed. (Whereas trainable attention refers to the production of a heat map in the building&#x2F;training phase.</p>
+<h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><ul>
+<li>Gradients are important not just for optimization, but also for analyzing what neural networks have learned</li>
+<li>Standard backprop not always the most informative for visualization purposes</li>
+<li>Several ways to modify the gradient flow to improve the visualization results</li>
+</ul>
+<h1 id="Optimizing-the-Input-Images"><a href="#Optimizing-the-Input-Images" class="headerlink" title="Optimizing the Input Images"></a>Optimizing the Input Images</h1><p><strong>Idea:</strong> Since we have the gradient of scores w.r.t. inputs, can we optimize the image itself to maximize the score?</p>
+<p><strong>Why?</strong></p>
+<ul>
+<li>Create images from scratch</li>
+<li>Adversarial examples (maliciously crafted inputs that are specifically designed to deceive machine learning models)</li>
+</ul>
+<p>We do this by performing gradient ascent on an image. </p>
+<ul>
+<li>Start from a random, or zero, image<ul>
+<li>Compute the forward pass and gradients</li>
+<li>Perform ascent</li>
+<li>Iterate (repeat 2 previous steps)</li>
+</ul>
+</li>
+<li>Be sure to use scores to avoid minimizing other class scores (after we compute the softmax probabilities)<ul>
+<li>Because we’re using the raw scores themselves, the network is forced to directly increase the score for the class that we care about.</li>
+</ul>
+</li>
+<li>We will often need some form of regularization term to induce statistics of natural imagery<ul>
+<li>e.g. small pixel values or spatial smoothness</li>
+</ul>
+</li>
+</ul>
+<p>Consider the following image. While less than optimal you can see that there is the formulation of an image.</p>
+<p><img src="/../images/DL_02-03_11.png" alt="Gradient-Based Visualizations"></p>
+<p>We can improve these results with various tricks:</p>
+<ul>
+<li>Clipping of small values and gradients</li>
+<li>Gaussian blurring</li>
+<li>Other techiques exist as well</li>
+</ul>
+<h2 id="Summary-1"><a href="#Summary-1" class="headerlink" title="Summary"></a>Summary</h2><p>We can optimize the input image to generate examples to increase class<br>scores or activations.</p>
+<p>This can show us a great deal about what examples (not in the training set) activate the network.</p>
+<h1 id="Testing-Robustness"><a href="#Testing-Robustness" class="headerlink" title="Testing Robustness"></a>Testing Robustness</h1><ul>
+<li>We can perform gradient ascent on image</li>
+<li>Rather than start from zero image, why not real image?</li>
+<li>And why not optimize the score of an arbitrary (incorrect!) class</li>
+</ul>
+<p><img src="/../images/DL_02-03_12.png" alt="Testing Robustness"></p>
+<p>It turns out that only a very small number of pixels (per dimension) is needed to optimize the incorrectness. By adding a bit of noise or perturbations we can cause a network to misclassify.</p>
+<p><img src="/../images/DL_02-03_13.png" alt="Testing Robustness"></p>
+<p>This problem is not unique to Deep Learning&#x2F;Machine Learning!</p>
+<ul>
+<li>Other classical methods can suffer from it as well</li>
+<li>Can show how linearity (even at the end) can bring this about<ul>
+<li>can add many small values that add up in the right direction</li>
+</ul>
+</li>
+</ul>
+<p><img src="/../images/DL_02-03_14.png" alt="Testing Robustness"></p>
+<p><strong>Summary of Adversarial Attacks &amp; Defenses</strong></p>
+<p>Similar to other security related areas, it’s very much a cat and mouse game.</p>
+<p>Some defenses exist and their performance&#x2F;success depends on the situation, such as:</p>
+<ul>
+<li>Training with adversarial examples</li>
+<li>Perturbations, noise, or re-encoding of inputs</li>
+</ul>
+<p>There are no universal methods however that exist, are robust, to all types of attacks.</p>
+<p><strong>Other forms of Robustness Testing</strong></p>
+<p><img src="/../images/DL_02-03_15.png" alt="Testing Robustness"></p>
+<p>We can try to understanding the biases of CNNs (compare to those of humans)</p>
+<p><img src="/../images/DL_02-03_16.png" alt="Testing Robustness"></p>
+<p>In the example, a human can discern that a cat with the texture of an elephant is still a cat, but a NN will almost certainly classify it as an elephant.</p>
+<h2 id="Summary-2"><a href="#Summary-2" class="headerlink" title="Summary"></a>Summary</h2><ul>
+<li>Various ways to test the robustness and biases of neural networks</li>
+<li>Adversarial examples have implications for understanding and trusting them</li>
+<li>Exploring the gain of different architectures in terms of robustness and biases can also be used to understand what has been learned.</li>
+</ul>
+<h1 id="Style-Transfer"><a href="#Style-Transfer" class="headerlink" title="Style Transfer"></a>Style Transfer</h1><p>This refers to the generation of an image where the content of the target image remains the same but the style, or texture, is transfered from another image.</p>
+<p>Images can be generated through backpropogation – Regularization can be used to ensure we match image statisitcs.</p>
+<p><strong>Idea:</strong> What if we want to preserve the content of a particular image?</p>
+<ul>
+<li>We can match the features at different layers</li>
+<li>We can even construct a loss for this</li>
+</ul>
+<p><img src="/../images/DL_02-03_17.png" alt="Style Transfer"></p>
+<p>Example: Suppose we have an image of a dog that we wish to replicate</p>
+<ul>
+<li>We feed the image through a CNN<ul>
+<li>In doing so, we extract the activation layers and feature values for all the layers</li>
+</ul>
+</li>
+<li>We then compute the loss<ul>
+<li>The loss can be defined as the difference between the features of generate layer and the content image</li>
+<li>$L_{content}&#x3D;(F_C^1-F_P^1)^2$</li>
+<li>What’s happening here is that we are minimizing the loss in the feature space</li>
+<li>You could use something other than features but the principle would remain the same</li>
+</ul>
+</li>
+</ul>
+<p>We can take this another step forward as well! Recall that backwards edges are going to the same node are summed. So we can take the loss at each of the layers and sum them up:<br>$$<br>L_{content}&#x3D;\sum_l (F_C^l-F_P^l)^2<br>$$</p>
+<p><strong>Idea:</strong> Can we have the content of one image and <em>texture</em> (style) of another image?</p>
+<p>Yes! The idea here is very similar to the process above. We start with 2 images, let’s call them the content and the style image. We compute the feature maps or activations. We also create a third image from scratch, from nothing. Now want we need to do is to minimize the loss between our zero image and each of the feature layers of the style and content images. It should be clear these need to be minimized together, at the same time. But we can’t use the same loss on both sides. Otherwise you’ll get converging content or converging styles, not a mix of both which is what we want.</p>
+<p>How do we represent similarity in terms of textures? </p>
+<ol>
+<li>There is a history of this in classical Computer vision.</li>
+</ol>
+<ul>
+<li>Key ideas revolve around summary statisitcs</li>
+<li>Should ideally remove most spatial information</li>
+</ul>
+<ol start="2">
+<li>Deep Learning variants</li>
+</ol>
+<ul>
+<li>Called a Gram Matrix</li>
+</ul>
+<p><img src="/../images/DL_02-03_18.png" alt="Style Transfer"></p>
+<h2 id="Summary-3"><a href="#Summary-3" class="headerlink" title="Summary"></a>Summary</h2><ul>
+<li>Generating images through optimization is a powerful concept!</li>
+<li>Besides fun and art, methods such as stylization also useful for understanding what the network has learned</li>
+<li>Also useful for other things such as data augmentation</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/Deep-Learning/" rel="tag"># Deep Learning</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/06/08/DL_02-02_ConvolutionalNeuralNetworkArchitectures/" rel="prev" title="Deep Learning-2-2 Convolutional Neural Network Architectures">
+      <i class="fa fa-chevron-left"></i> Deep Learning-2-2 Convolutional Neural Network Architectures
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/06/29/DL_03-01_RecurrentNeuralNetworks/" rel="next" title="Deep Learning-3-1 Recurrent Neural Networks">
+      Deep Learning-3-1 Recurrent Neural Networks <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Learning-Objectives"><span class="nav-number">1.</span> <span class="nav-text">Learning Objectives</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Visualization-of-Neural-Networks"><span class="nav-number">2.</span> <span class="nav-text">Visualization of Neural Networks</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Summary-and-Caveats"><span class="nav-number">2.1.</span> <span class="nav-text">Summary and Caveats</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Gradient-Based-Visualizations"><span class="nav-number">3.</span> <span class="nav-text">Gradient-Based Visualizations</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Gradient-of-Loss-w-r-t-Image"><span class="nav-number">3.1.</span> <span class="nav-text">Gradient of Loss w.r.t. Image</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Object-Segmentation"><span class="nav-number">3.2.</span> <span class="nav-text">Object Segmentation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gradient-of-Activation-w-r-t-Input"><span class="nav-number">3.3.</span> <span class="nav-text">Gradient of Activation w.r.t. Input</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Guided-backprop"><span class="nav-number">3.3.1.</span> <span class="nav-text">Guided backprop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VGG-Layer-by-Layer-Visualization"><span class="nav-number">3.3.2.</span> <span class="nav-text">VGG Layer-by-Layer Visualization</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Guided-Grad-CAM"><span class="nav-number">3.4.</span> <span class="nav-text">Guided Grad-CAM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Summary"><span class="nav-number">3.5.</span> <span class="nav-text">Summary</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Optimizing-the-Input-Images"><span class="nav-number">4.</span> <span class="nav-text">Optimizing the Input Images</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Summary-1"><span class="nav-number">4.1.</span> <span class="nav-text">Summary</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Testing-Robustness"><span class="nav-number">5.</span> <span class="nav-text">Testing Robustness</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Summary-2"><span class="nav-number">5.1.</span> <span class="nav-text">Summary</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Style-Transfer"><span class="nav-number">6.</span> <span class="nav-text">Style Transfer</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Summary-3"><span class="nav-number">6.1.</span> <span class="nav-text">Summary</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

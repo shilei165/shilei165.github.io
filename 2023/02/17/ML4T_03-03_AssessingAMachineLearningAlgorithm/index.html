@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="A closer look at KNN solutions What happens as K varies quiz What happens as D varies quiz Metric 1: RMS error In sample vs. Out of sample Cross validation Roll forward cross validation Metric 2: Cor">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Machine Learning for Trading--3-3 Assessing a Machine Learning Algorithm">
+<meta property="og:url" content="http://example.com/2023/02/17/ML4T_03-03_AssessingAMachineLearningAlgorithm/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="A closer look at KNN solutions What happens as K varies quiz What happens as D varies quiz Metric 1: RMS error In sample vs. Out of sample Cross validation Roll forward cross validation Metric 2: Cor">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/..%5Cimages%5CML4T-0303_01.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5CML4T-0303_02.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5CML4T-0303_03.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5CML4T-0303_04.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5CML4T-0303_05.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5CML4T-0303_06.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5CML4T-0303_07.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5CML4T-0303_08.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5CML4T-0303_09.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5CML4T-0303_10.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5CML4T-0303_11.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5CML4T-0303_12.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5CML4T-0303_13.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5CML4T-0303_14.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5CML4T-0303_15.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5CML4T-0303_16.png">
+<meta property="article:published_time" content="2023-02-18T02:54:22.000Z">
+<meta property="article:modified_time" content="2023-02-28T17:26:44.068Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="ML4T">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/..%5Cimages%5CML4T-0303_01.png">
+
+<link rel="canonical" href="http://example.com/2023/02/17/ML4T_03-03_AssessingAMachineLearningAlgorithm/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Machine Learning for Trading--3-3 Assessing a Machine Learning Algorithm | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/17/ML4T_03-03_AssessingAMachineLearningAlgorithm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Machine Learning for Trading--3-3 Assessing a Machine Learning Algorithm
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-02-17 21:54:22" itemprop="dateCreated datePublished" datetime="2023-02-17T21:54:22-05:00">2023-02-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Machine-Learning-for-Trading/" itemprop="url" rel="index"><span itemprop="name">Machine Learning for Trading</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ul>
+<li>A closer look at KNN solutions</li>
+<li>What happens as K varies quiz</li>
+<li>What happens as D varies quiz</li>
+<li>Metric 1: RMS error</li>
+<li>In sample vs. Out of sample</li>
+<li>Cross validation</li>
+<li>Roll forward cross validation</li>
+<li>Metric 2: Correlation</li>
+<li>Overfitting</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="A-closer-look-at-KNN-solutions"><a href="#A-closer-look-at-KNN-solutions" class="headerlink" title="A closer look at KNN solutions"></a>A closer look at KNN solutions</h1><p>In previous chapter, we calculate the predicted y value for this x as the mean of the y values of these three neighbors. As x gets larger, the set of nearest neighbors, and therefore the predicted y value, shifts. We can plot the predicted y values throughout the following continuous range of x values.</p>
+<p><img src="/..%5Cimages%5CML4T-0303_01.png" alt="A closer look at KNN solutions"></p>
+<p>A helpful feature of this model is that it doesn’t overfit the data. Since we consider multiple neighbors for each prediction, a prediction is never disproportionately influenced by a single training example.</p>
+<p>However, this model is not without its shortcomings. For example, we see flat lines at either end of the plot. After a certain point, the model returns the same prediction for any x because the neighbors don’t change. In other words, the model is unable to extrapolate any trends present in the data.</p>
+<h1 id="What-happens-as-K-varies-quiz"><a href="#What-happens-as-K-varies-quiz" class="headerlink" title="What happens as K varies quiz"></a>What happens as K varies quiz</h1><p>Consider the following three models, each generated using a different value for K.</p>
+<p>Our first task is to match the value of K with the corresponding plot. Our second task is to decide whether we increase the chances of overfitting as we increase K. An overfit model matches the training set very well but fails to generalize to new examples.</p>
+<p><img src="/..%5Cimages%5CML4T-0303_02.png" alt="quiz"></p>
+<p>Let’s consider the case where K&#x3D;1. In this case, the model passes through every point P directly, since near P, the only point that has any influence is P.</p>
+<p>Now consider the case where K&#x3D;N. In this case, every point considers all of the neighbors. Thus, the generated model is a straight line passing through the mean of the y values of all the points.</p>
+<h1 id="What-happens-as-D-varies-quiz"><a href="#What-happens-as-D-varies-quiz" class="headerlink" title="What happens as D varies quiz"></a>What happens as D varies quiz</h1><p>Consider the following three polynomial models. The difference between each model is the degree of the polynomial d.</p>
+<p>Our first task is to match the value of d with the corresponding plot. Our second task is to decide whether we increase the chances of overfitting as we increase d.</p>
+<p><img src="/..%5Cimages%5CML4T-0303_03.png" alt="quiz"></p>
+<p>Notice that for each of these models, we can extrapolate beyond the data given. This ability to extrapolate is a property of parametric models that instance-based models lack.</p>
+<h1 id="Metric-1-RMS-error"><a href="#Metric-1-RMS-error" class="headerlink" title="Metric 1: RMS error"></a>Metric 1: RMS error</h1><p>We’ve looked at different graphs of models and visually evaluated how well they fit sets of data. A more quantitative approach to measuring fit is to measure error.</p>
+<p><img src="/..%5Cimages%5CML4T-0303_04.png" alt="RMS error"></p>
+<p>A common type of error is the root-mean-square error (RMSE), which we compute by taking the square root of the mean of the squared errors for each point.</p>
+<p>The RMSE formulation gives us an approximation of the average error, although it emphasizes larger errors slightly more than smaller ones.</p>
+<h1 id="In-sample-vs-Out-of-sample"><a href="#In-sample-vs-Out-of-sample" class="headerlink" title="In sample vs. Out of sample"></a>In sample vs. Out of sample</h1><p>Remember from our KNN discussion that it’s possible to build models that can perfectly fit an arbitrary data set. In other words, we can create a model that has virtually zero error against our training set.</p>
+<p>As a result, it doesn’t make sense to evaluate our model against the data on which it trained. Instead, we train our model on one set of data and test it on another, previously unseen set of data: the test set.</p>
+<p>We minimize the in-sample error between the training set and the model during training. We then compute the out-of-sample error between the test set and the model to evaluate how well the model generalizes to new data.</p>
+<p><img src="/..%5Cimages%5CML4T-0303_05.png" alt="In and Out sample"></p>
+<h2 id="Which-is-worse-quiz"><a href="#Which-is-worse-quiz" class="headerlink" title="Which is worse quiz"></a>Which is worse quiz</h2><p>Suppose we just built a model. Which error would you expect to be larger: in-sample or out-of-sample?</p>
+<p><img src="/..%5Cimages%5CML4T-0303_06.png" alt="quiz"></p>
+<p>In general, the out-of-sample error is worse than the in-sample error.</p>
+<h1 id="Cross-validation"><a href="#Cross-validation" class="headerlink" title="Cross validation"></a>Cross validation</h1><p>Usually, when researchers are evaluating a model, they split their data into two sets. 60% of the data goes into a training set, and the remaining 40% goes into a test set.</p>
+<p><img src="/..%5Cimages%5CML4T-0303_07.png" alt="cross validation"></p>
+<p>One problem researchers sometimes encounter, however, is that they don’t have enough data to analyze their model effectively. They can mitigate this problem by partitioning their data set into different subsets such that they can run multiple trials.</p>
+<p>For example, we can slice our data set into five equal partitions. In trial one, we train on the first four slices and test on the fifth. In trial two, we train on the last four slices and test on the first. We can follow this approach to generate a total of five unique train&#x2F;test splits from our single set of data.</p>
+<p><img src="/..%5Cimages%5CML4T-0303_08.png" alt="cross validation"></p>
+<p><img src="/..%5Cimages%5CML4T-0303_09.png" alt="cross validation"></p>
+<h1 id="Roll-forward-cross-validation"><a href="#Roll-forward-cross-validation" class="headerlink" title="Roll forward cross validation"></a>Roll forward cross validation</h1><p>Cross-validation is a great tool, but typically doesn’t fit financial data applications well, at least in the form we’ve seen so far.</p>
+<p>In financial applications, we are typically working with temporal data, and arbitrary selection of training and testing sets can create a situation where our testing data predates our training data.</p>
+<p>In other words, we might find ourselves training on data from the relative future and testing on data from the relative past. Any future bias like this can lead to unrealistically optimistic results, so we need to avoid it.</p>
+<p>We can avoid this bias with roll forward cross-validation. In roll forward cross-validation, we constrain the selection of training and testing sets such that training data always comes before test data. Even with these constraints, we can still subset our data to create multiple train&#x2F;test trials.</p>
+<p><img src="/..%5Cimages%5CML4T-0303_10.png" alt="cross validation"></p>
+<p><img src="/..%5Cimages%5CML4T-0303_11.png" alt="cross validation"></p>
+<p>For example, let’s suppose we slice our data set into five equal partitions. In trial one, we train on the slice one and test one slice two. In trial two, we train on slice two and test on slice three. We can follow this approach to generate a total of four unique train&#x2F;test splits from our single set of data.</p>
+<h1 id="Metric-2-Correlation"><a href="#Metric-2-Correlation" class="headerlink" title="Metric 2: Correlation"></a>Metric 2: Correlation</h1><p>Another way to evaluate the accuracy of a regression algorithm is to look at the relationship between predicted and observed values of our dependent variable, y.</p>
+<p>We compute the correlation between \(Y_{test}\) and \(Y_{predict}\) to quantitatively measure the relationship between the two sets of variables. Correlation values range from -1 to 1, where -1 indicates a perfect inverse relationship, 1 indicates a perfect positive relationship, and 0 indicates no relationship.</p>
+<p><img src="/..%5Cimages%5CML4T-0303_12.png" alt="correlation"></p>
+<p>Given two ndarrays n1 and n2 of identical shapes, we can compute the correlation between them like:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">np.corrcoef(n1, n2)</span><br></pre></td></tr></table></figure>
+<h2 id="Correlation-and-RMS-error-quiz"><a href="#Correlation-and-RMS-error-quiz" class="headerlink" title="Correlation and RMS error quiz"></a>Correlation and RMS error quiz</h2><p>Let’s think about the relationship between RMS error and the correlation between \(Y_{test}\) and \(Y_{predict}\). Which of the following statements is true?</p>
+<p><img src="/..%5Cimages%5CML4T-0303_13.png" alt="quiz"></p>
+<p>In most cases, correlation decreases as RMS error increases. However, it is possible to construct examples where correlation increases as RMS error increases.</p>
+<h1 id="Overfitting"><a href="#Overfitting" class="headerlink" title="Overfitting"></a>Overfitting</h1><p>Let’s consider a parameterized polynomial model M. We want to increase the degree of M steadily - adding an x term, an \(x^2\) term, an \(x^3\) term, and so on - and understand how the error changes in response.</p>
+<p>When d is small, our out-of-sample error is likely to be very close to our in-sample error. However, as d increases, the out-of-sample error gets larger. In other words, a model with more factors can fit the training data better at the expense of fitting the test data. Indeed, at large values of d, we might see sharp increases in out-of-sample error.</p>
+<p><img src="/..%5Cimages%5CML4T-0303_14.png" alt="overfitting"></p>
+<h2 id="Overfitting-quiz"><a href="#Overfitting-quiz" class="headerlink" title="Overfitting quiz"></a>Overfitting quiz</h2><p>Let’s consider overfitting in KNN and how in-sample and out-of-sample error changes as K increases from 1 to the number of items N in a data set.</p>
+<p>Which of the following plots correctly represents the shape of the error curves that we would expect for both types of error as we increase K?</p>
+<p><img src="/..%5Cimages%5CML4T-0303_15.png" alt="overfitting quiz"></p>
+<h2 id="A-few-other-considerations-quiz"><a href="#A-few-other-considerations-quiz" class="headerlink" title="A few other considerations quiz"></a>A few other considerations quiz</h2><p>There are a few other factors worth considering when evaluating a learning algorithm. For each of the following factors, which of the two models has better performance?</p>
+<p><img src="/..%5Cimages%5CML4T-0303_16.png" alt="quiz"></p>
+<ul>
+<li>Linear regression models require less space for persistence than KNN models. </li>
+<li>KNN models require less compute time to train than linear regression models. In fact, KNN models require zero time to train.</li>
+<li>Linear regression models process queries more quickly than KNN models. The query time for a linear regression model is constant. The query time for KNN models grows with the number of queries, as previously queried data points are added to the data set and must be examined in subsequent queries.</li>
+<li>Adding new data is quicker in KNN than in linear regression. Incorporating new data into a model requires retraining the model, but, as we just saw, the training time for a KNN model is zero.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/ML4T/" rel="tag"># ML4T</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/02/16/ML4T_03-02_Regression/" rel="prev" title="Machine Learning for Trading--3-2 Regression">
+      <i class="fa fa-chevron-left"></i> Machine Learning for Trading--3-2 Regression
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/02/18/ML4T_03-04_EnsembleLearners-BaggingAndBoosting/" rel="next" title="Machine Learning for Trading--3-4 Ensemble Learners- Bagging and Boosting">
+      Machine Learning for Trading--3-4 Ensemble Learners- Bagging and Boosting <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#A-closer-look-at-KNN-solutions"><span class="nav-number">1.</span> <span class="nav-text">A closer look at KNN solutions</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#What-happens-as-K-varies-quiz"><span class="nav-number">2.</span> <span class="nav-text">What happens as K varies quiz</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#What-happens-as-D-varies-quiz"><span class="nav-number">3.</span> <span class="nav-text">What happens as D varies quiz</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Metric-1-RMS-error"><span class="nav-number">4.</span> <span class="nav-text">Metric 1: RMS error</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#In-sample-vs-Out-of-sample"><span class="nav-number">5.</span> <span class="nav-text">In sample vs. Out of sample</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Which-is-worse-quiz"><span class="nav-number">5.1.</span> <span class="nav-text">Which is worse quiz</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Cross-validation"><span class="nav-number">6.</span> <span class="nav-text">Cross validation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Roll-forward-cross-validation"><span class="nav-number">7.</span> <span class="nav-text">Roll forward cross validation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Metric-2-Correlation"><span class="nav-number">8.</span> <span class="nav-text">Metric 2: Correlation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Correlation-and-RMS-error-quiz"><span class="nav-number">8.1.</span> <span class="nav-text">Correlation and RMS error quiz</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Overfitting"><span class="nav-number">9.</span> <span class="nav-text">Overfitting</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Overfitting-quiz"><span class="nav-number">9.1.</span> <span class="nav-text">Overfitting quiz</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#A-few-other-considerations-quiz"><span class="nav-number">9.2.</span> <span class="nav-text">A few other considerations quiz</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Learning Objectives Convolutional Neural Networks Convolution Layers Input &amp; Output Sizes Pooling Layers">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Deep Learning-2-1 Convolution and Pooling Layers">
+<meta property="og:url" content="http://example.com/2023/06/07/DL_02-01_ConvolutionalNeuralNetworks/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="Learning Objectives Convolutional Neural Networks Convolution Layers Input &amp; Output Sizes Pooling Layers">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/DL_02-01_01.png">
+<meta property="og:image" content="http://example.com/images/DL_02-01_02.png">
+<meta property="og:image" content="http://example.com/images/DL_02-01_03.png">
+<meta property="og:image" content="http://example.com/images/DL_02-01_04.png">
+<meta property="og:image" content="http://example.com/images/DL_02-01_05.png">
+<meta property="og:image" content="http://example.com/images/DL_02-01_06.png">
+<meta property="og:image" content="http://example.com/images/DL_02-01_07.png">
+<meta property="og:image" content="http://example.com/images/DL_02-01_08.png">
+<meta property="og:image" content="http://example.com/images/DL_02-01_09.png">
+<meta property="og:image" content="http://example.com/images/DL_02-01_10.gif">
+<meta property="og:image" content="http://example.com/images/DL_02-01_11.png">
+<meta property="og:image" content="http://example.com/images/DL_02-01_12.png">
+<meta property="og:image" content="http://example.com/images/DL_02-01_13.png">
+<meta property="og:image" content="http://example.com/images/DL_02-01_14.png">
+<meta property="og:image" content="http://example.com/images/DL_02-01_15.png">
+<meta property="og:image" content="http://example.com/images/DL_02-01_16.png">
+<meta property="og:image" content="http://example.com/images/DL_02-01_17.png">
+<meta property="og:image" content="http://example.com/images/DL_02-01_18.png">
+<meta property="og:image" content="http://example.com/images/DL_02-01_19.png">
+<meta property="og:image" content="http://example.com/images/DL_02-01_20.png">
+<meta property="og:image" content="http://example.com/images/DL_02-01_21.png">
+<meta property="article:published_time" content="2023-06-07T22:14:22.000Z">
+<meta property="article:modified_time" content="2023-06-07T20:31:18.275Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="Deep Learning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/DL_02-01_01.png">
+
+<link rel="canonical" href="http://example.com/2023/06/07/DL_02-01_ConvolutionalNeuralNetworks/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Deep Learning-2-1 Convolution and Pooling Layers | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/06/07/DL_02-01_ConvolutionalNeuralNetworks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Deep Learning-2-1 Convolution and Pooling Layers
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-06-07 18:14:22" itemprop="dateCreated datePublished" datetime="2023-06-07T18:14:22-04:00">2023-06-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Learning-Objectives"><a href="#Learning-Objectives" class="headerlink" title="Learning Objectives"></a>Learning Objectives</h1><ul>
+<li>Convolutional Neural Networks</li>
+<li>Convolution Layers</li>
+<li>Input &amp; Output Sizes</li>
+<li>Pooling Layers</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="Convolutional-Neural-Networks"><a href="#Convolutional-Neural-Networks" class="headerlink" title="Convolutional Neural Networks"></a>Convolutional Neural Networks</h1><p>Until now we’ve focused exclusively on linear and nonlinear layers. We’ve also discussed at length fully connected layers (FCs) where all output layers are connected to all input nodes. Of course, these are not the only types of layers and in this section we will begin exploring another type: Convolutional Neural Networks.</p>
+<p>Layers don’t need to be fully connected!! For example, when building image based models it tends to make more sense to look at areas of an image rather than look at each pixel individually. So we might define nodes to focus on small patches of inputs, or windows. To approach this we consider the idea of convolution operations as a layer in the neural network.</p>
+<p>Recall the idea of convolution. A convolution is a process whereby a Kernel(matrix) is multiplied against a matrix(window), this process is repeated for ALL possible windows in the target dataset (usually an image). The reason this is so beneficial is that kernal can be created to extract features from an image.</p>
+<h2 id="Properties-of-Convolutions"><a href="#Properties-of-Convolutions" class="headerlink" title="Properties of Convolutions"></a>Properties of Convolutions</h2><ol>
+<li><p><strong>Sparse Interactions:</strong> (aka Sparse Weights, Sparse connectivity) This happens when the kernel K is smaller than the input. If there are M inputs and N outputs, then matrix multiplication requires MxN parameters and thus the complexity is O(MxN). If we limit the output to KxN where K &lt; M then we can reduce the complexity by the same amount to O(KxN)</p>
+</li>
+<li><p><strong>Parameter Sharing:</strong> This refers to the use of the same parameter for more than one function in a model.</p>
+</li>
+<li><p><strong>Equivariance:</strong> To say a function is equivariant means that if the input changes, then the output changes in the same way. i.e. f(g(t))&#x3D;g(f(t))</p>
+</li>
+</ol>
+<h2 id="Convolution-Operations"><a href="#Convolution-Operations" class="headerlink" title="Convolution Operations"></a>Convolution Operations</h2><p>Here are some examples of convolutions.</p>
+<p><img src="/../images/DL_02-01_01.png" alt="convolutions"></p>
+<p>This new convolution layer can take any input 3D tensor (say, RGB) and output another similarly shaped output. In fact what we will be looking to do is to use&#x2F;apply multiple kernels for various features we want to extract. We will also need to take the output of these convolutions and organize them into feature maps so our neural network may perform the needed analysis.</p>
+<p>Convolution layers can be combined with non-linear and pooling layers which reduce the dimensionality of the data. For example we can take a 3x3 patch from an image and take the max. This effectively reduces 9 numbers down to 1.</p>
+<p>The following image gives a high level approach to convolutional neural networks. The idea is to extract more and more abstract features from the image&#x2F;data. Finally in the end we create our fully connected layer (one or multiple) to produce our results. Hopefully by the time we get to the last stage our tensors have been reduces to a manageable size.</p>
+<p><img src="/../images/DL_02-01_02.png" alt="convolutions"></p>
+<p>Here is a more advanced example of the type of architecture that is used in practice. These have existed since the 1980’s. One application of these has been to read scanned checks cashed in a bank. (Note that a Gaussian Connection is just a fully connected layer)</p>
+<p><img src="/../images/DL_02-01_03.png" alt="convolutions"></p>
+<p>Nowadays these have become much more complex.</p>
+<p><img src="/../images/DL_02-01_04.png" alt="convolutions"></p>
+<h1 id="Convolution-Layers"><a href="#Convolution-Layers" class="headerlink" title="Convolution Layers"></a>Convolution Layers</h1><p>Backpropagation, and automatic differentiation, allows us to optimize any function composed of differentiable blocks.</p>
+<ul>
+<li>No need to modify the learning algorithm</li>
+<li>The complexity of the function is limited only by computation and memory</li>
+</ul>
+<p>However, connectivity in linear layers doesn’t always make sense! Consider for example a 1024x1024 image, assuming it’s greyscale then that’s 1,048,576 pixels and therefore we need 1million by N weights plus another N bias terms just so we can properly feed it into a fully connected layer. This begs the question: Is this really necassary?</p>
+<p><img src="/../images/DL_02-01_05.png" alt="convolution layers"></p>
+<p>Image features are spatially localized!</p>
+<ul>
+<li>Image features tend to be smaller features repeated across the image.<ul>
+<li>For example Edges, Colors, motifs (corners).</li>
+</ul>
+</li>
+<li>No reason to believe one feature tends to appear in one location vs. another (stationarity).</li>
+</ul>
+<p><strong>How can we induce a bias in the design of a neural network layer to reflect this?</strong></p>
+<p>Idea 1: Receptive fields</p>
+<p><img src="/../images/DL_02-01_06.png" alt="Receptive fields"></p>
+<p>Idea 2: Shared Weights</p>
+<p><img src="/../images/DL_02-01_07.png" alt="Shared Weights"></p>
+<p>Idea 3: Learning Many Features</p>
+<p><img src="/../images/DL_02-01_08.png" alt="Learning Many Features"></p>
+<h2 id="Convolution-Review"><a href="#Convolution-Review" class="headerlink" title="Convolution Review"></a>Convolution Review</h2><p>In mathematics a convolution is an operation on two functions f and g producing a third function that is typically viewed as a modified version of one of the original functions, giving the area of overlap between the two functions as a function of the amount that one of the original functions is translated.</p>
+<p><img src="/../images/DL_02-01_09.png" alt="Convolution Review"></p>
+<p>In terms of deep learning, an (image) convolution is an element-wise multiplication of two matrices followed by a sum.</p>
+<p>Seriously. That’s it. You just learned what a convolution is:</p>
+<ol>
+<li>Take two matrices (which both have the same dimensions).</li>
+<li>Multiply them, element-by-element (i.e., not the dot product, just a simple multiplication).</li>
+<li>Sum the elements together.</li>
+</ol>
+<p><img src="/../images/DL_02-01_10.gif" alt="Convolution Review"></p>
+<p>There is also a highly similar and important related operation called cross correlation. </p>
+<h3 id="Convolutions-versus-cross-correlation"><a href="#Convolutions-versus-cross-correlation" class="headerlink" title="Convolutions versus cross correlation"></a>Convolutions versus cross correlation</h3><p>Convolution (denoted by the * operator) over a two-dimensional input image I and two-dimensional kernel K is defined as:<br>$$<br>S(r,c) &#x3D; (I * K)(r,c) &#x3D; \sum_{a&#x3D;-\frac {k_1-1}{2}}^{\frac {k_1-1}{2}} \sum_{-\frac {k_2-1}{2}}^{\frac {k_2-1}{2}} I(r-a,c-b)K(a,b)<br>$$<br>However, many machine learning and deep learning libraries use the simplified cross-correlation function<br>$$<br>S(r,c) &#x3D; (I * K)(r,c) &#x3D; \sum_{a&#x3D;0}^{k_1-1} \sum_{b&#x3D;0}^{k_2-1} I(r+a,c+b)K(a,b)<br>$$</p>
+<p>where $k_1, k_2$ are the row and column number of the kernal, and $I, K$ are the input matrix and kernal matrix.</p>
+<p>All this math amounts to is a sign change in how we access the coordinates of the image I (i.e., we don’t have to “flip” the kernel relative to the input when applying cross-correlation). Specifically,</p>
+<ul>
+<li>Convolution: Start at end of kernel and move back</li>
+<li>Cross-correlation: Start in the beginning of kernel and move forward (same as for image)</li>
+</ul>
+<p>An intuitive interpretation of the relationship:</p>
+<ul>
+<li>Take the kernel, and rotate 180 degrees along center (sometimes referred to as “flip”)</li>
+<li>Perform cross-correlation</li>
+<li>(Just dot-product filter with image!)</li>
+</ul>
+<p><img src="/../images/DL_02-01_11.png" alt="Convolution Review"></p>
+<p><img src="/../images/DL_02-01_12.png" alt="Convolution Review"></p>
+<p><img src="/../images/DL_02-01_13.png" alt="Convolution Review"></p>
+<p><strong>Summary</strong>: Convolutions are just simple linear operations</p>
+<p>So why bother? Why not just call it a linear layer with a small receptive field?</p>
+<ul>
+<li>There is a duality between convolutions and receptive fields during backpropogation</li>
+<li>Convolutions have various mathematical properties people care about (we are those people)</li>
+<li>This is historically how they’ve come about</li>
+</ul>
+<h1 id="Input-and-Output-Sizes"><a href="#Input-and-Output-Sizes" class="headerlink" title="Input and Output Sizes"></a>Input and Output Sizes</h1><h2 id="Convolution-Layer-Hyper-Parameters-PyTorch"><a href="#Convolution-Layer-Hyper-Parameters-PyTorch" class="headerlink" title="Convolution Layer Hyper-Parameters (PyTorch)"></a>Convolution Layer Hyper-Parameters (PyTorch)</h2><p><img src="/../images/DL_02-01_14.png" alt="Convolution Layer Hyper-Parameters"></p>
+<h2 id="Valid-Convolution"><a href="#Valid-Convolution" class="headerlink" title="Valid Convolution"></a>Valid Convolution</h2><p>Output size of a vanilla convolution operation is $$(H-k_1+1) \times (W-k_2+1)$$.</p>
+<p>This is called a <strong>“valid convolution”</strong> and only applies kernel within image.</p>
+<p><img src="/../images/DL_02-01_15.png" alt="Input and Output Sizes"></p>
+<h2 id="Adding-Padding"><a href="#Adding-Padding" class="headerlink" title="Adding Padding"></a>Adding Padding</h2><p>We can pad the images to make the output the same size:</p>
+<ul>
+<li>Zeros, mirrored image, etc.</li>
+<li>Note padding often refers to pixels added to one size (P&#x3D;1 here)</li>
+</ul>
+<p><img src="/../images/DL_02-01_16.png" alt="Adding Padding"></p>
+<h2 id="Strides"><a href="#Strides" class="headerlink" title="Strides"></a>Strides</h2><p>Strides refers to the movement of the convolution. The default of one means we move the filter one pixel, but we can take larger strides. </p>
+<ul>
+<li>This can potentially result in loss of information</li>
+<li>Can be used for dimensionality reduction (not recommended)</li>
+</ul>
+<p><img src="/../images/DL_02-01_17.png" alt="Strides"></p>
+<h2 id="Multi-Channel-Inputs"><a href="#Multi-Channel-Inputs" class="headerlink" title="Multi-Channel Inputs"></a>Multi-Channel Inputs</h2><p>While we have generally spoken of images and kernels as 2 dimensional, this isn’t a hard and fast rule. In fact many of the images we work with have colours, ant t&#x2F;f must have a third dimension called the channel (which is always 3). The third dimension refers to the RGB structure of the image and would not exist in a greyscale, or black and white, image.</p>
+<p>To perform convolutions on such images we simply add a 3rd channel to our convolution kernel, and multiply&#x2F;copy our kernel across all 3 dimensions. To perform the convolution we again perform elementwise multiplication between the kernel and the image patch, then sum them up like a dot product.</p>
+<p><img src="/../images/DL_02-01_18.png" alt="Multi-Channel Inputs"></p>
+<p>We also can have multiple kernels per layer. In this case, we stack the feature maps together at the output.</p>
+<p><img src="/../images/DL_02-01_19.png" alt="Multi-Channel Inputs"></p>
+<p>Of course we can also vectorize these operations by flattening the image patch as row vectors, then flatten the kernels and take their transpose to produce column vectors.</p>
+<h1 id="Pooling-Layers"><a href="#Pooling-Layers" class="headerlink" title="Pooling Layers"></a>Pooling Layers</h1><p>Recall that dimension reduction is an important aspect of Machine learning. How can we make a layer to explicitly down sample an image or feature map? Well the answer is pooling operations!</p>
+<p>Parameters needed to Pool:</p>
+<ul>
+<li><strong>Kernel size</strong>: Size of window to take the max over</li>
+<li><strong>Stride</strong>: the stride of the window. (Default &#x3D; kernel size)</li>
+<li><strong>Padding</strong>: Implicit zero Padding to be added on both sides</li>
+</ul>
+<h2 id="Max-Pooling"><a href="#Max-Pooling" class="headerlink" title="Max Pooling"></a>Max Pooling</h2><p>Stride a window across an image and perform per-patch max operation.</p>
+<p><img src="/../images/DL_02-01_20.png" alt="Max Pooling"></p>
+<p>We are not restricted to max either. In fact you can use any differentiable function (average, min, etc etc).</p>
+<p>Since the output of convolution and pooling layers are (multi-channel) images, we can sequence them just as any other layer.</p>
+<p><img src="/../images/DL_02-01_21.png" alt="Max Pooling"></p>
+<p>This combination adds some <strong>invariance</strong> to translation of features. If feature (such as beak) translated a little bit, output values still<br>remain the same.</p>
+<p>Convolution by itself has the property of <strong>equivariance</strong>. For example, if feature (such as beak) translated a little bit, output values move by the same translation.</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/Deep-Learning/" rel="tag"># Deep Learning</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/06/04/DL_01-03_NeuralNetworkOptimization%20-%20Copy/" rel="prev" title="Deep Learning-1-3 Optimization of Deep Neural Networks Overview">
+      <i class="fa fa-chevron-left"></i> Deep Learning-1-3 Optimization of Deep Neural Networks Overview
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/06/08/DL_02-02_ConvolutionalNeuralNetworkArchitectures/" rel="next" title="Deep Learning-2-2 Convolutional Neural Network Architectures">
+      Deep Learning-2-2 Convolutional Neural Network Architectures <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Learning-Objectives"><span class="nav-number">1.</span> <span class="nav-text">Learning Objectives</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Convolutional-Neural-Networks"><span class="nav-number">2.</span> <span class="nav-text">Convolutional Neural Networks</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Properties-of-Convolutions"><span class="nav-number">2.1.</span> <span class="nav-text">Properties of Convolutions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Convolution-Operations"><span class="nav-number">2.2.</span> <span class="nav-text">Convolution Operations</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Convolution-Layers"><span class="nav-number">3.</span> <span class="nav-text">Convolution Layers</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Convolution-Review"><span class="nav-number">3.1.</span> <span class="nav-text">Convolution Review</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Convolutions-versus-cross-correlation"><span class="nav-number">3.1.1.</span> <span class="nav-text">Convolutions versus cross correlation</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Input-and-Output-Sizes"><span class="nav-number">4.</span> <span class="nav-text">Input and Output Sizes</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Convolution-Layer-Hyper-Parameters-PyTorch"><span class="nav-number">4.1.</span> <span class="nav-text">Convolution Layer Hyper-Parameters (PyTorch)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Valid-Convolution"><span class="nav-number">4.2.</span> <span class="nav-text">Valid Convolution</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Adding-Padding"><span class="nav-number">4.3.</span> <span class="nav-text">Adding Padding</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Strides"><span class="nav-number">4.4.</span> <span class="nav-text">Strides</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Multi-Channel-Inputs"><span class="nav-number">4.5.</span> <span class="nav-text">Multi-Channel Inputs</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Pooling-Layers"><span class="nav-number">5.</span> <span class="nav-text">Pooling Layers</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Max-Pooling"><span class="nav-number">5.1.</span> <span class="nav-text">Max Pooling</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Learning Objectives Describe the major functions of an information system Explain why it is important for business professionals to understand information systems Explain key concepts related to syste">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Information Systems 2- Introduction to Information Systems">
+<meta property="og:url" content="http://example.com/2023/01/05/Information_Systems_Chapter_2/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="Learning Objectives Describe the major functions of an information system Explain why it is important for business professionals to understand information systems Explain key concepts related to syste">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-01-05T18:24:00.000Z">
+<meta property="article:modified_time" content="2023-07-17T14:50:08.765Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Information Systems">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2023/01/05/Information_Systems_Chapter_2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Information Systems 2- Introduction to Information Systems | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/05/Information_Systems_Chapter_2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Information Systems 2- Introduction to Information Systems
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-01-05 13:24:00" itemprop="dateCreated datePublished" datetime="2023-01-05T13:24:00-05:00">2023-01-05</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Information-Systems/" itemprop="url" rel="index"><span itemprop="name">Information Systems</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Learning-Objectives"><a href="#Learning-Objectives" class="headerlink" title="Learning Objectives"></a><strong>Learning Objectives</strong></h1><ul>
+<li>Describe the major functions of an information system</li>
+<li>Explain why it is important for business professionals to understand information systems</li>
+<li>Explain key concepts related to systems</li>
+<li>Describe the information processing cycle</li>
+<li>Describe the critical elements of an information system</li>
+<li>Explain how information systems help managers deal with information</li>
+<li>Give examples of business rules</li>
+<li>Descuss how information systems facilitate organizational change</li>
+<li>Compare and contrast common information systems</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="Why-All-Business-Professionals-Need-to-Be-Information-Systems-Managers"><a href="#Why-All-Business-Professionals-Need-to-Be-Information-Systems-Managers" class="headerlink" title="Why All Business Professionals Need to Be Information Systems Managers"></a>Why All Business Professionals Need to Be Information Systems Managers</h1><ul>
+<li>IS are increasingly ingrained in our business and professional lives.</li>
+<li>Everyone will use information system regardless of your major or your career.</li>
+<li>Learning how to effectively use IS can help you be more effective and successful in your career.</li>
+</ul>
+<h1 id="Overview-of-Systems"><a href="#Overview-of-Systems" class="headerlink" title="Overview of Systems"></a>Overview of Systems</h1><p>A <strong>System</strong> is a set of interacting components working together to form a complex, integrated whole to achieve some goal by taking inputs and processing them to produce outputs.</p>
+<ul>
+<li>A system is made up of different pieces, called components. It can take many different forms, ranging from human organs to computer softwares.</li>
+<li>These components work together; they are interrelated.</li>
+<li>A system has some purpose or goals.</li>
+<li>The goal is achieved by taking inputs and processing them to produce outputs.</li>
+</ul>
+<p>A few systems-related concepts that are not apparent from the definition.</p>
+<ul>
+<li>A system is separated from its environment by the system’s boundary.</li>
+<li>Most systems are <strong>open system</strong> – interact with their environments.</li>
+<li>Systems are often made up of <strong>subsystems</strong> – a part of larger system.</li>
+<li><strong>Equifinality</strong> – there are many different potential paths to the final outcome.</li>
+<li><strong>Feedback and control</strong> - a set of functions intended to ensure the proper operation of a system.</li>
+</ul>
+<h1 id="Foundations-of-Information-Systems"><a href="#Foundations-of-Information-Systems" class="headerlink" title="Foundations of Information Systems"></a>Foundations of Information Systems</h1><ul>
+<li>An information system does not require a computer. However, in this class, we are primarily concerned with computerized information system.</li>
+<li>Information systems include the following operations (also called information processing cycle)<ol>
+<li><em>Input</em> – Collection of data and their conversion into a form that allows processing.</li>
+<li><em>Processing</em> – Manipulation and transformation of data.</li>
+<li><em>Storage</em> – Holding place for data so that they can be retrieved at a larger time.</li>
+<li><em>Output</em> – Transformation of processed data into a form that can be understood.</li>
+<li><em>Control</em> – Enforcement of correct processing procedures.</li>
+</ol>
+</li>
+<li>Information systems have six critical elements.<ol>
+<li><em>Data</em> – Raw facts, text, numbers, images…</li>
+<li><em>Hardware</em> – Physical devices (computers&#x2F;hard disks, printers keyboards, etc.)</li>
+<li><em>Software</em> – Set of instructions that gorven the operation of IS (system software &amp; application software)</li>
+<li><em>Communication media</em> – Set of devices and protocols (rules) that enable computers to communicate with each other (network cabling, routers, etc.)</li>
+<li><em>People</em> – Individuals who use the IS (most important component – use&#x2F;interpret&#x2F;monitor&#x2F;build&#x2F;maintain)</li>
+</ol>
+</li>
+</ul>
+<h1 id="How-Information-Systems-Help-Us-Deal-with-Information"><a href="#How-Information-Systems-Help-Us-Deal-with-Information" class="headerlink" title="How Information Systems Help Us Deal with Information"></a>How Information Systems Help Us Deal with Information</h1><ul>
+<li>First, information systems let us gather large amounts of data quickly, easily, and reliably.<ul>
+<li>Examples include the check out system in a grocery store.</li>
+</ul>
+</li>
+<li>Second, information systems allow businesses to store and organize very large amounts of data.<ul>
+<li>IS allow businesses to store volumes of data is an organized manner that allows for rapid retrieval.</li>
+</ul>
+</li>
+<li>Third, information systems perform their data manipulations quicky, accurately, and consistently.<ul>
+<li>As long as the hardware is operating correctly and the software is designed and implemented correctly, an information system is very consistent in its manipulations.</li>
+</ul>
+</li>
+<li>Finally, information systems let us retrieve and output information in a variety of forms, depending on what is useful to the user.<ul>
+<li>The same information can be displayed on a screen, printed, or graphed.</li>
+</ul>
+</li>
+</ul>
+<p>One important function of many business information systems is to enforce <strong>business rules</strong>.</p>
+<ul>
+<li>A business rule is a statement that defines or constrains an aspect of a business with the intent of controlling behaviors within the business.</li>
+<li>All businesses have rules that govern their operations. (Hotel reservation&#x2F; course registration)</li>
+<li>Information systems enforce business rules by not allowing violations to occur.</li>
+</ul>
+<h1 id="How-Information-Systems-Facilitate-Organizational-Change"><a href="#How-Information-Systems-Facilitate-Organizational-Change" class="headerlink" title="How Information Systems Facilitate Organizational Change"></a>How Information Systems Facilitate Organizational Change</h1><ul>
+<li><p><strong>Process Improvements</strong></p>
+<ul>
+<li>IS can help organizations improve both the efficiency and effectiveness of processes.</li>
+<li>Example: customer self-service&#x2F; ATM.</li>
+</ul>
+</li>
+<li><p><strong>Automation</strong></p>
+<ul>
+<li>Some processes have been totally automated.</li>
+<li>Example: online ordering.</li>
+</ul>
+</li>
+<li><p><strong>Control</strong></p>
+<ul>
+<li>When properly designed and implemented, an information system can ensure that business rules are followed throughout a process.</li>
+<li>Example: check credit card before accepting payment.</li>
+</ul>
+</li>
+<li><p><strong>Information Flow</strong></p>
+<ul>
+<li>Workflow systems facilitate information flow throughout a work task.</li>
+<li>Example: grade change –&gt; auto email notification.</li>
+</ul>
+</li>
+</ul>
+<h1 id="Common-Information-Systems"><a href="#Common-Information-Systems" class="headerlink" title="Common Information Systems"></a>Common Information Systems</h1><p><strong>Classify information systems according to the impact or “reach” of the system</strong>:</p>
+<ul>
+<li><p><strong>Personal applications</strong></p>
+<ul>
+<li>Help make individuals’ daily work more efficient and effective</li>
+<li>Example: Microsoft Office, Evernote or Onenote</li>
+</ul>
+</li>
+<li><p><strong>Transaction processing systems (TPSs)</strong></p>
+<ul>
+<li>Collect, monitor, process, report, and store large volumes of data that are created by business processes.</li>
+<li>Example: grocery store point-of-sale system</li>
+</ul>
+</li>
+<li><p><strong>Functional and management information systems</strong></p>
+<ul>
+<li>Monitor, control, and analyze the operation of functional areas</li>
+<li>Example: financial management systems, sales force automation systems</li>
+</ul>
+</li>
+<li><p><strong>Integrated enterprise systems</strong></p>
+<ul>
+<li>Multiple applications in cohesive, interrelated system</li>
+<li>Example: enterprise resource planning systems provide an integrated set of modules that carry out the information processing and reporting systems for the entire organization</li>
+</ul>
+</li>
+<li><p><strong>Interorganizational systems</strong></p>
+<ul>
+<li>Span organizational boundaries to connect companies to suppliers and customers.</li>
+<li>Electronic data interchange (EDI) is at the heart of many of these systems. It allows the systems interact with partner organization.</li>
+</ul>
+</li>
+<li><p><strong>Global systems</strong></p>
+<ul>
+<li>Interorganizational systems that cross national boundaries</li>
+<li>More complex than other systems</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Information-Systems/" rel="tag"># Information Systems</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/01/04/Information_Systems_Chapter_1/" rel="prev" title="Information Systems 1- The Value of Information">
+      <i class="fa fa-chevron-left"></i> Information Systems 1- The Value of Information
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/01/07/Information_Systems_Chapter_3/" rel="next" title="Information Systems 3- Evaluating Informaiton">
+      Information Systems 3- Evaluating Informaiton <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Learning-Objectives"><span class="nav-number">1.</span> <span class="nav-text">Learning Objectives</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Why-All-Business-Professionals-Need-to-Be-Information-Systems-Managers"><span class="nav-number">2.</span> <span class="nav-text">Why All Business Professionals Need to Be Information Systems Managers</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Overview-of-Systems"><span class="nav-number">3.</span> <span class="nav-text">Overview of Systems</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Foundations-of-Information-Systems"><span class="nav-number">4.</span> <span class="nav-text">Foundations of Information Systems</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#How-Information-Systems-Help-Us-Deal-with-Information"><span class="nav-number">5.</span> <span class="nav-text">How Information Systems Help Us Deal with Information</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#How-Information-Systems-Facilitate-Organizational-Change"><span class="nav-number">6.</span> <span class="nav-text">How Information Systems Facilitate Organizational Change</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Common-Information-Systems"><span class="nav-number">7.</span> <span class="nav-text">Common Information Systems</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

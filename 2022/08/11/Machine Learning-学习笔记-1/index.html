@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="这篇文章跟大家分享一下Machine Learning的学习笔记: 01-单变量线性回归(Linear Regression with One Variable)。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Machine Learning-学习笔记-01-Linear Regression with One Variable">
+<meta property="og:url" content="http://example.com/2022/08/11/Machine%20Learning-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-1/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="这篇文章跟大家分享一下Machine Learning的学习笔记: 01-单变量线性回归(Linear Regression with One Variable)。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-08-12T03:05:23.000Z">
+<meta property="article:modified_time" content="2023-07-17T14:50:08.829Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="计算机">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="人工智能">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2022/08/11/Machine%20Learning-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Machine Learning-学习笔记-01-Linear Regression with One Variable | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/11/Machine%20Learning-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Machine Learning-学习笔记-01-Linear Regression with One Variable
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-08-11 23:05:23" itemprop="dateCreated datePublished" datetime="2022-08-11T23:05:23-04:00">2022-08-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>这篇文章跟大家分享一下Machine Learning的学习笔记: 01-单变量线性回归(Linear Regression with One Variable)。</p>
+<span id="more"></span>
+<hr>
+<h1 id="单变量线性回归"><a href="#单变量线性回归" class="headerlink" title="单变量线性回归"></a>单变量线性回归</h1><p><strong>Hypothesis:</strong><br>$$h_{\theta}(x) &#x3D; {\theta_0} + {\theta_1x}$$</p>
+<p><strong>Parameters:</strong> \({\theta_0}, {\theta_1}\) </p>
+<p><strong>Cost Function:</strong><br>$$J({\theta_0},{\theta_1})&#x3D; \frac{1}{2m}\sum_{i&#x3D;1}^{m}(h_\theta(x^{(i)})-y^{(i)})^2$$</p>
+<p>其中，\(h_\theta(x^{(i)})\)是预测值，\(y^{(i)}\)是真实值。Cost function越小说明我们的模型跟真实值之间的差距越小，也就是说预测会越准确。所以Meachine learning的目的是找到\(J({\theta_0},{\theta_1})\)的最小值。</p>
+<h1 id="当-theta-0-0-时的简化情况"><a href="#当-theta-0-0-时的简化情况" class="headerlink" title="当\(\theta_0&#x3D;0\)时的简化情况"></a>当\(\theta_0&#x3D;0\)时的简化情况</h1><p>当\(\theta_0&#x3D;0\)时,hypothesis可以写为：<br>$$h_\theta(x)&#x3D;\theta_1x$$<br>这时我们只有一个参数\(\theta_1\),此时Cost function变为：<br>$$J(\theta_1)&#x3D;\frac{1}{2m}\sum_{i&#x3D;1}^{m}(h_\theta(x^{(i)})-y^{(i)})^2$$<br>这里由于\(h_\theta(x)&#x3D;\theta_1x\),所以cost function也可以写为：<br>$$J(\theta_1)&#x3D;\frac{1}{2m}\sum_{i&#x3D;1}^{m}(\theta_1x^{(i)}-y^{(i)})^2$$<br>这时，我们需要建立模型找到\(J(\theta_1)\)的最小值。通过不断改变\(\theta_1\)的值，我们就可以找到cost function\(J(\theta_1)\)的最小值。或者可以通过绘制二维图形，来非常简单的找到最优解。</p>
+<h1 id="两个参数的情况"><a href="#两个参数的情况" class="headerlink" title="两个参数的情况"></a>两个参数的情况</h1><p>当有两个参数\(\theta_0,\theta_1\)时，Hypothesis的图像就变成了一个三维图像，最小值为图像的最低点。<br>找到cost function最小值的步骤为：</p>
+<ol>
+<li>从某个特定的\(\theta_0,\theta_1\)开始代入计算，比如\(\theta_0&#x3D;0,\theta_1&#x3D;0\)</li>
+<li>不断改变\(\theta_0,\theta_1\)的值来减小\(J({\theta_0},{\theta_1})\)的值，直到找到\(J({\theta_0},{\theta_1})\)的最小值。</li>
+</ol>
+<p>那么如何不断改变\(\theta_0,\theta_1\)的值呢？我们需要用到下面的公式：<br>$$\theta_j :&#x3D; \theta_j - \alpha\frac{\partial}{\partial{\theta_j}}{J({\theta_0},{\theta_1})}\ \ \ \ (for\ \ j&#x3D;0\ and\ j&#x3D;1)$$ </p>
+<p>这里将:&#x3D;后面的值重新赋予\(\theta_j\)。由于方程中出现了两个参数，改变其中一个两一个也会随之改变，所以在赋值的时候，我们需要将\(\theta_0,\theta_1\)同时赋值。</p>
+<p>通过对cost function求偏导就可以来确定我们参数改变的方向是朝着\({J({\theta_0},{\theta_1})}\)更小的方向来赋值。\(\alpha\)是learning rate，用于调整我们改变参数时候的变化大小，选择合适的\(\alpha\)会让我们更快更准确的找到最优解。</p>
+<p>当\(\alpha\)太小的时候，方程求解的过程会十分漫长；但如果\(\alpha\)选择的太大，就有可能错过最优解，从而导致无法解出方程。</p>
+<h1 id="对-theta-0-theta-1-求偏导"><a href="#对-theta-0-theta-1-求偏导" class="headerlink" title="对\(\theta_0, \theta_1\)求偏导"></a>对\(\theta_0, \theta_1\)求偏导</h1><p>上面提到了在不断对\(\theta_0, \theta_1\)赋值的过程中，我们需要对\(\theta_0, \theta_1\)求偏导，那么简化之后来看一下会得到什么样的结果吧。<br>$$<br>\frac{\partial}{\partial{\theta_j}}{J({\theta_0},{\theta_1})} &#x3D;<br>\frac{\partial}{\partial{\theta_j}}{\frac{1}{2m}}\sum_{i&#x3D;1}^{m}(h_\theta(x^{(i)})-y{(i)})^2&#x3D;<br>\frac{\partial}{\partial{\theta_j}}{\frac{1}{2m}}\sum_{i&#x3D;1}^{m}(\theta_0+\theta_1x^{(i)}-y^{(i)})^2<br>$$<br>所以\(\theta_0, \theta_1\)分别为：<br>$$<br>\theta_0\ :\  \frac{\partial}{\partial{\theta_j}}{J({\theta_0},{\theta_1})} &#x3D; \frac{1}{m}\sum_{i&#x3D;1}^{m}(h_\theta(x^{(i)})-y^{(i)})<br>$$<br>$$<br>\theta_1\ :\  \frac{\partial}{\partial{\theta_j}}{J({\theta_0},{\theta_1})} &#x3D; \frac{1}{m}\sum_{i&#x3D;1}^{m}[(h_\theta(x^{(i)})-y{(i)})x^{(i)}]<br>$$<br>类似的，如果我们有多个参数，对\(\theta_j\)求偏导，我们会得到类似的结果：<br>$$<br>\theta_j\ :\  \frac{\partial}{\partial{\theta_j}}{J({\theta_j})} &#x3D; \frac{1}{m}\sum_{i&#x3D;1}^{m}[(h_\theta(x^{(i)})-y^{(i)})x_j^{(i)}]<br>$$</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" rel="tag"># 计算机</a>
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+              <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" rel="tag"># 人工智能</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/08/10/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Python%E6%93%8D%E4%BD%9CRedis%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="prev" title="如何使用Python来操作Redis数据库">
+      <i class="fa fa-chevron-left"></i> 如何使用Python来操作Redis数据库
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/08/12/Machine%20Learning-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2/" rel="next" title="Machine Learning-学习笔记-02-Linear Algebra Review">
+      Machine Learning-学习笔记-02-Linear Algebra Review <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%95%E5%8F%98%E9%87%8F%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92"><span class="nav-number">1.</span> <span class="nav-text">单变量线性回归</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BD%93-theta-0-0-%E6%97%B6%E7%9A%84%E7%AE%80%E5%8C%96%E6%83%85%E5%86%B5"><span class="nav-number">2.</span> <span class="nav-text">当\(\theta_0&#x3D;0\)时的简化情况</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%A4%E4%B8%AA%E5%8F%82%E6%95%B0%E7%9A%84%E6%83%85%E5%86%B5"><span class="nav-number">3.</span> <span class="nav-text">两个参数的情况</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%B9-theta-0-theta-1-%E6%B1%82%E5%81%8F%E5%AF%BC"><span class="nav-number">4.</span> <span class="nav-text">对\(\theta_0, \theta_1\)求偏导</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

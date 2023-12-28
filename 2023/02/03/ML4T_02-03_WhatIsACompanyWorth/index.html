@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="What is a company worth? Why company value matters? The value of a future dollar Intrinsic value Book value Market capitalization">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Machine Learning for Trading--2-3 What is a company worth?">
+<meta property="og:url" content="http://example.com/2023/02/03/ML4T_02-03_WhatIsACompanyWorth/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="What is a company worth? Why company value matters? The value of a future dollar Intrinsic value Book value Market capitalization">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/ML4T-0203_01.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0203_02.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0203_03.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0203_04.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0203_05.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0203_07.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0203_08.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0203_06.png">
+<meta property="article:published_time" content="2023-02-04T02:54:22.000Z">
+<meta property="article:modified_time" content="2023-03-07T16:49:55.534Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="ML4T">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/ML4T-0203_01.png">
+
+<link rel="canonical" href="http://example.com/2023/02/03/ML4T_02-03_WhatIsACompanyWorth/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Machine Learning for Trading--2-3 What is a company worth? | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/03/ML4T_02-03_WhatIsACompanyWorth/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Machine Learning for Trading--2-3 What is a company worth?
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-02-03 21:54:22" itemprop="dateCreated datePublished" datetime="2023-02-03T21:54:22-05:00">2023-02-03</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Machine-Learning-for-Trading/" itemprop="url" rel="index"><span itemprop="name">Machine Learning for Trading</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ul>
+<li>What is a company worth?</li>
+<li>Why company value matters?</li>
+<li>The value of a future dollar</li>
+<li>Intrinsic value</li>
+<li>Book value</li>
+<li>Market capitalization</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="What-is-a-company-worth"><a href="#What-is-a-company-worth" class="headerlink" title="What is a company worth?"></a>What is a company worth?</h1><p>Suppose there is a company that consistently generates \$1 per year. What is that company worth?</p>
+<p><img src="/../images/ML4T-0203_01.png" alt="What is a company worth"></p>
+<h1 id="Why-company-value-matters"><a href="#Why-company-value-matters" class="headerlink" title="Why company value matters?"></a>Why company value matters?</h1><p>What the stock market says a company is worth is often different than what a company is actually worth. On one particular day, the stock market might overvalue a company; on another, it might undervalue the company.</p>
+<p>Many trading strategies focus on identifying where the current stock price diverges from the true value of the company. For example, if we see a stock price that surpasses this value, we know to sell the stock. Conversely, a stock price that falls below this value signals that we should buy the stock.</p>
+<p><img src="/../images/ML4T-0203_02.png" alt="Why company value matters?"></p>
+<p>Three ways to evaluate the stoce value:</p>
+<ul>
+<li>Intrinsic value</li>
+<li>Book value</li>
+<li>Market cap</li>
+</ul>
+<h2 id="The-Balch-Bond-Quiz"><a href="#The-Balch-Bond-Quiz" class="headerlink" title="The Balch Bond Quiz"></a>The Balch Bond Quiz</h2><p>Assume that we are in a position to receive one of three different assets.</p>
+<p>The first asset is a \$1 bill: cold, hard cash. The second asset is a Tucker Balch bond; essentially, a promise certified by the professor that he will pay us \$1 in one year. The third asset is a US Government bond, which also pays out \$1 in one year, but is backed by the United States government.</p>
+<p>Which of these assets would you rather receive? Rank the choices from 1 (best) to 3 (worst).</p>
+<p><img src="/../images/ML4T-0203_03.png" alt="Quiz"></p>
+<h1 id="The-value-of-a-future-dollar"><a href="#The-value-of-a-future-dollar" class="headerlink" title="The value of a future dollar"></a>The value of a future dollar</h1><p>We need to account for two factors when thinking about the value of a promised dollar: who is making the promise and how long we have to wait for them to deliver the dollar.</p>
+<p><img src="/../images/ML4T-0203_04.png" alt="Value of a future dollar"></p>
+<p>PV: present value; FV: future value; IR: interest rate; i: waiting period, measured in i years</p>
+<h1 id="Intrinsic-value"><a href="#Intrinsic-value" class="headerlink" title="Intrinsic value"></a>Intrinsic value</h1><p>Intrinsic value uses dividends to measure the value of a company.</p>
+<p><img src="/../images/ML4T-0203_05.png" alt="Intrinsic value"></p>
+<p>We can compute the present intrinsic value, IV, of the whole company by taking the sum of the present values of all dividends to be distributed.</p>
+<p>Instead of interest rate, we consider the discount rate, which is a measure of how risky we think an investment in a company might be.</p>
+<p>For example: If the dividend &#x3D; \$2&#x2F; year, and the discount rate &#x3D; 4% &#x3D;&#x3D;&#x3D;&gt; Intrinsic value &#x3D; 2&#x2F;0.04 &#x3D; \$50.</p>
+<h1 id="Book-value"><a href="#Book-value" class="headerlink" title="Book value"></a>Book value</h1><p>A classic definition of book value is total assets minus intangible assets and liabilities.</p>
+<p><img src="/../images/ML4T-0203_07.png" alt="Book value"></p>
+<h1 id="Market-capitalization"><a href="#Market-capitalization" class="headerlink" title="Market capitalization"></a>Market capitalization</h1><p>Alternatively, we can let the market determine the value of a company. Market capitalization is the product of the number of outstanding shares and the share price. </p>
+<p><img src="/../images/ML4T-0203_08.png" alt="Market cap"></p>
+<p>For instance, a company with 1,000,000 shares and a share price of \$100 has a market capitalization of \$100,000,000.</p>
+<h2 id="Compute-company-value-quiz"><a href="#Compute-company-value-quiz" class="headerlink" title="Compute company value quiz"></a>Compute company value quiz</h2><p><img src="/../images/ML4T-0203_06.png" alt="Quiz"></p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/ML4T/" rel="tag"># ML4T</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/02/02/ML4T_02-02_MarketMechanics/" rel="prev" title="Machine Learning for Trading--2-2 Market Mechanics">
+      <i class="fa fa-chevron-left"></i> Machine Learning for Trading--2-2 Market Mechanics
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/02/04/ML4T_02-04_TheCaptical%20AssetsPricingModel/" rel="next" title="Machine Learning for Trading--2-4 The Capital Assets Pricing Model (CAPM)">
+      Machine Learning for Trading--2-4 The Capital Assets Pricing Model (CAPM) <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#What-is-a-company-worth"><span class="nav-number">1.</span> <span class="nav-text">What is a company worth?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Why-company-value-matters"><span class="nav-number">2.</span> <span class="nav-text">Why company value matters?</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#The-Balch-Bond-Quiz"><span class="nav-number">2.1.</span> <span class="nav-text">The Balch Bond Quiz</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-value-of-a-future-dollar"><span class="nav-number">3.</span> <span class="nav-text">The value of a future dollar</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Intrinsic-value"><span class="nav-number">4.</span> <span class="nav-text">Intrinsic value</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Book-value"><span class="nav-number">5.</span> <span class="nav-text">Book value</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Market-capitalization"><span class="nav-number">6.</span> <span class="nav-text">Market capitalization</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Compute-company-value-quiz"><span class="nav-number">6.1.</span> <span class="nav-text">Compute company value quiz</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

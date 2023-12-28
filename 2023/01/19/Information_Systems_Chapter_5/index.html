@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Learning Objectives Discuss the purpose of a database management system Dicide whether it is better to store data using a database management system or another alternative, such as a spreadsheet Expla">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Information System 5- Storing and Organizing Information">
+<meta property="og:url" content="http://example.com/2023/01/19/Information_Systems_Chapter_5/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="Learning Objectives Discuss the purpose of a database management system Dicide whether it is better to store data using a database management system or another alternative, such as a spreadsheet Expla">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-01-19T13:52:00.000Z">
+<meta property="article:modified_time" content="2023-07-17T14:50:08.762Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Information Systems">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2023/01/19/Information_Systems_Chapter_5/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Information System 5- Storing and Organizing Information | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/19/Information_Systems_Chapter_5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Information System 5- Storing and Organizing Information
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-01-19 08:52:00" itemprop="dateCreated datePublished" datetime="2023-01-19T08:52:00-05:00">2023-01-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Information-Systems/" itemprop="url" rel="index"><span itemprop="name">Information Systems</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Learning-Objectives"><a href="#Learning-Objectives" class="headerlink" title="Learning Objectives"></a><strong>Learning Objectives</strong></h1><ul>
+<li>Discuss the purpose of a database management system</li>
+<li>Dicide whether it is better to store data using a database management system or another alternative, such as a spreadsheet</li>
+<li>Explain the basic sturcture and components of relational databses</li>
+<li>Describe the purpose of foreign keys in a relational database</li>
+<li>Discuss the purpose of a relational databse schema and explain it notation</li>
+<li>List and describe a number of online databases</li>
+<li>Understand what Big Data is and how businesses can use it to make more informed decisions</li>
+</ul>
+<span id="more"></span>
+<hr>
+<p>Much of the information used by businesses is stored in database, and much of the data you will deal with is stored in relational databases. In this chapter, we will help you learn about how relational databases store data. (Appendices C &amp; D you will learn how to construct, populate, and retrieve data from Microsoft Access).</p>
+<h1 id="Overview-of-Relational-Databases"><a href="#Overview-of-Relational-Databases" class="headerlink" title="Overview of Relational Databases"></a>Overview of Relational Databases</h1><h2 id="Databases-and-Database-Management-Systems"><a href="#Databases-and-Database-Management-Systems" class="headerlink" title="Databases and Database Management Systems"></a>Databases and Database Management Systems</h2><ul>
+<li><p><strong>Database</strong> is an organized collection of data.</p>
+</li>
+<li><p>Relational database (RD) is the dominant type of database for business applications.</p>
+</li>
+<li><p>RD can store different types of information, include text, numbers, images, and videos.</p>
+</li>
+<li><p>A database is managed by a database management system (DBMS).</p>
+</li>
+<li><p>A DBMS provides the means for creating, maintaining, and using databases.  –&gt; Using is most important for business students.</p>
+</li>
+<li><p>Smaller database-oriented tasks can be handled by a personal DBMS, such as Microsoft Access or OpenOffice Base.</p>
+</li>
+<li><p>Larger, more complex databases require an enterprise-level DBMS, such as Oracle, MySQL, Microsoft SQL Server, or IBM’s DB2.</p>
+</li>
+<li><p>Each of these databases has its adv. and disadv., but all are quite capable.</p>
+</li>
+<li><p>Databases are very important elements of information system. </p>
+</li>
+<li><p>Most IS today use <strong>multitiered architectures</strong> that divide processing into different elements.</p>
+</li>
+<li><p><strong>multitiered architectures</strong> refers to the database server, the Web server, and applications, all existing on different computers.  –&gt; more chapter 7.</p>
+</li>
+<li><p>Application requests data from DBMS –&gt; APP manipulate the data -&gt; send updated data to the DBMS –&gt; DBMS updates the actual databases.</p>
+</li>
+</ul>
+<h1 id="Databases-versus-Spreadsheets-Where-to-Use-a-DBMS"><a href="#Databases-versus-Spreadsheets-Where-to-Use-a-DBMS" class="headerlink" title="Databases versus Spreadsheets: Where to Use a DBMS"></a>Databases versus Spreadsheets: Where to Use a DBMS</h1><ul>
+<li><p>Both spreadsheet (e.g. MS Excel) and DBMS store information in tables of rows and columns. However, they have very different purposes, strengths, and weaknesses.</p>
+</li>
+<li><p>Spreadsheet – very simple data storage tasks, such as personal contact list, home inventory, or shopping list.</p>
+</li>
+<li><p>Spreadsheet limitations: (Example in Google Spreadsheet)</p>
+<ul>
+<li>Unnecessary data duplication</li>
+<li>Difficulty in data retrieval and search</li>
+<li>Poor data integrity  – inaccurate, inconsistent, and out-of-date data</li>
+<li>Difficulty in relating different elements (such as customers and orders)</li>
+</ul>
+</li>
+<li><p>Most database management systems have methods for keeping data up to date and consistent, and provide a higher quality data than data stored in spreadsheet.</p>
+</li>
+<li><p>Although spreadsheets are relatively easy to use, in the long run, it is better to take time to plan &amp; design a proper database, especially as the amount of information being stored increases.</p>
+</li>
+<li><p>Spreadsheets are good for analyzing and displaying information visually.</p>
+</li>
+<li><p>Databases are good at storing and organizing information.</p>
+</li>
+<li><p>Fortunately, it is easy to extract data from database and import them to a spreadsheet for analysis.</p>
+</li>
+<li><p>So you don’t have to make an “either&#x2F;or” choice.</p>
+</li>
+</ul>
+<h2 id="Relational-Databases"><a href="#Relational-Databases" class="headerlink" title="Relational Databases"></a>Relational Databases</h2><p>A <strong>relational database</strong> stores data in the form of connected tables. </p>
+<ul>
+<li>Tables are made up of records (rows) and fields (columns).</li>
+<li>A <strong>record</strong> is a set of fields that all belongs to the same thing.</li>
+<li>The <strong>fields</strong> represent some characteristic of the thing.</li>
+</ul>
+<p>More complicated Relational Database: </p>
+<ul>
+<li>Each table stores data about a separate thing. –&gt; allows for flexibility when retrieving data while minimizing redundancy.</li>
+<li>By storing each piece of information only once, we ensure that the data are consistent.</li>
+</ul>
+<p>The way to uniquely identify each record &amp; connect with different pieces of information:</p>
+<ul>
+<li>A natural choice for unique identifier called the <strong>primary key</strong>. – Each table in a database has a primary key (PK).</li>
+<li>The connections are implemented by <strong>foreign keys</strong>. – The fields that reference a PK in a related table.</li>
+<li>These cross-referencing foreign keys make it easy to combine data contained in multiple tables.</li>
+</ul>
+<p>Rules govern relational database design:</p>
+<ul>
+<li>Each row&#x2F;column intersection can store at most one item of data.</li>
+<li><strong>Normal forms</strong> – are the rules to ensure data consistency by eliminating unnecessary redundancy.</li>
+<li>The separate structure prevents inconsistencies by storing each item of data only once.</li>
+</ul>
+<p>Relationships:</p>
+<ul>
+<li>Relational databases store <strong>one-to-many</strong> relationships – e.g. one customer is related to many orders</li>
+<li><strong>Many-to-many</strong> relationships are also existed – e.g. student can take different courses, and one course can have more than one student.</li>
+<li>Many-to-many relationships require creating a new table that links the two related tables – linking or intersection tables.</li>
+<li><strong>One-to-one</strong> are more unusual, but it also existed – e.g. customers &amp; accounts.</li>
+</ul>
+<h1 id="Database-Diagrams"><a href="#Database-Diagrams" class="headerlink" title="Database Diagrams"></a>Database Diagrams</h1><p>Using actual data to show the structure of a database only works for very small databases. For larger databases, we use database schema diagrams.</p>
+<ul>
+<li><p>Entity-relationship diagrams (ERD) </p>
+</li>
+<li><p>Database schemas</p>
+</li>
+<li><p>Both show the data elements and the relationships among them</p>
+</li>
+<li><p>Table name - top</p>
+</li>
+<li><p>Primary key (PK) - left</p>
+</li>
+<li><p>Foreign keys (FK) - beside PK to the left (numbered, could be more than 1)</p>
+</li>
+</ul>
+<h1 id="Online-Databases"><a href="#Online-Databases" class="headerlink" title="Online Databases"></a>Online Databases</h1><p>There are other types of databases that are quite useful; many of them are accessible through the Internet.</p>
+<ul>
+<li>These databases serve a different purpose than databases we discussed earlier</li>
+<li>Very useful for performing research</li>
+<li>Contain pointers to sources of information</li>
+<li>Most of these are available through libraries</li>
+</ul>
+<p>Examples:</p>
+<ul>
+<li><strong>Career Research</strong><ul>
+<li>United States Bureau of Labor Statistics (<a target="_blank" rel="noopener" href="http://www.bls.gov/data/">http://www.bls.gov/data/</a>), <a target="_blank" rel="noopener" href="http://www.monster.com/">www.monster.com</a>, <a target="_blank" rel="noopener" href="http://www.careerlink.com/">www.careerlink.com</a>, <a target="_blank" rel="noopener" href="http://www.careerbuilder.com/">www.careerbuilder.com</a></li>
+</ul>
+</li>
+<li><strong>Market Research</strong><ul>
+<li>United States Census Bureau (<a target="_blank" rel="noopener" href="http://www.census.gov/">http://www.census.gov</a>).</li>
+</ul>
+</li>
+<li><strong>Economic Forecasting</strong><ul>
+<li>Federal Reserve Economic Data (FRED) (<a target="_blank" rel="noopener" href="http://research.stlouisfed.org/fred2/">http://research.stlouisfed.org/fred2/</a>)</li>
+</ul>
+</li>
+</ul>
+<h1 id="Big-Data"><a href="#Big-Data" class="headerlink" title="Big Data"></a>Big Data</h1><p><strong>Big Data</strong> is something of a buzzword that refers to the vast amount of data (often measured in terabytes or petabytes) that are created and stored that have grown beyond the capabilities of traditional data processing tools and applications.</p>
+<p><strong>Big Data Challenges</strong></p>
+<ul>
+<li><p>How should the data be stored?</p>
+<ul>
+<li>Data is unstructured, unlike relational data – sacrifice some levels of data integrity to keep performance at an acceptable level.</li>
+<li>Network-attached storage (NAS)<ul>
+<li>Uses a series of file servers that can easily expand to grow capacity and high-speed connections between them</li>
+</ul>
+</li>
+<li>Direct-attached storage (DAS)<ul>
+<li>Keeps data more centralized for faster access time for processing; limits scalability of data size</li>
+</ul>
+</li>
+<li>Hybrid approaches: store data with NAS; access temporary data with DAS</li>
+<li>Data lakes: huge volumes of data in original format with unique identifiers and tags describing what data is about. <ul>
+<li>In most data repositories data structure and requirements are defined up front. </li>
+<li>In data lake, data structures and requirements are not defined until the data are needed.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>How do data from various sources integrate with one another? </p>
+<ul>
+<li>Big data uses E&#x2F;T&#x2F;L process (extract, transform, load) – more in Chapter 14<ul>
+<li>Extract or retrieve data involves identifying the sources of the various data that needed</li>
+<li>Transform is the process where the data are modified and combined. e.g. second-by-second data combined with day-by-day date</li>
+<li>Loading is a matter of writing the data to a disk in a fashion that can be readily retrieved as necessary</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>How are data retrieved and disseminated?</p>
+<ul>
+<li><p>If structured data: SQL</p>
+</li>
+<li><p>If unstructured: NoSQL (“Not only SQL”)</p>
+<ul>
+<li>Greater scalability and efficiency in storing and retrieving data. </li>
+<li>Dynamic creation of a table per query</li>
+<li>Allows ad hoc queries – Ad hoc is a word that originally comes from Latin and means “for this” or “for this situation.” In current American English it is used to describe something that has been formed or used for a special and immediate purpose, without previous planning.</li>
+</ul>
+</li>
+<li><p>Data Analytics: Interpretation of the data regardless of how it is stored</p>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Information-Systems/" rel="tag"># Information Systems</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/01/18/ML4T_01-02_WorkingWithMultipleStock/" rel="prev" title="Machine Learning for Trading--1-2 Working with Multiple Stocks">
+      <i class="fa fa-chevron-left"></i> Machine Learning for Trading--1-2 Working with Multiple Stocks
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/01/19/ML4T_01-03_ThePowerOfNumpy/" rel="next" title="Machine Learning for Trading--1-3 The Power of Numpy">
+      Machine Learning for Trading--1-3 The Power of Numpy <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Learning-Objectives"><span class="nav-number">1.</span> <span class="nav-text">Learning Objectives</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Overview-of-Relational-Databases"><span class="nav-number">2.</span> <span class="nav-text">Overview of Relational Databases</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Databases-and-Database-Management-Systems"><span class="nav-number">2.1.</span> <span class="nav-text">Databases and Database Management Systems</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Databases-versus-Spreadsheets-Where-to-Use-a-DBMS"><span class="nav-number">3.</span> <span class="nav-text">Databases versus Spreadsheets: Where to Use a DBMS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Relational-Databases"><span class="nav-number">3.1.</span> <span class="nav-text">Relational Databases</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Database-Diagrams"><span class="nav-number">4.</span> <span class="nav-text">Database Diagrams</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Online-Databases"><span class="nav-number">5.</span> <span class="nav-text">Online Databases</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Big-Data"><span class="nav-number">6.</span> <span class="nav-text">Big Data</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

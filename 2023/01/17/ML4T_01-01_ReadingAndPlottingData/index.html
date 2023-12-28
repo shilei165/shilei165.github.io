@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Pandas是一个建立在 Python 之上的一个高效的，简单易用的数据结构和分析工具。 Pandas 的核心就是一个高效易用的数据类型：DataFrame。这个数据类型有点类似 R 语言的数据框 (Data Frame)，也有点类似于 Excel 表格，但是比这两种更加适合在 Python 的语言环境内操作数据。在这个数据结构之下，我们可以轻松的对数据进行清洗，整理，归纳总结，合并，转换，计算等">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Machine Learning for Trading--1-1 Reading and Plotting Data">
+<meta property="og:url" content="http://example.com/2023/01/17/ML4T_01-01_ReadingAndPlottingData/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="Pandas是一个建立在 Python 之上的一个高效的，简单易用的数据结构和分析工具。 Pandas 的核心就是一个高效易用的数据类型：DataFrame。这个数据类型有点类似 R 语言的数据框 (Data Frame)，也有点类似于 Excel 表格，但是比这两种更加适合在 Python 的语言环境内操作数据。在这个数据结构之下，我们可以轻松的对数据进行清洗，整理，归纳总结，合并，转换，计算等">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-01-17T23:14:22.000Z">
+<meta property="article:modified_time" content="2023-03-09T17:32:25.401Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="Pandas">
+<meta property="article:tag" content="matplotlib">
+<meta property="article:tag" content="ML4T">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2023/01/17/ML4T_01-01_ReadingAndPlottingData/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Machine Learning for Trading--1-1 Reading and Plotting Data | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/17/ML4T_01-01_ReadingAndPlottingData/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Machine Learning for Trading--1-1 Reading and Plotting Data
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-01-17 18:14:22" itemprop="dateCreated datePublished" datetime="2023-01-17T18:14:22-05:00">2023-01-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Machine-Learning-for-Trading/" itemprop="url" rel="index"><span itemprop="name">Machine Learning for Trading</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Pandas是一个建立在 Python 之上的一个高效的，简单易用的数据结构和分析工具。 Pandas 的核心就是一个高效易用的数据类型：DataFrame。这个数据类型有点类似 R 语言的数据框 (Data Frame)，也有点类似于 Excel 表格，但是比这两种更加适合在 Python 的语言环境内操作数据。在这个数据结构之下，我们可以轻松的对数据进行清洗，整理，归纳总结，合并，转换，计算等等。</p>
+<ul>
+<li>从CSV文件中读取并输出数据 – Reading in a CSV File</li>
+<li>选择特定行的数据–Select data in specific rows</li>
+<li>输出某列数据的最大值、平均值–Find maximum\mean closing value for stock</li>
+<li>配合matplotlib将数据绘制成折线图–Plotting</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="从CSV文件中读取并输出数据-–-Reading-in-a-CSV-File"><a href="#从CSV文件中读取并输出数据-–-Reading-in-a-CSV-File" class="headerlink" title="从CSV文件中读取并输出数据 – Reading in a CSV File"></a>从CSV文件中读取并输出数据 – Reading in a CSV File</h1><ul>
+<li>读取数据–pd.read_csv(“data.csv”)</li>
+<li>输出整个dataframe–print(df)</li>
+<li>输出前五行数据—-print(df.head())</li>
+<li>输出最后五行数据–print(df.tail())</li>
+</ul>
+<p>Example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line"></span><br><span class="line">def test _run():</span><br><span class="line">    &quot;&quot;&quot;Function called by Test Run.&quot;&quot;&quot;</span><br><span class="line">    df = pd.read_csv(&quot;./data/AAPL.csv&quot;)</span><br><span class="line">    # Quiz: Print last 5 rows of the data frame</span><br><span class="line">    # print df				# prints entire data set (dataframe)</span><br><span class="line">    print (df.head())		# prints first five records</span><br><span class="line">    print (df.tail())			# prints last five records</span><br><span class="line"></span><br><span class="line">if __name__ = &quot;__main__&quot;:</span><br><span class="line">	test_run()</span><br></pre></td></tr></table></figure>
+
+<h1 id="选择特定行的数据–Select-data-in-specific-rows"><a href="#选择特定行的数据–Select-data-in-specific-rows" class="headerlink" title="选择特定行的数据–Select data in specific rows"></a>选择特定行的数据–Select data in specific rows</h1><ul>
+<li>输出第10行到第20行之间的所有数据–print(df[10:21])</li>
+</ul>
+<p>Example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line"></span><br><span class="line">def test_run():</span><br><span class="line">    &quot;&quot;&quot;Function called by Test Run.&quot;&quot;&quot;</span><br><span class="line">    df = pd.read_csv(&quot;data/AAPL.csv&quot;)</span><br><span class="line">    print (df[10:21])		# print rows between index 10 and 20 inclusive</span><br><span class="line">	</span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    test_run()</span><br></pre></td></tr></table></figure>
+
+<h1 id="输出某列数据的最大值、平均值–Find-maximum-mean-closing-value-for-stock"><a href="#输出某列数据的最大值、平均值–Find-maximum-mean-closing-value-for-stock" class="headerlink" title="输出某列数据的最大值、平均值–Find maximum\mean closing value for stock"></a>输出某列数据的最大值、平均值–Find maximum\mean closing value for stock</h1><ul>
+<li>输出Close列的最大值–df[‘Close’].max()</li>
+<li>输出Close列的平均–df[‘Close’].mean()</li>
+</ul>
+<p>Example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line"></span><br><span class="line">def get_max_close(symbol):</span><br><span class="line">	&quot;&quot;&quot;Return the maximum closing value for stock indicated by symbol.</span><br><span class="line"></span><br><span class="line">	Note: Data for a stock is stored in file: data/&lt;symbol&gt;.csv</span><br><span class="line">	&quot;&quot;&quot;</span><br><span class="line">	df = pd.read_csv(&quot;data/&#123;&#125;.csv&quot;.format(symbol)) #read in data</span><br><span class="line">	return df[&#x27;close&#x27;].max() #compute and return max</span><br><span class="line"></span><br><span class="line">def test _run():</span><br><span class="line">	&quot;&quot;&quot;Function called by Test Run.&quot;&quot;&quot;</span><br><span class="line">	for symbol in [&#x27;APPL&#x27;, &#x27;IBM&#x27;]:</span><br><span class="line">		print &quot;Max close&quot;</span><br><span class="line">		print symbol, get_max_close(symbol)</span><br><span class="line"></span><br><span class="line">if __name__ = &quot;__main__&quot;:</span><br><span class="line">	test_run()</span><br></pre></td></tr></table></figure>
+
+<h1 id="配合matplotlib将数据绘制成折线图–Plotting"><a href="#配合matplotlib将数据绘制成折线图–Plotting" class="headerlink" title="配合matplotlib将数据绘制成折线图–Plotting"></a>配合matplotlib将数据绘制成折线图–Plotting</h1><ul>
+<li>绘图–df.plot() 以及 plt.show()</li>
+</ul>
+<p>Example 1–输出单列数据:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line"></span><br><span class="line">def test_run():</span><br><span class="line">	&quot;&quot;&quot;Plot a single column.&quot;&quot;&quot;</span><br><span class="line">	df = pd.read_csv(&quot;data/AAPL.csv&quot;)</span><br><span class="line">	print df[&#x27;Ajf Close&#x27;]</span><br><span class="line">	df[&#x27;Adf Close&#x27;].plot()</span><br><span class="line">	plt.show()</span><br><span class="line"></span><br><span class="line">if __name__ = &quot;__main__&quot;:</span><br><span class="line">	test_run()</span><br></pre></td></tr></table></figure>
+
+<p>Example 2 – 输出两列数据:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">		</span><br><span class="line">def test_run():</span><br><span class="line">    df = pd.read_csv(&quot;data/IBM.csv&quot;)</span><br><span class="line">    df[[&#x27;Close&#x27;, &#x27;Adj Close&#x27;]].plot()</span><br><span class="line">    plt.show()  # must be called to show plots</span><br><span class="line">	</span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    test_run()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/Pandas/" rel="tag"># Pandas</a>
+              <a href="/tags/matplotlib/" rel="tag"># matplotlib</a>
+              <a href="/tags/ML4T/" rel="tag"># ML4T</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/01/15/Information_Systems_Chapter_4/" rel="prev" title="Information Systems 4- Gaining Strategic Value from Information">
+      <i class="fa fa-chevron-left"></i> Information Systems 4- Gaining Strategic Value from Information
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/01/18/ML4T_01-02_WorkingWithMultipleStock/" rel="next" title="Machine Learning for Trading--1-2 Working with Multiple Stocks">
+      Machine Learning for Trading--1-2 Working with Multiple Stocks <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8ECSV%E6%96%87%E4%BB%B6%E4%B8%AD%E8%AF%BB%E5%8F%96%E5%B9%B6%E8%BE%93%E5%87%BA%E6%95%B0%E6%8D%AE-%E2%80%93-Reading-in-a-CSV-File"><span class="nav-number">1.</span> <span class="nav-text">从CSV文件中读取并输出数据 – Reading in a CSV File</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E7%89%B9%E5%AE%9A%E8%A1%8C%E7%9A%84%E6%95%B0%E6%8D%AE%E2%80%93Select-data-in-specific-rows"><span class="nav-number">2.</span> <span class="nav-text">选择特定行的数据–Select data in specific rows</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BE%93%E5%87%BA%E6%9F%90%E5%88%97%E6%95%B0%E6%8D%AE%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC%E3%80%81%E5%B9%B3%E5%9D%87%E5%80%BC%E2%80%93Find-maximum-mean-closing-value-for-stock"><span class="nav-number">3.</span> <span class="nav-text">输出某列数据的最大值、平均值–Find maximum\mean closing value for stock</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%85%8D%E5%90%88matplotlib%E5%B0%86%E6%95%B0%E6%8D%AE%E7%BB%98%E5%88%B6%E6%88%90%E6%8A%98%E7%BA%BF%E5%9B%BE%E2%80%93Plotting"><span class="nav-number">4.</span> <span class="nav-text">配合matplotlib将数据绘制成折线图–Plotting</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

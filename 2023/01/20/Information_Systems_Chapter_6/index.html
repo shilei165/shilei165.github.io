@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Learning Objectives Discuss the importance of having good decision-making skills Explain how decision-making changes depending on organizational level Discuss the role of information in decision-makin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Information System 6- Analyzing Information for Business Decision-Making">
+<meta property="og:url" content="http://example.com/2023/01/20/Information_Systems_Chapter_6/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="Learning Objectives Discuss the importance of having good decision-making skills Explain how decision-making changes depending on organizational level Discuss the role of information in decision-makin">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-01-20T14:43:00.000Z">
+<meta property="article:modified_time" content="2023-01-20T18:24:38.566Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Information Systems">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2023/01/20/Information_Systems_Chapter_6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Information System 6- Analyzing Information for Business Decision-Making | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/20/Information_Systems_Chapter_6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Information System 6- Analyzing Information for Business Decision-Making
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-01-20 09:43:00" itemprop="dateCreated datePublished" datetime="2023-01-20T09:43:00-05:00">2023-01-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Information-Systems/" itemprop="url" rel="index"><span itemprop="name">Information Systems</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Learning-Objectives"><a href="#Learning-Objectives" class="headerlink" title="Learning Objectives"></a><strong>Learning Objectives</strong></h1><ul>
+<li>Discuss the importance of having good decision-making skills</li>
+<li>Explain how decision-making changes depending on organizational level</li>
+<li>Discuss the role of information in decision-making</li>
+<li>Contrast structured, semistructured, and unstructured decisions</li>
+<li>Apply a decision-making methodology</li>
+<li>Choose the appropriate technology tool for a given decision-making task</li>
+</ul>
+<span id="more"></span>
+<hr>
+<p>Making good decisions requires information, but that is not enough. You must also be able to analyze information.</p>
+<ul>
+<li>A <strong>decision</strong> is simply a choice among alternatives.</li>
+<li>Regardless of the importance of the decision, making the decision requires retrieving and analyzing information.</li>
+</ul>
+<h1 id="The-Importance-of-Good-Decision-Making-Skills"><a href="#The-Importance-of-Good-Decision-Making-Skills" class="headerlink" title="The Importance of Good Decision-Making Skills"></a>The Importance of Good Decision-Making Skills</h1><ul>
+<li>One of the skills that sets apart successful business professionals</li>
+<li>Ability to solve complex problems are among the most highly sought after for potential employees</li>
+<li>These skills are directly related to being able to make good decisions</li>
+</ul>
+<p>It is increasingly important as one moves up the “organizational ladder”.</p>
+<ul>
+<li>Decisions made by higher-level managers tend to be more complicated.</li>
+<li>Higher-level decisions typically have greater impacts. – e.g. store manager: hiring and scheduling hourly workers vs. district manager: choose suppliers vs. CEO: whether to introduce new product</li>
+</ul>
+<h1 id="Using-Information-for-Decision-Making"><a href="#Using-Information-for-Decision-Making" class="headerlink" title="Using Information for Decision-Making"></a>Using Information for Decision-Making</h1><ul>
+<li>Many of our information needs are related to decision-making, and making good decisions requires information.</li>
+<li>You need good information to understand the objectives of a decision, the constraints that limit the number of alternatives, and the alternatives themselves.</li>
+<li>You also need information to forecast the potential outcomes of each alternative.</li>
+<li>Information provides the means for comparing and selecting among the alternatives.</li>
+</ul>
+<h1 id="Type-of-Decisions"><a href="#Type-of-Decisions" class="headerlink" title="Type of Decisions"></a>Type of Decisions</h1><h2 id="Simon’s-framework"><a href="#Simon’s-framework" class="headerlink" title="Simon’s framework"></a>Simon’s framework</h2><ul>
+<li>Structured decisions – routine and repetitive, often have well-defined procedures for dealing with them.<ul>
+<li>Know what information we need and how to use the information</li>
+</ul>
+</li>
+<li>Unstructured decisions – novel and do not have agreed-upon procedures for making them.<ul>
+<li>Not sure exactly what information we need, nor do we know how to use the information.</li>
+</ul>
+</li>
+<li>Semistructured decisions  – somewhere in between two extremes.</li>
+</ul>
+<h2 id="Anthony’s-framework"><a href="#Anthony’s-framework" class="headerlink" title="Anthony’s framework"></a>Anthony’s framework</h2><p>A complementary view comes from Anthony (1965), who developed a framework of managerial activity that is made up of three categories: strategic planning, managerial control, and operational control.</p>
+<ul>
+<li>operational control<ul>
+<li>it make sure that the tasks of the organization are being conducted efficiently and effectively.</li>
+<li>usually involved structured decisions</li>
+<li>it has narrow, well-defined information needs that can be anticipated.</li>
+<li>information comes sources that are easily accessed</li>
+<li>do not require any human intervention – e.g. order-processing program</li>
+</ul>
+</li>
+<li>strategic planning<ul>
+<li>involves choosing the organization’s objectives and deciding how to achieve them; predicting the future of the organization and its environment; using creative, nonroutine thinking</li>
+<li>usually involved unstructured decisions</li>
+<li>the information needs often are broad and poorly defined</li>
+<li>information comes from both internal and external sources</li>
+</ul>
+</li>
+<li>managerial control<ul>
+<li>enusring the efficient, effective use of resources in achieving the objectives laid out in strategic planning</li>
+<li>usually involved semistructured decisions</li>
+<li>we can anticipate some information needs but cannot create a program capable of making the decision without relying on human judgment</li>
+</ul>
+</li>
+</ul>
+<h1 id="A-Decision-Making-Process"><a href="#A-Decision-Making-Process" class="headerlink" title="A Decision-Making Process"></a>A Decision-Making Process</h1><h2 id="Simon’s-classic-intelligence-design-choice-model"><a href="#Simon’s-classic-intelligence-design-choice-model" class="headerlink" title="Simon’s classic intelligence&#x2F;design&#x2F;choice model"></a>Simon’s classic intelligence&#x2F;design&#x2F;choice model</h2><ul>
+<li>Intelligence<ul>
+<li>includes those activities that alert decision makers that there is a need to change the current state</li>
+</ul>
+</li>
+<li>Design<ul>
+<li>involves developing alternative approaches to bringing about the required change or achieving the required goals</li>
+</ul>
+</li>
+<li>Choice<ul>
+<li>the most effective and efficient alternative is selected in this phase</li>
+</ul>
+</li>
+<li><em>implementation</em><ul>
+<li>in this phase the activities in the chosen alternative are carried out</li>
+</ul>
+</li>
+</ul>
+<h2 id="Identify-and-Clearly-Define-the-Problem"><a href="#Identify-and-Clearly-Define-the-Problem" class="headerlink" title="Identify and Clearly Define the Problem"></a>Identify and Clearly Define the Problem</h2><ul>
+<li>It is the most critical phase in the decision-making process</li>
+<li>A good problem definition should produce a clear, concise problem statement that describes both the initial state and desired state</li>
+<li>The “5 Why” technique</li>
+</ul>
+<h2 id="Determine-Requirements-and-Goals"><a href="#Determine-Requirements-and-Goals" class="headerlink" title="Determine Requirements and Goals"></a>Determine Requirements and Goals</h2><ul>
+<li><strong>Requirements</strong> are the conditions that any acceptable solution <strong>must</strong> provide. – must haves</li>
+<li><strong>Decision goals</strong> go beyond the minimum, essential requirements. – likely to haves.</li>
+</ul>
+<h2 id="Identify-Alternatives"><a href="#Identify-Alternatives" class="headerlink" title="Identify Alternatives"></a>Identify Alternatives</h2><ul>
+<li>An <strong>alternative</strong> is method for transforming the current condition into the desired state.</li>
+<li>Two stages: generation &amp; refinement</li>
+</ul>
+<h2 id="Define-the-Criteria"><a href="#Define-the-Criteria" class="headerlink" title="Define the Criteria"></a>Define the Criteria</h2><ul>
+<li><strong>Decision criteria</strong> are objective measures of the requirements and goals that help you discriminate among the alternatives.</li>
+<li>It is important that each criterion be independent of other criteria.</li>
+</ul>
+<h2 id="Select-a-Decision-Making-Technique-Tool"><a href="#Select-a-Decision-Making-Technique-Tool" class="headerlink" title="Select a Decision-Making Technique&#x2F;Tool"></a>Select a Decision-Making Technique&#x2F;Tool</h2><p>Some easy but quite useful techinques:</p>
+<ul>
+<li>Pros&#x2F;Cons Analysis – list the advantages and disadvantages</li>
+<li>Paired Comparisons – evaluate each alternative against all other alternatives</li>
+<li>Decision Matrix – use a grid that lists all the alternatives in the first column and all the criteria in the first row<ul>
+<li>you also can use a weighted version of the decision matrix</li>
+</ul>
+</li>
+<li><em>Evaluate the Alternatives Using the Criteria</em></li>
+<li><em>Check That the Solution Solve the Problem</em></li>
+</ul>
+<h1 id="Information-Retrieval-and-Analysis-Tools"><a href="#Information-Retrieval-and-Analysis-Tools" class="headerlink" title="Information Retrieval and Analysis Tools"></a>Information Retrieval and Analysis Tools</h1><p>In this section, we discuss how information systems help with decision-making.</p>
+<p><strong>Two categories of tools:</strong></p>
+<ul>
+<li><p>Information retrieval tools – include database management systems, reporting tools, and document management tools</p>
+<ul>
+<li>reporting tools allow users to create reports visually rather than requiring special commends (e.g. drag data from left to right on a screen)</li>
+<li>document management systems include functions that help users locate and retrieve in documents (version control, sharing)</li>
+</ul>
+</li>
+<li><p>Information analysis tools</p>
+<ul>
+<li><strong>What-if analysis</strong> – involves seeing how changes in one or more outcome variables<ul>
+<li>e.g. If you are purchasing a car, you can see the impact of changing the interest rate on monthly payment.</li>
+</ul>
+</li>
+<li><strong>goal-seek analysis</strong> – you specify the value of the outcome variable you seek (the goal), and the spreadsheet software determines the value of a particular input that will produce the desired output<ul>
+<li>e.g. Suppose you have a budget of $400 per month, you can determine the down payment based on your budget</li>
+</ul>
+</li>
+<li>“When more advanced techniques are needed, you must turn to dedicated statistical software, such as SPSS, Stata, R, and SAS (among others)</li>
+<li>There are also software tools that help you visualize data</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Information-Systems/" rel="tag"># Information Systems</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/01/19/ML4T_01-03_ThePowerOfNumpy/" rel="prev" title="Machine Learning for Trading--1-3 The Power of Numpy">
+      <i class="fa fa-chevron-left"></i> Machine Learning for Trading--1-3 The Power of Numpy
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/01/20/ML4T_01-04_StatisticalAnalysisOfTimeSeries/" rel="next" title="Machine Learning for Trading--1-4 Statistical Analysis and Stock Basics">
+      Machine Learning for Trading--1-4 Statistical Analysis and Stock Basics <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Learning-Objectives"><span class="nav-number">1.</span> <span class="nav-text">Learning Objectives</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-Importance-of-Good-Decision-Making-Skills"><span class="nav-number">2.</span> <span class="nav-text">The Importance of Good Decision-Making Skills</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Using-Information-for-Decision-Making"><span class="nav-number">3.</span> <span class="nav-text">Using Information for Decision-Making</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Type-of-Decisions"><span class="nav-number">4.</span> <span class="nav-text">Type of Decisions</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Simon%E2%80%99s-framework"><span class="nav-number">4.1.</span> <span class="nav-text">Simon’s framework</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Anthony%E2%80%99s-framework"><span class="nav-number">4.2.</span> <span class="nav-text">Anthony’s framework</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#A-Decision-Making-Process"><span class="nav-number">5.</span> <span class="nav-text">A Decision-Making Process</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Simon%E2%80%99s-classic-intelligence-design-choice-model"><span class="nav-number">5.1.</span> <span class="nav-text">Simon’s classic intelligence&#x2F;design&#x2F;choice model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Identify-and-Clearly-Define-the-Problem"><span class="nav-number">5.2.</span> <span class="nav-text">Identify and Clearly Define the Problem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Determine-Requirements-and-Goals"><span class="nav-number">5.3.</span> <span class="nav-text">Determine Requirements and Goals</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Identify-Alternatives"><span class="nav-number">5.4.</span> <span class="nav-text">Identify Alternatives</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Define-the-Criteria"><span class="nav-number">5.5.</span> <span class="nav-text">Define the Criteria</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Select-a-Decision-Making-Technique-Tool"><span class="nav-number">5.6.</span> <span class="nav-text">Select a Decision-Making Technique&#x2F;Tool</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Information-Retrieval-and-Analysis-Tools"><span class="nav-number">6.</span> <span class="nav-text">Information Retrieval and Analysis Tools</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

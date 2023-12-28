@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="前面我们讲解了如何使用SCHTASK来定时执行Windows的特定程序，但是我们还无法做到定时关闭。比如我们希望每天晚上9点开始定时打开迅雷来下载东西，然后每天上午9点来关闭迅雷，以免在使用网络的时候对网速产生影响。于是，我们就需要用到Taskkill指令，并且结合我们之前学过的Schetask来定时执行程序关闭任务。这篇文章，我们就来一起学习一下如何使用这个指令吧">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何使用Taskkill命令来定时关闭任务或程序">
+<meta property="og:url" content="http://example.com/2022/07/19/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Taskkill%E5%91%BD%E4%BB%A4%E6%9D%A5%E5%AE%9A%E6%97%B6%E5%85%B3%E9%97%AD%E4%BB%BB%E5%8A%A1%E6%88%96%E7%A8%8B%E5%BA%8F/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="前面我们讲解了如何使用SCHTASK来定时执行Windows的特定程序，但是我们还无法做到定时关闭。比如我们希望每天晚上9点开始定时打开迅雷来下载东西，然后每天上午9点来关闭迅雷，以免在使用网络的时候对网速产生影响。于是，我们就需要用到Taskkill指令，并且结合我们之前学过的Schetask来定时执行程序关闭任务。这篇文章，我们就来一起学习一下如何使用这个指令吧">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/taskmgr.png">
+<meta property="article:published_time" content="2022-07-19T17:22:12.000Z">
+<meta property="article:modified_time" content="2023-07-17T14:50:29.563Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="编程">
+<meta property="article:tag" content="定时任务">
+<meta property="article:tag" content="Taskkill">
+<meta property="article:tag" content="Windows">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/taskmgr.png">
+
+<link rel="canonical" href="http://example.com/2022/07/19/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Taskkill%E5%91%BD%E4%BB%A4%E6%9D%A5%E5%AE%9A%E6%97%B6%E5%85%B3%E9%97%AD%E4%BB%BB%E5%8A%A1%E6%88%96%E7%A8%8B%E5%BA%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>如何使用Taskkill命令来定时关闭任务或程序 | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/19/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Taskkill%E5%91%BD%E4%BB%A4%E6%9D%A5%E5%AE%9A%E6%97%B6%E5%85%B3%E9%97%AD%E4%BB%BB%E5%8A%A1%E6%88%96%E7%A8%8B%E5%BA%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何使用Taskkill命令来定时关闭任务或程序
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-07-19 13:22:12" itemprop="dateCreated datePublished" datetime="2022-07-19T13:22:12-04:00">2022-07-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Windows/" itemprop="url" rel="index"><span itemprop="name">Windows</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>前面我们讲解了如何使用SCHTASK来定时执行Windows的特定程序，但是我们还无法做到定时关闭。比如我们希望每天晚上9点开始定时打开迅雷来下载东西，然后每天上午9点来关闭迅雷，以免在使用网络的时候对网速产生影响。于是，我们就需要用到Taskkill指令，并且结合我们之前学过的Schetask来定时执行程序关闭任务。这篇文章，我们就来一起学习一下如何使用这个指令吧</p>
+<span id="more"></span>
+<hr>
+<h1 id="一、TASKKILL基本参数"><a href="#一、TASKKILL基本参数" class="headerlink" title="一、TASKKILL基本参数"></a><strong>一、TASKKILL基本参数</strong></h1><p>TASKKILL这个命令可以用来结束一个或多个进程。可以通过进程id或者进程图像名来结束进程。其常用参数如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">/S    system           指定要连接到的远程系统。</span><br><span class="line">/U    [domain\]user    指定应该在哪个用户上下文执行这个命令。</span><br><span class="line">/P    [password]       为提供的用户上下文指定密码。如果忽略，提示输入。</span><br><span class="line">/F                     指定要强行终止进程。</span><br><span class="line">/FI   filter           指定筛选进或筛选出查询的的任务。</span><br><span class="line">/PID  process id       指定要终止的进程的PID。</span><br><span class="line">/IM   image name       指定要终止的进程的影像名。通配符 &#x27;*&#x27;可用来指定所有图像名。</span><br><span class="line">/T                     Tree kill: 终止指定的进程和任何由此启动的子进程。</span><br><span class="line">/?                     显示帮助/用法。</span><br></pre></td></tr></table></figure>
+<h1 id="二、程序image-name和PID"><a href="#二、程序image-name和PID" class="headerlink" title="二、程序image name和PID"></a><strong>二、程序image name和PID</strong></h1><p>首先我们来了解一下什么是程序的image name和PID。简单来说，他们都是程序或进程的身份代码。image name是这个程序的名称，而PID (process identifier) 是这个程序所运行的进程的特有名称。一个程序可以对应多条进程。<br>比如迅雷的image name为’thunder.exe’，记事本的image name为’notepad.exe’。我们也可以通过Ctrl + Alt + Delete 键组合或者使用命令taskmgr来打开进程管理器去查看正在运行的进程。我们就可以在Details一栏中找到我们需要关闭的程序以及对应的PID。<br><img src="/images/taskmgr.png" alt="Task Manager"><br>对于我们日常使用来说，使用image name和PID来对特定程序进行关闭已经完全足够。下面我列举出几个例子来说明如何使用image name和PID来关闭程序或进程：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">taskkill /f /im QQ.exe           # 关闭QQ</span><br><span class="line">taskkill /f /im thunder.exe /T   # 关闭迅雷和其所对应的所有子进程</span><br><span class="line">taskkill /f /pid 4256            # 关闭chromdriver所对应的4256进程</span><br></pre></td></tr></table></figure>
+
+<h1 id="三、筛选器的使用"><a href="#三、筛选器的使用" class="headerlink" title="三、筛选器的使用"></a><strong>三、筛选器的使用</strong></h1><p>如果我们需要关闭多个进程，可以使用筛选器来提高筛选效率。具体参数如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">筛选器名      有效运算符                  有效值</span><br><span class="line">-----------   ---------------           --------------</span><br><span class="line">STATUS        eq, ne                    运行 | 没有响应</span><br><span class="line">IMAGENAME     eq, ne                    图像名</span><br><span class="line">PID           eq, ne, gt, lt, ge, le    PID 值</span><br><span class="line">SESSION       eq, ne, gt, lt, ge, le    会话编号</span><br><span class="line">CPUTIME       eq, ne, gt, lt, ge, le    CPU 时间，格式为hh:mm:ss。</span><br><span class="line">MEMUSAGE      eq, ne, gt, lt, ge, le    内存使用，单位为 KB</span><br><span class="line">USERNAME      eq, ne                    用户名，格式为[domain\]user</span><br><span class="line">MODULES       eq, ne                    DLL 名</span><br><span class="line">SERVICES      eq, ne                    服务名</span><br><span class="line">WINDOWTITLE   eq, ne                    窗口标题</span><br></pre></td></tr></table></figure>
+<p>注意: 1. 只有带有筛选器的情况下，才能跟 &#x2F;IM 切换使用通配符 ‘*‘。<br>      2. 其中eq代表“equal”, ne代表”not equal”,gt代表”greater than”,lt代表”less than”, ge代表”greater than or equal to”,le代表”less than or equal to”。<br>      3. 注意: 远程进程总是要强行终止，不管是否指定了 &#x2F;F 选项。<br>举例如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">TASKKILL /F /FI &quot;PID ge 1000&quot; /FI &quot;WINDOWTITLE ne untitle*&quot;</span><br><span class="line">TASKKILL /F /FI &quot;USERNAME eq NT AUTHORITY\SYSTEM&quot; /IM notepad.exe</span><br><span class="line">TASKKILL /S system /U domain\username /FI &quot;USERNAME ne NT*&quot; /IM *</span><br><span class="line">TASKKILL /S system /U username /P password /FI &quot;IMAGENAME eq note*&quot;</span><br></pre></td></tr></table></figure>
+<h1 id="四、结合SCHTASKS命令来定时关闭进程"><a href="#四、结合SCHTASKS命令来定时关闭进程" class="headerlink" title="四、结合SCHTASKS命令来定时关闭进程"></a><strong>四、结合SCHTASKS命令来定时关闭进程</strong></h1><p>在了解了TASKKILL的基本用法之后，我们就可以结合SCHTASKS命令来定时关闭进程。比如我们就可以使用一下命令来定时在每天的17：30来关闭Python程序。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">schtasks /create /sc daily /mo 1 /tn &quot;STOP_Python&quot; /tr &quot;TASKKILL /F /IM py.exe /T&quot; /st 17:30 /f</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag"># 编程</a>
+              <a href="/tags/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/" rel="tag"># 定时任务</a>
+              <a href="/tags/Taskkill/" rel="tag"># Taskkill</a>
+              <a href="/tags/Windows/" rel="tag"># Windows</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/07/15/Hexo%E5%8D%9A%E5%AE%A2%E4%B8%BB%E9%A2%98%E7%9A%84%E9%80%89%E6%8B%A9%E5%92%8C%E4%BC%98%E5%8C%96/" rel="prev" title="Hexo博客主题的选择和优化">
+      <i class="fa fa-chevron-left"></i> Hexo博客主题的选择和优化
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/07/20/Python%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0--isinstance()%E5%92%8Ctype()/" rel="next" title="Python常用函数--isinstance()和type()">
+      Python常用函数--isinstance()和type() <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81TASKKILL%E5%9F%BA%E6%9C%AC%E5%8F%82%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">一、TASKKILL基本参数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E7%A8%8B%E5%BA%8Fimage-name%E5%92%8CPID"><span class="nav-number">2.</span> <span class="nav-text">二、程序image name和PID</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E7%AD%9B%E9%80%89%E5%99%A8%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">三、筛选器的使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E7%BB%93%E5%90%88SCHTASKS%E5%91%BD%E4%BB%A4%E6%9D%A5%E5%AE%9A%E6%97%B6%E5%85%B3%E9%97%AD%E8%BF%9B%E7%A8%8B"><span class="nav-number">4.</span> <span class="nav-text">四、结合SCHTASKS命令来定时关闭进程</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

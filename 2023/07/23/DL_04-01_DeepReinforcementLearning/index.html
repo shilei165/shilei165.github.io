@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Learning Objectives Reinforcement Learning Markov Decision Processes Algorithms for solving MDPs DQN: Deep Q-Learning Policy Gradients, Actor Critic">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Deep Learning-4-1 Deep Reinforcement Learning">
+<meta property="og:url" content="http://example.com/2023/07/23/DL_04-01_DeepReinforcementLearning/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="Learning Objectives Reinforcement Learning Markov Decision Processes Algorithms for solving MDPs DQN: Deep Q-Learning Policy Gradients, Actor Critic">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/DL_04-01_01.png">
+<meta property="og:image" content="http://example.com/images/DL_04-01_02.png">
+<meta property="og:image" content="http://example.com/images/DL_04-01_03.png">
+<meta property="og:image" content="http://example.com/images/DL_04-01_04.png">
+<meta property="og:image" content="http://example.com/images/DL_04-01_05.png">
+<meta property="og:image" content="http://example.com/images/DL_04-01_06.png">
+<meta property="og:image" content="http://example.com/images/DL_04-01_07.png">
+<meta property="og:image" content="http://example.com/images/DL_04-01_08.png">
+<meta property="og:image" content="http://example.com/images/DL_04-01_09.png">
+<meta property="og:image" content="http://example.com/images/DL_04-01_10.png">
+<meta property="article:published_time" content="2023-07-24T01:14:22.000Z">
+<meta property="article:modified_time" content="2023-07-23T19:50:21.331Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="Deep Learning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/DL_04-01_01.png">
+
+<link rel="canonical" href="http://example.com/2023/07/23/DL_04-01_DeepReinforcementLearning/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Deep Learning-4-1 Deep Reinforcement Learning | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/07/23/DL_04-01_DeepReinforcementLearning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Deep Learning-4-1 Deep Reinforcement Learning
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-07-23 21:14:22" itemprop="dateCreated datePublished" datetime="2023-07-23T21:14:22-04:00">2023-07-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Learning-Objectives"><a href="#Learning-Objectives" class="headerlink" title="Learning Objectives"></a>Learning Objectives</h1><ul>
+<li>Reinforcement Learning</li>
+<li>Markov Decision Processes</li>
+<li>Algorithms for solving MDPs</li>
+<li>DQN: Deep Q-Learning</li>
+<li>Policy Gradients, Actor Critic</li>
+</ul>
+<span id="more"></span>
+<hr>
+<p>In this module, we’ll talk about advanced topics, that is we’ll show the power of deep learning and moving beyond just the standard supervised machine learning setting that we’ve talked about thus far. For example, we’ll try to address the problem of how to deal with unlabeled data, which is much easier to collect. And where we don’t have a lot of labeled data, that is annotations that humans have made or given for each piece of data that we have. We’ll also try to cover decision making tasks, which moves beyond just making predictions on pieces of data. But actually allows the neural network to make the decisions in the form of actions that actually affect the world.</p>
+<h1 id="Reinforcement-Learning"><a href="#Reinforcement-Learning" class="headerlink" title="Reinforcement Learning"></a>Reinforcement Learning</h1><p>In this section, we will introduce reinforcement learning where the task is to make a sequence of decisions or predictions similar to what you’re seeing in sequence models. However, we will not receive supervision in the form of the correct decision or a prediction which should have been made. Instead, we will only receive evaluative feedback in the form of reward for the decision or our prediction which was made.</p>
+<p><strong>Definition</strong> Reinforcement learning can be defined in one sentence as a sequential decision, making in an environment with evaluative feedback.</p>
+<p>Let’s break the last sentence into it’s component parts.</p>
+<h2 id="Environment"><a href="#Environment" class="headerlink" title="Environment"></a>Environment</h2><p>Let’s break this definition down by first talking about what we mean by an environment. For that, let’s imagine we have an agent who can take actions in an environment and the environment produces a state which the agent can persist. In addition to giving a reward to the agent for the actions it did take. Now this environment may be unknown, very complex.</p>
+<p><img src="/../images/DL_04-01_01.png" alt="Environment"></p>
+<p>Think of the worst case as a real robot being deployed in the world, in which case the environment is the real world. The task of this agent is to learn a policy to map states of the environment to actions that it can play to affect the environment. The objective of this agent is to maximize the reward it will get from the environment in the long run.</p>
+<h2 id="Evaluative-feedback"><a href="#Evaluative-feedback" class="headerlink" title="Evaluative feedback"></a>Evaluative feedback</h2><p>Evaluative feedback means that the agent is supposed to pick actions and receive rewards which can be positive or negative only for the actions that it did take and not for the actions that did not take. This means that the agent will never know or have supervision for the correct or best action that it should have taken at a particular state.</p>
+<h2 id="Sequential-decisions"><a href="#Sequential-decisions" class="headerlink" title="Sequential decisions"></a>Sequential decisions</h2><p>Unlike supervised learning, and sequential decisions just means that the agent needs to make a sequence of actions or a sequence of states in order to complete the task. And with this what can happen is that the reward may be delayed and it can only happen at the end of the task, which means that the agent needs to optimize in the long term for rewards it may get at a very very later stage.</p>
+<h2 id="Challenges"><a href="#Challenges" class="headerlink" title="Challenges"></a>Challenges</h2><ul>
+<li>To evaluate a feedback implies that the best action can only be found through trial and error, requiring the agent to try all possible actions at all states.</li>
+<li>In order to be 100% certain about the best action, the agent may not receive reward for every action it takes, requiring long term planning in order to eventually get high rewards in the future.</li>
+<li>Updates made to the policy during learning will lead to changes in the actions that are picked by the policy and hence will change the data distribution of states and rewards that the policy absorbs making this distribution non stationary.</li>
+<li>Further, if the task involves streaming data, the agent will see certain states only once and never again in his lifetime, making it difficult to learn from past mistakes.</li>
+</ul>
+<h2 id="The-protocol-for-how-the-agent-interacts-with-the-environment"><a href="#The-protocol-for-how-the-agent-interacts-with-the-environment" class="headerlink" title="The protocol for how the agent interacts with the environment"></a>The protocol for how the agent interacts with the environment</h2><ul>
+<li>At every time step t</li>
+</ul>
+<p>++ the agent will receive an observation $o_t$<br>++ it will execute an action $a_t$</p>
+<ul>
+<li>In the environment at time step t</li>
+</ul>
+<p>++ the environment will receive this action $a_t$<br>++ and produce a new observation  $o_{t+1}$, as well as a reward $r_{t+1}$</p>
+<ul>
+<li>RL has also been applied to games like GO where the objective is to defeat the opponent.</li>
+</ul>
+<p>++ The state of the environment is the location of the pieces on the board.<br>++ The action is where to put down the next piece and<br>++ The reward in this case is quite sparse.</p>
+<p>It is plus one for winning the game or zero otherwise, making it an exceptionally challenging long term planning task.</p>
+<h1 id="Markov-Decision-Processes"><a href="#Markov-Decision-Processes" class="headerlink" title="Markov Decision Processes"></a>Markov Decision Processes</h1><p>Markov decision processes, MDPs, form the underlying framework of Reinforcement learning. They can be defined as a tuple of five values:</p>
+<ul>
+<li>S - The set of all possible states of the environment</li>
+<li>A - The set of all possible actions that can be taken at every step</li>
+<li>R(s,a,s’) - Is the reward distribution given a state S, action A, and next state  S′</li>
+<li>T(s,a,s’) - is the transition probability distribution, of the next state S’<ul>
+<li>often written as p(s’|s,a)</li>
+</ul>
+</li>
+<li>γ- is the discount factorS - The set of all possible states of the environment</li>
+</ul>
+<p>We can now define an Interaction Trajectory as a sequence of state&#x2F;action&#x2F;rewards</p>
+<h2 id="Markov-Property"><a href="#Markov-Property" class="headerlink" title="Markov Property"></a>Markov Property</h2><p>The Markov processes are an important class of the stochastic processes. The Markov property means that evolution of the Markov process in the future depends only on the present state and does not depend on past history. The Markov process does not remember the past if the present state is given. Hence, the Markov process is called the process with memoryless property.</p>
+<p>MDPs are characterized by the Markov property, which as seen by the definition of the transition probability. It implies that the distribution of possible next states given state s, and action a, Does not depend on any of the previous states or actions in the trajectory.</p>
+<p>In Reinforcement learning, we assume an underlying MDP with unknown Transition probability distribution T and Reward distribution R</p>
+<p>Instead, only samples from these distributions are observed by the agent interacting with the environment. Evaluative feedback comes into play, because of the lack of knowledge in the reward distribution. This will require a trial and error approach to determine rewards.</p>
+<p>For our discussions we will assume known reward and transition functions. This will allow us to look at algorithms for solving MDPs, which comes down to finding the best policy. Which can be loosly defined as the best action for each possible state s in the set of all possible states</p>
+<ul>
+<li>Rewards are known everywhere, no evaluative feedback</li>
+<li>Know how the world works, ie all transitions</li>
+</ul>
+<p>Let’s take a look at a simple environment, (see below), where we can intuitively figure out what is the best policy. The 2D environment below is a grid world, where there’s an agent indicated by a blue triangle. Where the state of the environment is the 2D coordinates of this agent. In which case the agent right now is at (2,3). The actions that the agent can take is either move one cell north, east, south, or west. And the rewards are either +1 or -1 at the absorbing states shown in the figure on the right.</p>
+<p><img src="/../images/DL_04-01_02.png" alt="Markov Property"></p>
+<p>With this setup, it is easy to see that the optimal policy is to head east twice, in order to reach the +1 absorbing state. However, let’s assume that there is some noise in how the agent transitions to next state. This noise is in the form of a 20% chance, of the agent drifting once a left or right of the direction of motion. Now, things get a bit complicated. The policy will now have to prescribe an action, for the states that the agent could land up in. As it is not guaranteed to always move in the direction of east. One way to describe such a policy, would be in the form of a 2D matrix, of the same shape as this 2D grid. But each matrix element is prescribing an action to take, if the agent is at that cell. This leads us to the formal definition of a policy, that we will use for solving MDPs.</p>
+<p>Formally a policy is a mapping from states to actions</p>
+<p>Deterministic Policy :  $\pi(s)&#x3D;a$</p>
+<p>Stochastic Policy :  $\pi(a|s)&#x3D;P(A_t&#x3D;a|S_t&#x3D;s)$</p>
+<p>What defines a good policy?</p>
+<ul>
+<li>Maximize current rewards vs Sum of all rewards where  γ∈[0,1]</li>
+<li>Discounted sum of future rewards!</li>
+<li>Now 1, next step γ, 2 steps from now γ2</li>
+</ul>
+<p>We can now define the optimal policy as</p>
+<p>$$\pi^∗&#x3D;argmax_πE[\sum_{t≥0}γ^tr_t|π]$$</p>
+<p>Expected Value here is taken over</p>
+<ul>
+<li>Initial State $s_0∼p(s_0)$</li>
+<li>Actions from policy $a_t∼π(⋅|s_t)$</li>
+<li>Next States $s_{t+1}∼p(⋅|s_t,a_t)$ from the transition distribution</li>
+</ul>
+<p>Note the discount term raised to the power of t. This implies that immediate rewards are preferred over future rewards.</p>
+<p>We need to now introduce one last component the value function. The value function is a prediction of discounted sum of future rewards.</p>
+<ul>
+<li>State value function, V-function,  V:S→R<ul>
+<li>maps the state to real values</li>
+<li>This allows us to measure the “goodness” of a state</li>
+</ul>
+</li>
+<li>State-Action value function, Q-Function  Q:S×A→R<ul>
+<li>This allows us to measure the goodness of the state-action pair</li>
+<li>It will also tell us the impact of this action on the future</li>
+</ul>
+</li>
+</ul>
+<p>For a policy that produces a trajectory sample $(s_0,a_0,s_1,a_1,⋯)$</p>
+<p>The V-function of the policy at state s, is the expected discounted sum of rewards from state s:</p>
+<p>$$V^π(s)&#x3D;E[\sum_{t≥0}γ^tr_t|π,s_0&#x3D;s]$$</p>
+<p>The Q-Function of the policy at state s and action a is the expected cumulative reward upon taking action a in state s (and following policy thereafter):<br>$$Q^π(s,a)&#x3D;E[\sum_{t≥0}γ^tr_t|π,s_0&#x3D;s,a_0&#x3D;a]$$</p>
+<h1 id="Algorithms-for-Solving-MDPs"><a href="#Algorithms-for-Solving-MDPs" class="headerlink" title="Algorithms for Solving MDPs"></a>Algorithms for Solving MDPs</h1><h3 id="Optimal-V-Q-functions"><a href="#Optimal-V-Q-functions" class="headerlink" title="Optimal V &amp; Q functions"></a>Optimal V &amp; Q functions</h3><p>In the previous section, see above, we defined the V and Q functions for all policies π. In a simple slight of hand you can define the Q and V for the optimal policy by simply using the * notation to denote the optimal policy.</p>
+<p>ie<br>$$V^∗(s)&#x3D;E[\sum_{t≥0}γ^tr_t|π^*,s_0&#x3D;s]$$</p>
+<p>Similarly<br>$$Q^∗(s,a)&#x3D;E[\sum_{t≥0}γ^tr_t|π^*,s_0&#x3D;s,a_0&#x3D;a]$$</p>
+<p>Now these two equation are highly interconnected, via the optimal, and have the following identities, with subtle yet important difference in interpretation</p>
+<p>$$V^∗(s)&#x3D;max_aQ^∗(s,a)$$</p>
+<ul>
+<li>it says that the optimal value at a state is the same as the max Q value over all possible actions at that state</li>
+</ul>
+<p>$$\pi^∗(s)&#x3D;argmax_aQ^∗(s,a)$$</p>
+<ul>
+<li>it says that the optimal policy at state s will occur at the action a that maximizes the Q function at that state<br>Taking a closer look at the definition of the optimal Q function, we will now try to rewrite it recursively in terms of the optimal value function at future states. Let’s define the term return as the sum of discounted future rewards.</li>
+</ul>
+<h3 id="Bellman-Optimality-Equations"><a href="#Bellman-Optimality-Equations" class="headerlink" title="Bellman Optimality Equations"></a>Bellman Optimality Equations</h3><p>Taking a closer look at the definition of the optimal Q function, we will now try to rewrite it recursively in terms of the optimal value function at future states. Let’s define the term return as the sum of discounted future rewards.</p>
+<p>At time step t&#x3D;0 our expected return is</p>
+<p>$$Q^∗(s,a)&#x3D;E[\sum_{t≥0}γ^tr(s,a)|s_0&#x3D;s,a_0&#x3D;a]$$</p>
+<p>Where the expected value is taken over $a_t∼π^∗(⋅|s_t)$ and $s_{t+1}∼p(⋅|s_t,a_t)$</p>
+<p>If we look ahead to time step t&#x3D;1, we get (a reward from t&#x3D;0) + (the discounted return from t&#x3D;1) </p>
+<p>$$<br>\large &#x3D; \gamma^0 r(s,a) + \mathbb{E}<em>{s’ \sim p(\cdot | s,a)}<br>\left[ \gamma \mathbb{E}</em>{a_t \sim \pi^*(\cdot|s_t) \text{ and } s_{t+1}\sim p(\cdot|s_t,a_t)}<br>[ \sum_{t \geq 1} \gamma^{t-1} r(s_t,a_t) | s_1 &#x3D; s’ ] \right]<br>$$</p>
+<p>( Now imagine the next few steps because typing these equations in Latex is rather tedious)</p>
+<p>We can now use this to put together to derive the bellman optimality equations<br>$$Q^∗(s,a)&#x3D;E_{s′∼p}(s’|s,a)[r(s,a)+γV^∗(s′)]\\<br>&#x3D;\sum_{s′}p(s′|s,a)[r(s,a)+γV^∗(s′)]\\<br>&#x3D;\sum_{s′}p(s′|s,a)[r(s,a)+γmaxa′Q^∗(s′,a′)]$$</p>
+<p>Similarly we can also define $V^∗$ as follows<br>$$V^∗(s)&#x3D;max_a\sum_{s′}p(s′|s,a)[r(s,a)+γV^∗(s′)]$$</p>
+<h3 id="Value-Iteration"><a href="#Value-Iteration" class="headerlink" title="Value-Iteration"></a>Value-Iteration</h3><p>And we can use it to define an algorithm as follows</p>
+<ul>
+<li>Initialize values of all states</li>
+<li>While not converged<ul>
+<li>For each state</li>
+<li>$V^{i+1}(s)←max_a\sum_{s′}p(s′|s,a)[r(s,a)+γV^∗(s′)]$</li>
+</ul>
+</li>
+<li>Repeat until convergence (no change in values)<ul>
+<li>$V^0→V^1→⋯→V^i→⋯→V^∗$</li>
+</ul>
+</li>
+</ul>
+<h3 id="Q-Iteration"><a href="#Q-Iteration" class="headerlink" title="Q-Iteration"></a>Q-Iteration</h3><p>Intuitively, each application of this recursive equation can be thought of as propagating the information of the return at a state s to the return values of its neighboring states under the transition probability. This update will produce a sequence of vectors V0, V1, and so on, until we get V star upon convergence.</p>
+<p>Given the nature of the upgrade step, each iteration of this algorithm will have a time complexity order $O(S^2A)$, where S is the cardinality of the state space and A is the cardinality of the action space.</p>
+<p>In a similar fashion we can derive the Q function recursively as follows<br>$$<br>\large Q^{i+1}(s,a) &#x3D; max_a \sum_{s’} p(s’|s,a) [r(s,a) + \gamma \color{red}{max_{a’} Q^i(s’,a’)} ]<br>$$</p>
+<p>Which is basically the same as before, except for the last loop over the actions to get max a.</p>
+<p>So all this begs the question of how to determine the optimal policy??</p>
+<h3 id="Pollicy-Iteration"><a href="#Pollicy-Iteration" class="headerlink" title="Pollicy Iteration"></a>Pollicy Iteration</h3><p>Begin with $π_0$ and iteratively refine it: $π_0→π_1→⋯→π_i→⋯→π^∗$</p>
+<p>Involves repeating two steps:</p>
+<ol>
+<li>Policy Evaluation: Compute $V^π$ similar to Value Iteration</li>
+<li>Policy Refinement: Greedily change actions as per $V^π$ at next states</li>
+</ol>
+<ul>
+<li>$\color{red}{\pi_{i}(s)} \leftarrow argmax_a \sum_{s’} p(s’|s,a) [r(s,a) + \gamma \color{red}{V^{\pi_i}(s’)} ]$</li>
+</ul>
+<p>$π_i$ may seem a bit out of place but it turns out that it converges to π∗ much faster than V^{πi} does to V^{π∗}</p>
+<p>Another possible algorithm is Value Iteration. which we leave to the reader to research</p>
+<h1 id="DQN-Deep-Q-Learning"><a href="#DQN-Deep-Q-Learning" class="headerlink" title="DQN: Deep Q-Learning"></a>DQN: Deep Q-Learning</h1><p>Deep Q-learning assumes a parametrized Q-function that is optimised to match the optimal Q-function, from a defined data set of state, action, next state and reward tuples as shown below. The simplest example of such a parameters network, is a linear Q-network with one weight vector and a bias. Alternatively, the Q-network can also be a deep neural network.</p>
+<p>Intuition: to learn a parametrized Q-Function from data ${ (s,a,s’,r)<em>i }</em>{i&#x3D;1}^N$</p>
+<h3 id="Examples"><a href="#Examples" class="headerlink" title="Examples:"></a>Examples:</h3><ul>
+<li>A simple&#x2F;basic example of such a function is Q-Learning with linear function approximators<ul>
+<li>$Q(s,a;w,b) &#x3D; W_a^T s + b_a$</li>
+</ul>
+</li>
+<li>Another example is Deep Q Learning by fitting a Q-Network<ul>
+<li>$Q(s,a;\theta)$</li>
+<li>works well in practice</li>
+<li>Q Network can take RGB images</li>
+</ul>
+</li>
+</ul>
+<h3 id="CASE-Study"><a href="#CASE-Study" class="headerlink" title="CASE Study"></a>CASE Study</h3><ul>
+<li>this was used to develop a Q learning network that could play atari games. It used the last 4 images to represent the state</li>
+</ul>
+<p>Updating the Q function is the application of the bellman equation seen before<br>$$\color{red}{Q^*(s,a)} &#x3D; \mathbb{E}<em>{s’ \sim p(s’|s,a)} [r(s,a) + \gamma \color{blue}{max</em>{a’} Q^*(s’,a’)}]$$</p>
+<p>During training, we can use a single Q-network to predict the Q-values for the current state and action shown on the left, and the next state and next actions shown in blue on the right. Instead of having a for loop over all states to update the Q-network, as was done in Q-iteration, we introduced a regression objective that will minimize this mean squared error.</p>
+<h3 id="Loss-for-a-single-point"><a href="#Loss-for-a-single-point" class="headerlink" title="Loss for a single point"></a>Loss for a single point</h3><ul>
+<li>MSE Loss :&#x3D; $\color{red}{Q_{new}(s,a)} - (r + \gamma \color{blue}{max_{a’} Q_{old}(s’,a’)})^2$</li>
+<li>Where $Q_{new}$ is the predicted value</li>
+<li>and  $(r + \gamma \color{blue}{max_{a’} Q_{old}(s’,a’)})$ is the target Q-Value</li>
+</ul>
+<p>Intuitively, this will attempt to make the predicted Q-values in red, match the target Q-values on the right. However, in practice, it has been observed that using a single Q-network, makes the loss minimization unstable.</p>
+<p>For stability purposes you can</p>
+<ul>
+<li>Freeze $Q_{old}$ and update $Q_{new}$ parameters</li>
+<li>ie Set $Q_{old}←Q_{new}$ at regular intervals</li>
+</ul>
+<p><img src="/../images/DL_04-01_03.png" alt="practice Q"></p>
+<p>Assuming a fixed dataset, the Avg MSE Loss can be optimized using the <strong>Fitted Q-Iteration Algorithm</strong>. However, the question is how to gather experience or “data”? This is why RL is hard!</p>
+<p>There are two challenges:</p>
+<p><strong>Challenge 1:</strong> Exploration vs Exploitation</p>
+<ul>
+<li>Exploration refers to the process of the agent trying out different actions in the environment to gain more information about the potential rewards associated with different states and actions. </li>
+<li>Exploitation, on the other hand, involves the agent choosing actions that are believed to be the best based on its current knowledge or Q-value estimates.</li>
+</ul>
+<p><strong>Challenge 2:</strong> Non iid, highly correlated data</p>
+<p>High Level look at gathering data</p>
+<p><img src="/../images/DL_04-01_04.png" alt="practice Q"></p>
+<p><strong>What should $\pi_{gather}$ be?</strong><br>Greedy? &#x3D;&gt; Local minimas, no exploration</p>
+<ul>
+<li>argmaxaQ(s,a;θ)</li>
+<li>ϵ greedy exploration strategy<ul>
+<li>$a_t&#x3D;argmax_aQ(s,a)$ with probability 1−ϵ</li>
+<li>or $a_t&#x3D;random$ action with probability ϵ</li>
+</ul>
+</li>
+</ul>
+<p>It should be noted though that there are potentially large pitfalls in this approach. If samples are correlated, then this leads to high variance gradients, which leads to inefficient learning.</p>
+<p>This can be remedied by experience replay.</p>
+<ul>
+<li>A replay buffer stores transitions (s,a,s′,r)</li>
+<li>Continually update replay buffer as game (experience) epsiodes are played, older are samples discarded</li>
+<li>Train Q-Network on random minibatches of transitions from replay memory, instead of consecutive samples</li>
+<li>The larger the buffer the lower the correlation</li>
+</ul>
+<p>Now that we have all the needed pieces, we can fully understand and implement the original Deep Q-Learning Alogrithm</p>
+<p><img src="/../images/DL_04-01_05.png" alt="practice Q"></p>
+<h1 id="Policy-Gradients-Actor-Critic"><a href="#Policy-Gradients-Actor-Critic" class="headerlink" title="Policy Gradients, Actor Critic"></a>Policy Gradients, Actor Critic</h1><p>In this lecture, we will study a family of policy based RL Algorithms, which are based on graded updates or paramterized policies. </p>
+<p>Among the types of methods used in RL are </p>
+<ol>
+<li>value based methods to learn Q-functions</li>
+<li>model based methods to learn transition and reward functions.</li>
+</ol>
+<p>However, both methods provide an optimal policy that is used to perform a task with a high reward.</p>
+<p><img src="/../images/DL_04-01_06.png" alt="Policy Gradients, Actor Critic"></p>
+<p>Policy based methods on the other hand directly parameterize a policy and optimize it to maximize returns.</p>
+<p>Our class of Policies is parametrized by the family of parameters given by θ, which can be the parameters of a linear transformation, or deep network, or other possibilities.</p>
+<p>Formally</p>
+<ul>
+<li>$\large \pi_{\theta}(s|a) : \mathcal{S} \rightarrow \mathcal{A}$</li>
+<li>The objective function we want to maximize is given by<ul>
+<li>$\large J(\pi) &#x3D; \mathbb{E}[\sum_{t&#x3D;1}^T \mathcal{R}(s_t,a_t)]$</li>
+<li>we assume γ&#x3D;1 for this discussion</li>
+</ul>
+</li>
+</ul>
+<p>Going forward we will adjust our notation to properly convey our goal</p>
+<ul>
+<li>Our original optimal policy was defined as<ul>
+<li>$\pi^* &#x3D; \text{argmax}<em>{\pi:\mathcal{S} \rightarrow \mathcal{A}} \mathbb{E}[\sum</em>{t&#x3D;1}^T R(s_t,a_t)]$</li>
+</ul>
+</li>
+<li>Our new way<ul>
+<li>\theta^* &#x3D; \text{argmax}<em>{\theta} \mathbb{E}[\sum</em>{t&#x3D;1}^T R(s_t,a_t)]</li>
+</ul>
+</li>
+</ul>
+<p>To be clear this is not a change in the definition. It’s simply making explicit that the optimal parameters fully describe the optimal policy</p>
+<p><img src="/../images/DL_04-01_07.png" alt="Policy Gradients, Actor Critic"></p>
+<p>Let’s now do a walkthrough of a policy based algorithm</p>
+<h3 id="Step-1-Data-Gathering"><a href="#Step-1-Data-Gathering" class="headerlink" title="Step 1: Data Gathering"></a>Step 1: Data Gathering</h3><p>We begin by defining a finite trajectory tau as<br>$$\tau &#x3D; (s_0,a_0,\cdots,s_T,a_T)$$</p>
+<p>The probability of tau given a policy $\pi_\theta$, is denoted $\pi_\theta(\tau)$, is given by</p>
+<p>$$<br>\begin{split}<br>\pi_{\theta}(\tau) &amp; &#x3D; p_{\theta}(\tau) \<br>&amp; &#x3D; p_{\theta}(s_0,a_0,\cdots,s_T,a_T)  \<br>&amp; &#x3D; p(s_0) \prod_{t&#x3D;0}^T p_{\theta}(a_t|s_t) \cdot p(s_{t+1}|s_t,a_t)<br>\end{split}<br>$$</p>
+<p>Further, we will write our objective as finding the parameters theta that maximizes the expected sum of rewards over trajectories tau.</p>
+<p>$$\large \text{argmax}<em>{\theta} \mathbb{E}</em>{\tau \sim p_{\theta}(\tau)} [\mathcal{R}(\tau)]$$</p>
+<p>Now we can gather data in a much simpler form than before</p>
+<ul>
+<li>We already have a policy $\tau_\theta$</li>
+<li>So we can Sample N trajectories ${\tau i}^N_{i&#x3D;1}$ by acting according to $\pi_\theta$<ul>
+<li>this is a small batch of trajectories using the current $\pi_\theta$, which can be used as a sample based approximation of our reward objective.</li>
+</ul>
+</li>
+</ul>
+<p>In the next few slides, when we formally derive our policy gradient expression, we will see a similar expectation that will again use the same batch of trajectories to estimate the gradient update.</p>
+<p>$$\approx \frac{1}{N} \sum_{i&#x3D;1}^N \sum_{t&#x3D;1}^T r(s_t^i, a_t^i)$$</p>
+<p>Let’s now derive the policy gradient</p>
+<p>$$<br>\large<br>\begin{split}<br>\nabla_{\theta} J(\theta) &amp; &#x3D; \nabla_{\theta} \mathbb{E}<em>{\tau \sim p</em>{\theta}}(\tau) [\mathcal{R}(t)] \<br>&amp; &#x3D; \nabla_{\theta} \int \pi_{\theta}(\tau) \mathcal{R}(\tau) d\tau  \<br>&amp; &#x3D; \int \nabla_{\theta} \pi_{\theta}(\tau) \mathcal{R}(\tau) d\tau  \<br>&amp; &#x3D; \int \nabla_{\theta} \pi_{\theta}(\tau) (\frac{\pi_{\theta}(\tau)}{\pi_{\theta}(\tau)}) \mathcal{R}(\tau) d\tau  \<br>&amp; &#x3D; \int \pi_{\theta}(\tau) \nabla_{\theta} \text{log}\pi_{\theta}(\tau) \mathcal{R}(\tau) d\tau  \<br>&amp; &#x3D; \mathbb{E}<em>{\tau \sim p</em>{\theta}}(\tau) [\nabla_{\theta} \text{log}\pi_{\theta}(\tau) \mathcal{R}(\tau)]<br>\end{split}<br>$$</p>
+<p>Note that we used the identity</p>
+<p>$$\large \nabla_{\theta} \text{log}\pi_{\theta}(\tau) &#x3D; (\frac{\nabla_{\theta} \pi_{\theta}(\tau)}{\pi_{\theta}(\tau)})$$</p>
+<p><img src="/../images/DL_04-01_08.png" alt="Policy Gradients, Actor Critic"></p>
+<p><img src="/../images/DL_04-01_09.png" alt="Policy Gradients, Actor Critic"></p>
+<p>The key idea behind these variations is that subtracting some baseline b shown in red, that does not depend on actions will preserve the mean of the gradient expectation while possibly reducing the variance for specific choices of B. The proof of why the mean is not affected by such a baseline. And what is the best choice of such a baseline is left as an exercise. The different choices of this baseline have resulted in two important variants of the policy gradient algorithm. The first is known as the actor-critic algorithm that replaces rewards with the Q function of the policy that is learned from data. The second algorithm is known as advantage actor-critic that substitutes the reward with the advantage of the policy. It is defined as the Q function minus the V function.</p>
+<p><img src="/../images/DL_04-01_10.png" alt="Policy Gradients, Actor Critic"></p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/Deep-Learning/" rel="tag"># Deep Learning</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/06/30/DL_03-03_Sequence%20modelsAndAttention%20mechanism%20-%20Copy/" rel="prev" title="Deep Learning-3-3 Sequence models & Attention mechanism">
+      <i class="fa fa-chevron-left"></i> Deep Learning-3-3 Sequence models & Attention mechanism
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/07/23/DL_04-02_%20UnsupervisedandSemi-Supervised/" rel="next" title="Deep Learning-4-2 Unsupervised and Semi-Supervised Learning">
+      Deep Learning-4-2 Unsupervised and Semi-Supervised Learning <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Learning-Objectives"><span class="nav-number">1.</span> <span class="nav-text">Learning Objectives</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reinforcement-Learning"><span class="nav-number">2.</span> <span class="nav-text">Reinforcement Learning</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Environment"><span class="nav-number">2.1.</span> <span class="nav-text">Environment</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Evaluative-feedback"><span class="nav-number">2.2.</span> <span class="nav-text">Evaluative feedback</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sequential-decisions"><span class="nav-number">2.3.</span> <span class="nav-text">Sequential decisions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Challenges"><span class="nav-number">2.4.</span> <span class="nav-text">Challenges</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-protocol-for-how-the-agent-interacts-with-the-environment"><span class="nav-number">2.5.</span> <span class="nav-text">The protocol for how the agent interacts with the environment</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Markov-Decision-Processes"><span class="nav-number">3.</span> <span class="nav-text">Markov Decision Processes</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Markov-Property"><span class="nav-number">3.1.</span> <span class="nav-text">Markov Property</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Algorithms-for-Solving-MDPs"><span class="nav-number">4.</span> <span class="nav-text">Algorithms for Solving MDPs</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Optimal-V-Q-functions"><span class="nav-number">4.0.1.</span> <span class="nav-text">Optimal V &amp; Q functions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bellman-Optimality-Equations"><span class="nav-number">4.0.2.</span> <span class="nav-text">Bellman Optimality Equations</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Value-Iteration"><span class="nav-number">4.0.3.</span> <span class="nav-text">Value-Iteration</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q-Iteration"><span class="nav-number">4.0.4.</span> <span class="nav-text">Q-Iteration</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pollicy-Iteration"><span class="nav-number">4.0.5.</span> <span class="nav-text">Pollicy Iteration</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DQN-Deep-Q-Learning"><span class="nav-number">5.</span> <span class="nav-text">DQN: Deep Q-Learning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Examples"><span class="nav-number">5.0.1.</span> <span class="nav-text">Examples:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CASE-Study"><span class="nav-number">5.0.2.</span> <span class="nav-text">CASE Study</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Loss-for-a-single-point"><span class="nav-number">5.0.3.</span> <span class="nav-text">Loss for a single point</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Policy-Gradients-Actor-Critic"><span class="nav-number">6.</span> <span class="nav-text">Policy Gradients, Actor Critic</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Step-1-Data-Gathering"><span class="nav-number">6.0.1.</span> <span class="nav-text">Step 1: Data Gathering</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

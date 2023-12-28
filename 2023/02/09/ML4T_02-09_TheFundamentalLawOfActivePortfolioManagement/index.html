@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Grinold’s Fundamental Law The Coin Flipping Casino Coin-Flip Casino: Risk 1 Coin-Flip Casino: Risk 2 Coin-Flip Casino: Reward&#x2F;Risk  Coin-Flip Casino: Observations IR, IC, and Breadth The Fundame">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Machine Learning for Trading--2-9 The Fundamental Law Of Active Portfolio Management">
+<meta property="og:url" content="http://example.com/2023/02/09/ML4T_02-09_TheFundamentalLawOfActivePortfolioManagement/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="Grinold’s Fundamental Law The Coin Flipping Casino Coin-Flip Casino: Risk 1 Coin-Flip Casino: Risk 2 Coin-Flip Casino: Reward&#x2F;Risk  Coin-Flip Casino: Observations IR, IC, and Breadth The Fundame">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/ML4T-0209_01.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0209_02.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0209_03.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0209_04.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0209_05.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0209_06.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0209_07.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0209_08.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0209_09.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0209_10.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0209_11.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0209_12.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0209_13.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0209_14.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0209_15.png">
+<meta property="article:published_time" content="2023-02-10T02:54:22.000Z">
+<meta property="article:modified_time" content="2023-04-27T17:29:52.521Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="ML4T">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/ML4T-0209_01.png">
+
+<link rel="canonical" href="http://example.com/2023/02/09/ML4T_02-09_TheFundamentalLawOfActivePortfolioManagement/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Machine Learning for Trading--2-9 The Fundamental Law Of Active Portfolio Management | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/09/ML4T_02-09_TheFundamentalLawOfActivePortfolioManagement/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Machine Learning for Trading--2-9 The Fundamental Law Of Active Portfolio Management
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-02-09 21:54:22" itemprop="dateCreated datePublished" datetime="2023-02-09T21:54:22-05:00">2023-02-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Machine-Learning-for-Trading/" itemprop="url" rel="index"><span itemprop="name">Machine Learning for Trading</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ul>
+<li>Grinold’s Fundamental Law</li>
+<li>The Coin Flipping Casino</li>
+<li>Coin-Flip Casino: Risk 1</li>
+<li>Coin-Flip Casino: Risk 2</li>
+<li>Coin-Flip Casino: Reward&#x2F;Risk </li>
+<li>Coin-Flip Casino: Observations</li>
+<li>IR, IC, and Breadth</li>
+<li>The Fundamental Law</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="Grinold’s-Fundamental-Law"><a href="#Grinold’s-Fundamental-Law" class="headerlink" title="Grinold’s Fundamental Law"></a>Grinold’s Fundamental Law</h1><p>In the 1980s, Richard Grinold was seeking a method for relating three factors - performance, skill, and breadth - in investing.</p>
+<p>He developed a relationship called the fundamental law of active portfolio management, which relates performance, P, skill, S, and breadth, B, in the following equation.</p>
+<p>$$P&#x3D;s*\sqrt{B}$$</p>
+<p>We measure performance using a metric called the information ratio. The information ratio is very similar to the Sharpe ratio; however, the Sharpe ratio refers to risk-adjusted returns overall, and the information ratio refers to only the risk-adjusted returns that exceed the market or another portfolio benchmark.</p>
+<p>We measure skill using a metric called the information coefficient. Breadth simply refers to the number of trading opportunities that we take.</p>
+<p>Notice what this relationship is saying: we can improve the performance of our portfolio by either improving our skill in selecting stocks or by investing in more stocks.</p>
+<p><img src="/../images/ML4T-0209_01.png" alt="Grinold&#39;s Fundamental Law"></p>
+<h1 id="The-Coin-Flipping-Casino"><a href="#The-Coin-Flipping-Casino" class="headerlink" title="The Coin Flipping Casino"></a>The Coin Flipping Casino</h1><p>Investing in a stock is, in some ways, similar to betting on a coin flip. In both cases, we make a decision and then earn or lose money based on that decision.</p>
+<p>Let’s run with the coin flip analogy and imagine that we are in a coin-flipping casino. We are going to make bets on coin flips, and if the coin comes up heads, we win; otherwise, we lose.</p>
+<p>For a particular coin flip, we can place an even money bet of N tokens. If we win - the coin comes up heads - we win 2N tokens. If the coin comes up tails, we lose all N tokens.</p>
+<p>At this casino, there are 1000 betting tables, each with their own coin. We have 1000 tokens, and we can choose to bet however we’d like; for example, we can bet 1 token on 1000 tables, 1000 tokens on 1 table, or something in the middle.</p>
+<p>Once we have distributed our tokens - in other words, placed our bets - the coins are flipped all at once, and the winnings are paid out.</p>
+<p>To make the analogy more realistic, let’s assume that the coin is biased, and we know that it shows heads 51% of the time and tails 49% of the time. This informational edge is similar to the alpha value we associate with particular stocks that we think are going to outperform the market.</p>
+<p><img src="/../images/ML4T-0209_02.png" alt="The Coin Flipping Casino"></p>
+<h2 id="Which-Bet-is-Better-Quiz"><a href="#Which-Bet-is-Better-Quiz" class="headerlink" title="Which Bet is Better Quiz"></a>Which Bet is Better Quiz</h2><p>Let’s consider two different ways to bet.</p>
+<p>One approach is to put all 1000 tokens on one table and zero tokens on the other 999 tables. Another approach is to put one coin on each of the 1000 tables. Which of these approaches is better, or is it the case that they are equivalent?</p>
+<p><img src="/../images/ML4T-0209_03.png" alt="The Coin Flipping Casino"></p>
+<p><img src="/../images/ML4T-0209_04.png" alt="The Coin Flipping Casino"></p>
+<p>The first bet is very risky; that is, there is a 49% chance that we are going to lose all of our money with the single flip of a coin. The second bet is much less risky. By distributing our tokens across all one thousand tables, we only lose all of our money if we lose all 1000 bets: a very low probability indeed.</p>
+<p>Since the expected return for each of these bets is the same, the second bet is a better choice from the perspective of risk-adjusted reward.</p>
+<h2 id="Coin-Flip-Casino-Reward"><a href="#Coin-Flip-Casino-Reward" class="headerlink" title="Coin-Flip Casino: Reward"></a>Coin-Flip Casino: Reward</h2><p>To figure out which of these different scenarios is best, we need to consider reward and risk. When we talk about reward in this situation, we are talking about expected return.</p>
+<p>In the single-bet case, where we bet 1000 chips at once, our expected return is the chance of winning the bet times the amount that we would win plus the chance of losing the bet times the amount that we would lose.</p>
+<p>Since we are using a biased coin, we have a 51% chance of winning 1000 tokens and a 49% chance of losing 1000 tokens. If we multiply this out, we see that our expected return is 20 tokens.</p>
+<p>$$E &#x3D; 0.51 * 1000 + 0.49 * (-1000) &#x3D;20$$</p>
+<p>What is the expected return in the multi-bet case, where we bet 1000 tokens across 1000 different tables? </p>
+<p>As shown in the figure, the rewards will be the same.</p>
+<p><img src="/../images/ML4T-0209_05.png" alt="Coin-Flip Casino: Reward"></p>
+<h1 id="Coin-Flip-Casino-Risk-1"><a href="#Coin-Flip-Casino-Risk-1" class="headerlink" title="Coin-Flip Casino: Risk 1"></a>Coin-Flip Casino: Risk 1</h1><p>There are several ways that we might consider risk in this scenario.</p>
+<p>First, let’s look at the chance of us “losing it all”. In other words, after we have placed our bets, what is the chance that every coin flip we bet on lands on tails?</p>
+<p>In the single-bet case, where we bet everything on a single table, and the outcome is determined by the flip of a single coin, there is a 49% chance we lose all of our money. That’s a very high probability of loss; would you bet your savings account on odds like that?</p>
+<p>Let’s now consider the multi-bet scenario, where we bet a single token across 1000 tables, and our return is determined by the result of 1000 coin flips.</p>
+<p>In this scenario, the chance that we lose all of our money is the chance that we lose the first flip times the chance that we lose the second flip - and so forth - times the chance that we lose the one-thousandth flip.</p>
+<p>Formally, the chance of losing all of our money in the multi-bet scenario is $0.49^1000$, which is an infinitesimally small probability indeed.</p>
+<p><img src="/../images/ML4T-0209_06.png" alt="Coin-Flip Casino: Risk"></p>
+<h1 id="Coin-Flip-Casino-Risk-2"><a href="#Coin-Flip-Casino-Risk-2" class="headerlink" title="Coin-Flip Casino: Risk 2"></a>Coin-Flip Casino: Risk 2</h1><p>Another way we might examine risk in this experiment is to consider the standard deviation of all of the individual bet outcomes.</p>
+<p>In the multi-bet scenario, we are going to have a collection of 1000 outcomes that are either 1 or -1. Either we won the bet and won a token, or we didn’t and lost a token. The standard deviation for this case is 1.0.</p>
+<p>In the single-bet scenario, we are going to have a collection of 999 outcomes that are exactly zero and one outcome that is either 1000 or -1000. Regardless of whether we win or lose, the standard deviation of outcomes in this scenario is 31.62.</p>
+<p>Using this quantification of risk, we can see that the single-bet scenario is almost 32 times riskier than the multi-bet scenario.</p>
+<p><img src="/../images/ML4T-0209_07.png" alt="Coin-Flip Casino: Risk"></p>
+<h1 id="Coin-Flip-Casino-Reward-Risk"><a href="#Coin-Flip-Casino-Reward-Risk" class="headerlink" title="Coin-Flip Casino: Reward&#x2F;Risk"></a>Coin-Flip Casino: Reward&#x2F;Risk</h1><p>Now we can consider the risk-adjusted reward.</p>
+<p>Let’s look at the single-bet case first. In this case, the expected reward is $20, and the expected risk is 31.62 dollors. If we divide the reward by the risk, we get a value of 0.63.</p>
+<p>What is the risk-adjusted reward calculation for the multi-bet case?</p>
+<p><img src="/../images/ML4T-0209_08.png" alt="Coin-Flip Casino: Reward/Risk"></p>
+<h1 id="Coin-Flip-Casino-Observations"><a href="#Coin-Flip-Casino-Observations" class="headerlink" title="Coin-Flip Casino: Observations"></a>Coin-Flip Casino: Observations</h1><p>As we saw, the risk-adjusted reward for the single-bet case, $RAR_{single}$, is 0.63. Alternatively, the risk-adjusted reward for the 1000-bet case, $RAR_{multi}$, is 20. Notice the following relationship.</p>
+<p>$$RAR_{multi}&#x3D;RAR_{single} * \sqrt{bets}$$</p>
+<p>As we increase the number of bets that we place, the overall risk-adjusted reward increases with the square root of that number. Put another way, we can increase the overall risk-adjusted reward of our bets by improving the odds of a single bet or by spreading our money out over more bets.</p>
+<p>This relationship is identical to the fundamental law of active portfolio management, which relates performance, skill, and breadth in the following way.</p>
+<p>$$performance&#x3D;skill * \sqrt{breadth}$$</p>
+<p><img src="/../images/ML4T-0209_09.png" alt="Coin-Flip Casino: Observations"></p>
+<p>Let’s consider two real-world funds.</p>
+<p>The first is Renaissance Technologies, a hedge fund founded by Jim Simons, a math and computer science professor. The second is Warren Buffett, the investor who runs Berkshire Hathaway.</p>
+<p>Both of these funds have produced similar returns over the years, yet they have very different investment styles. On the one hand, Buffett holds about 120 stocks and doesn’t trade them, while, on the other hand, Renaissance Technologies trades upwards of 100,000 times a day.</p>
+<p>We can use the fundamental law of active portfolio management to understand how two funds can act so differently and yet post similar returns.</p>
+<p><img src="/../images/ML4T-0209_10.png" alt="Coin-Flip Casino: Observations"></p>
+<h1 id="IR-IC-and-Breadth"><a href="#IR-IC-and-Breadth" class="headerlink" title="IR, IC, and Breadth"></a>IR, IC, and Breadth</h1><p>Recall that we use the CAPM equation, as shown below, to determine the return on a portfolio.</p>
+<p>We can break this equation into two main components: a market component comprising, and a skill component.</p>
+<p>The information ratio is the Sharpe ratio of the observed α values for a portfolio over many periods. Since the alpha component quantifies returns exceeding the market, we can think of the information ratio as a measure of risk-adjusted excess return.</p>
+<p><img src="/../images/ML4T-0209_11.png" alt="IR, IC, and Breadth"></p>
+<p>The information coefficient (IC) is the correlation of the manager’s forecast to actual returns. IC can range from -1, a completely incorrect forecast, to 1, a perfectly correct forecast.</p>
+<p>Breadth represents the number of trading opportunities an investor encounters per year. Warren Buffett holds 120 stocks, so he sees 120 trading opportunities per year. On the other hand, Jim Simons, who trades over 100,000 times a day, has a much larger breadth.</p>
+<p><img src="/../images/ML4T-0209_12.png" alt="IR, IC, and Breadth"></p>
+<h1 id="The-Fundamental-Law"><a href="#The-Fundamental-Law" class="headerlink" title="The Fundamental Law"></a>The Fundamental Law</h1><p>Given an information coefficient, IC, and A breadth, BR, the fundamental law of active portfolio management states the following equation to calculate the information ratio, IR.</p>
+<p>$$IR&#x3D;IC * \sqrt{BR}$$</p>
+<p><img src="/../images/ML4T-0209_13.png" alt="The Fundamental Law"></p>
+<h2 id="Simons-vs-Buffet-Quiz"><a href="#Simons-vs-Buffet-Quiz" class="headerlink" title="Simons vs. Buffet Quiz"></a>Simons vs. Buffet Quiz</h2><p>How can we relate the performance of Renaissance Technologies - really, Jim Simons - and Warren Buffett?</p>
+<p>For this problem, let’s assume that Simons and Buffett both have the same information ratio. Let’s also assume that Simons’s stock-picking algorithms are only about 1&#x2F;1000th as smart as Buffett’s; in other words, Simon’s information coefficient is 1&#x2F;1000th that of Buffett.</p>
+<p>If Buffett trades 120 times a year, how many times must Simons trade to maintain the same information ratio as Buffett?</p>
+<p><img src="/../images/ML4T-0209_14.png" alt="Quiz"></p>
+<p><img src="/../images/ML4T-0209_15.png" alt="Quiz"></p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/ML4T/" rel="tag"># ML4T</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/02/09/Information_Systems_Chapter_13/" rel="prev" title="Information System 13- Information for Electronic Business">
+      <i class="fa fa-chevron-left"></i> Information System 13- Information for Electronic Business
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/02/10/ML4T_02-10_TheEfficient_Frontier/" rel="next" title="Machine Learning for Trading--2-10 Portfolio Optimization and the Efficient Frontier">
+      Machine Learning for Trading--2-10 Portfolio Optimization and the Efficient Frontier <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Grinold%E2%80%99s-Fundamental-Law"><span class="nav-number">1.</span> <span class="nav-text">Grinold’s Fundamental Law</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-Coin-Flipping-Casino"><span class="nav-number">2.</span> <span class="nav-text">The Coin Flipping Casino</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Which-Bet-is-Better-Quiz"><span class="nav-number">2.1.</span> <span class="nav-text">Which Bet is Better Quiz</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Coin-Flip-Casino-Reward"><span class="nav-number">2.2.</span> <span class="nav-text">Coin-Flip Casino: Reward</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Coin-Flip-Casino-Risk-1"><span class="nav-number">3.</span> <span class="nav-text">Coin-Flip Casino: Risk 1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Coin-Flip-Casino-Risk-2"><span class="nav-number">4.</span> <span class="nav-text">Coin-Flip Casino: Risk 2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Coin-Flip-Casino-Reward-Risk"><span class="nav-number">5.</span> <span class="nav-text">Coin-Flip Casino: Reward&#x2F;Risk</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Coin-Flip-Casino-Observations"><span class="nav-number">6.</span> <span class="nav-text">Coin-Flip Casino: Observations</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IR-IC-and-Breadth"><span class="nav-number">7.</span> <span class="nav-text">IR, IC, and Breadth</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-Fundamental-Law"><span class="nav-number">8.</span> <span class="nav-text">The Fundamental Law</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Simons-vs-Buffet-Quiz"><span class="nav-number">8.1.</span> <span class="nav-text">Simons vs. Buffet Quiz</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

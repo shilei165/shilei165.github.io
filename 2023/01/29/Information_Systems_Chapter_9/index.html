@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Learning Objectives Understand the various threats to information privacy Identify technologies and solutions used to protect the confidentiality and privacy of information Explain how information pri">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Information System 9- Protecting the Confidentiality and Privacy of Information">
+<meta property="og:url" content="http://example.com/2023/01/29/Information_Systems_Chapter_9/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="Learning Objectives Understand the various threats to information privacy Identify technologies and solutions used to protect the confidentiality and privacy of information Explain how information pri">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-01-29T17:24:00.000Z">
+<meta property="article:modified_time" content="2023-01-29T17:27:23.369Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Information Systems">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2023/01/29/Information_Systems_Chapter_9/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Information System 9- Protecting the Confidentiality and Privacy of Information | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/29/Information_Systems_Chapter_9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Information System 9- Protecting the Confidentiality and Privacy of Information
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-01-29 12:24:00" itemprop="dateCreated datePublished" datetime="2023-01-29T12:24:00-05:00">2023-01-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Information-Systems/" itemprop="url" rel="index"><span itemprop="name">Information Systems</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Learning-Objectives"><a href="#Learning-Objectives" class="headerlink" title="Learning Objectives"></a><strong>Learning Objectives</strong></h1><ul>
+<li>Understand the various threats to information privacy</li>
+<li>Identify technologies and solutions used to protect the confidentiality and privacy of information</li>
+<li>Explain how information privacy is a component of the PAPA ethical framework</li>
+<li>Discuss the relationship between information privacy and information security</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="Introduction-and-Definitions"><a href="#Introduction-and-Definitions" class="headerlink" title="Introduction and Definitions"></a>Introduction and Definitions</h1><p><strong>Privacy of information</strong> is the confidentiality of the information collected by organizations about the individuals using their services.</p>
+<p>Example: friends post something about them on Facebook or Twitter without their prior approval. –&gt; everyone has to be concerned not only about their own information privacy but also about the privacy of information of others.</p>
+<h1 id="Information-Privacy-Threats"><a href="#Information-Privacy-Threats" class="headerlink" title="Information Privacy Threats"></a>Information Privacy Threats</h1><ul>
+<li><p>Data Collection</p>
+<ul>
+<li>Faster, Easier, Hidden - Cookies (store information on your computer about you or your computer when you browse or enter information into certain website)</li>
+<li>Usage Tracking – Clickstream (Looks at IP of the computer connecting to a site, identifying what page the computer connected from, what page it goes to after the current one, how often in connects to this sets, and whether actual purchases are made –&gt; give marketers an indication of successful and unsuccessful online ads..)</li>
+<li>Proliferation of Data Sources (leads to more data being available and to individuals being increasingly concerned about the privacy of their information)</li>
+</ul>
+</li>
+<li><p>Secondary Use of Information (Data Sharing) – use of data for purposes other than those for which they were originally collected</p>
+<ul>
+<li>Function Creep – It is another term used to refer to data being used for other functions beyond those purposes for which they were collected.</li>
+<li>Opt-in vs. Opt-Out – When you opt in, you have to specifically state that you agree that your data can be used for other purposes, often to receive special deals or information from partner companies. When you opt out, you have to make sure you tell the company you do not want your data shared with others or used for other purposes.</li>
+</ul>
+</li>
+</ul>
+<h1 id="Consequences-of-Privacy-Violations"><a href="#Consequences-of-Privacy-Violations" class="headerlink" title="Consequences of Privacy Violations"></a>Consequences of Privacy Violations</h1><h2 id="Individual-Consequences-Identify-Theft"><a href="#Individual-Consequences-Identify-Theft" class="headerlink" title="Individual Consequences: Identify Theft"></a>Individual Consequences: Identify Theft</h2><ul>
+<li>Using someone else’s personal information for your own personal gain (fraudulent activities)</li>
+<li>The best way for individuals to protect themselves from identity theft is to follow basic security guidelines and common sense.<ul>
+<li>Do not use your Social Security Number unless it is absolutely needed. </li>
+<li>Shred everything that has any data about you. </li>
+<li>Place outgoing mail at the post office or locked collection box.</li>
+<li>Password protect financial accounts with strong passwords and two-factor authentication, if available.</li>
+<li>Really check the statements you receive.</li>
+<li>Request photo identification when someone asks for your information, and do not give it out over the phone, Internet, or mail unless you initiated the contact.</li>
+<li>Destroy digital data by going beyond a simple delete.</li>
+<li>Limit the information provided on your checks.</li>
+<li>Request your annual credit report and check it.</li>
+</ul>
+</li>
+</ul>
+<h2 id="Organizational-Consequences-Company-Reputation"><a href="#Organizational-Consequences-Company-Reputation" class="headerlink" title="Organizational Consequences: Company Reputation"></a>Organizational Consequences: Company Reputation</h2><p>If organizations fail to protect the privacy of their customers’ information, then their reputations can suffer.</p>
+<p>The costs of privacy breaches can be enormous for the companies involved. </p>
+<ul>
+<li>First, they may lose current and future customers. </li>
+<li>Second, they have to repair the breaches. </li>
+<li>Third, they have to compensate customers for their potential identity theft issues.</li>
+</ul>
+<h1 id="Technologies-and-Solutions-for-Information-Privacy"><a href="#Technologies-and-Solutions-for-Information-Privacy" class="headerlink" title="Technologies and Solutions for Information Privacy"></a>Technologies and Solutions for Information Privacy</h1><ul>
+<li>Cookies and Cookie Managers<ul>
+<li>Delete unwanted or dangerous cookies</li>
+<li>Can also use settings not to accept cookies – Google Chrome: “Settings”-&gt; “Privacy and security”-&gt;”Cookies and other site data”</li>
+</ul>
+</li>
+<li>Anonymous Browsing<ul>
+<li>Not allowing websites to track what you do online. </li>
+<li>Use settings to block or delete cookies</li>
+<li>Use settings to not send location information to websites</li>
+<li>Use anonymous search engine (e.g., DuckDuckGo)</li>
+<li>Turn off settings “personalizing” your searches </li>
+<li>Use anonymous browsing (e.g., InPrivate browsing - IE Explorer; Incognito - Chrome; etc.)</li>
+<li>Use a private browsers (e.g., Tor Browser (<a target="_blank" rel="noopener" href="https://www.torproject.org/">https://www.torproject.org/</a>))</li>
+</ul>
+</li>
+<li>Privacy Statement or Policy<ul>
+<li>Most serious companies who do business online have privacy policies. </li>
+<li>A <strong>privacy policy</strong> is a statement that describes what the organization’s practices are with respect to the privacy of its customers.</li>
+</ul>
+</li>
+<li>Privacy Seals<ul>
+<li><strong>Privacy seals</strong> offer companies another attempt at self-regulation regarding privacy of consumers and a way to reassure consumers about transacting with them online.</li>
+<li>These seals are also called reputation seals and are issued by such sites as TrustArc (previously called TRUSTe) (<a target="_blank" rel="noopener" href="http://www.trustarc.com/">http://www.trustarc.com</a>) and WebTrust. </li>
+<li>Examples include those offered by VeriSign (<a target="_blank" rel="noopener" href="http://www.verisign.com/">http://www.verisign.com</a>) and McAfee Secure (<a target="_blank" rel="noopener" href="https://www.mcafeesecure.com/">https://www.mcafeesecure.com/</a>).</li>
+</ul>
+</li>
+</ul>
+<h1 id="Government-Information-Privacy-Regulations"><a href="#Government-Information-Privacy-Regulations" class="headerlink" title="Government Information Privacy Regulations"></a>Government Information Privacy Regulations</h1><p>Even though information privacy is largely our responsibility as individuals, there are specific situations where governments have created regulations to protect information privacy. In fact, there are actually many such regulations throughout the world.</p>
+<ul>
+<li>European Union – General Data Protection Regulation (GDPR)</li>
+<li>United States – Gramm-Leach-Bliley Financial Services Modernization Act of 1999 (GLBA)</li>
+</ul>
+<h1 id="Mobile-Information-Privacy"><a href="#Mobile-Information-Privacy" class="headerlink" title="Mobile Information Privacy"></a>Mobile Information Privacy</h1><p>Information privacy is even more of an issue in mobile settings, such as in the use of your smartphone or tablet.</p>
+<p><strong>Issues in Mobile Environments:</strong></p>
+<ul>
+<li>Collection without awareness</li>
+<li>Fewer regulations</li>
+<li>Enormous amounts of personal data on devices</li>
+<li>Downloading apps without evaluating them</li>
+</ul>
+<p><strong>Recommendations:</strong></p>
+<ul>
+<li>Use only recognized app downloading location (Apple App Store, Google Play, etc.) </li>
+<li>Use settings that limit what apps have access to</li>
+<li>Install security apps on smartphone</li>
+<li>Secure lock screen with a PIN or password </li>
+<li>Use “Find My Phone” and “Remote Wipe” </li>
+<li>Don’t use public networks for anything important</li>
+</ul>
+<h1 id="IoT-and-Privacy"><a href="#IoT-and-Privacy" class="headerlink" title="IoT and Privacy"></a>IoT and Privacy</h1><ul>
+<li>The world of IoT provides huge amounts of personal data.</li>
+<li>The Internet Society (<a target="_blank" rel="noopener" href="http://internetsociety.org/">http://internetsociety.org</a>) suggests:<ul>
+<li>Enhance user control regarding the data collected by IoT devices and services and how they are managed.</li>
+<li>Improve transparency and notification by providing clear, accurate, relevant, and detailed information to users.</li>
+<li>Privacy laws and policies should keep up with technology and include the use of IoT sensors and continuous monitoring.</li>
+<li>Involve a broad variety of stakeholders in IoT privacy discussions to address the diversity of IoT risks and benefits</li>
+</ul>
+</li>
+</ul>
+<h1 id="Privacy-and-Ethics"><a href="#Privacy-and-Ethics" class="headerlink" title="Privacy and Ethics"></a>Privacy and Ethics</h1><p>The increased use of information technologies would lead to four major concerns about the use of informaiton:</p>
+<ul>
+<li>Privacy</li>
+<li>Accuracy</li>
+<li>Property</li>
+<li>Accessibility</li>
+</ul>
+<h1 id="Ethical-Decisions"><a href="#Ethical-Decisions" class="headerlink" title="Ethical Decisions"></a>Ethical Decisions</h1><p>PLUS Framework is a set of questions to help in making ethical decisions</p>
+<ul>
+<li>[P] is consistent with organizational policies, procedures and guidelines?</li>
+<li>[L] is acceptable under applicable laws and regulations?</li>
+<li>[U] conforms to universal values such as empathy, integrity, and justice?</li>
+<li>[S] satisfies your personal definition of what is good, right, and fair?</li>
+</ul>
+<h1 id="Relationship-between-Security-and-Privacy"><a href="#Relationship-between-Security-and-Privacy" class="headerlink" title="Relationship between Security and Privacy"></a>Relationship between Security and Privacy</h1><ul>
+<li>Security is the protection of information against threats such as unauthorized access to data, falsification of data, or denial of service.</li>
+<li>A company can provide every security protection possible against these threats to your information without necessarily having the intent of protecting the confidentiality of your information.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Information-Systems/" rel="tag"># Information Systems</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/01/28/Information_Systems_Chapter_8/" rel="prev" title="Information System 8- Securing Information">
+      <i class="fa fa-chevron-left"></i> Information System 8- Securing Information
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/01/31/Information_Systems_Chapter_10/" rel="next" title="Information System 10- Developing Informaiton Systems">
+      Information System 10- Developing Informaiton Systems <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Learning-Objectives"><span class="nav-number">1.</span> <span class="nav-text">Learning Objectives</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction-and-Definitions"><span class="nav-number">2.</span> <span class="nav-text">Introduction and Definitions</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Information-Privacy-Threats"><span class="nav-number">3.</span> <span class="nav-text">Information Privacy Threats</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Consequences-of-Privacy-Violations"><span class="nav-number">4.</span> <span class="nav-text">Consequences of Privacy Violations</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Individual-Consequences-Identify-Theft"><span class="nav-number">4.1.</span> <span class="nav-text">Individual Consequences: Identify Theft</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Organizational-Consequences-Company-Reputation"><span class="nav-number">4.2.</span> <span class="nav-text">Organizational Consequences: Company Reputation</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Technologies-and-Solutions-for-Information-Privacy"><span class="nav-number">5.</span> <span class="nav-text">Technologies and Solutions for Information Privacy</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Government-Information-Privacy-Regulations"><span class="nav-number">6.</span> <span class="nav-text">Government Information Privacy Regulations</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Mobile-Information-Privacy"><span class="nav-number">7.</span> <span class="nav-text">Mobile Information Privacy</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IoT-and-Privacy"><span class="nav-number">8.</span> <span class="nav-text">IoT and Privacy</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Privacy-and-Ethics"><span class="nav-number">9.</span> <span class="nav-text">Privacy and Ethics</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Ethical-Decisions"><span class="nav-number">10.</span> <span class="nav-text">Ethical Decisions</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Relationship-between-Security-and-Privacy"><span class="nav-number">11.</span> <span class="nav-text">Relationship between Security and Privacy</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

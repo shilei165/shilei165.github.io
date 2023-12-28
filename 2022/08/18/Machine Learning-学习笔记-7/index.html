@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="这篇文章跟大家分享一下Machine Learning的学习笔记: 07-正则化(Regularization)。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Machine Learning-学习笔记-07-Regularization">
+<meta property="og:url" content="http://example.com/2022/08/18/Machine%20Learning-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-7/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="这篇文章跟大家分享一下Machine Learning的学习笔记: 07-正则化(Regularization)。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/overFitting.png">
+<meta property="og:image" content="http://example.com/images/overFitting_2.png">
+<meta property="article:published_time" content="2022-08-18T16:40:23.000Z">
+<meta property="article:modified_time" content="2023-07-17T14:50:11.374Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="计算机">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="人工智能">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/overFitting.png">
+
+<link rel="canonical" href="http://example.com/2022/08/18/Machine%20Learning-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-7/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Machine Learning-学习笔记-07-Regularization | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/18/Machine%20Learning-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Machine Learning-学习笔记-07-Regularization
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-08-18 12:40:23" itemprop="dateCreated datePublished" datetime="2022-08-18T12:40:23-04:00">2022-08-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>这篇文章跟大家分享一下Machine Learning的学习笔记: 07-正则化(Regularization)。</p>
+<span id="more"></span>
+
+<h1 id="过度拟合的问题"><a href="#过度拟合的问题" class="headerlink" title="过度拟合的问题"></a>过度拟合的问题</h1><p>我们已经学习了几种不同的学习算法，包括线性回归和逻辑回归，它们能够有效地解决许多问题，但是当将它们应用到某些特定的机器学习应用时，会遇到过度拟合(over-fitting)的问题，可能会导致它们效果很差。</p>
+<p>下面是一个回归问题的例子：</p>
+<p><img src="/../images/overFitting.png" alt="overFitting"></p>
+<p>第一个模型是一个线性模型，欠拟合，不能很好地适应我们的训练集；第三个模型是一个四次方的模型，过于强调拟合原始数据，而丢失了算法的本质：预测新数据。我们可以看出，若给出一个新的值使之预测，它将表现的很差，是过拟合，虽然能非常好地适应我们的训练集但在新输入变量进行预测时可能会效果不好；而中间的模型似乎最合适。</p>
+<p>分类问题中也存在这样的问题：</p>
+<p><img src="/../images/overFitting_2.png" alt="overFitting_2"></p>
+<p>应该如何处理过度拟合问题？</p>
+<ul>
+<li><p>减少特征数量。</p>
+<ul>
+<li>可以是手工选择保留哪些特征</li>
+<li>使用一些模型选择的算法来帮忙（例如PCA）</li>
+</ul>
+</li>
+<li><p>正则化。 </p>
+<ul>
+<li>保留所有的特征，但是减少参数的大小（magnitude）。</li>
+<li>适用于有多个特征，但每个特征对预测函数的贡献都比较小。</li>
+</ul>
+</li>
+</ul>
+<h1 id="代价函数"><a href="#代价函数" class="headerlink" title="代价函数"></a>代价函数</h1><p>上面的回归问题中如果我们的模型是：  \(h_\theta(x)&#x3D;\theta_0+\theta_1x_1+\theta_2x_2^2+\theta_3x_3^3+\theta_4x_4^4\) 我们可以从之前的事例中看出，正是那些高次项导致了过拟合的产生，所以如果我们能让这些高次项的系数接近于0的话，我们就能很好的拟合了。 所以我们要做的就是在一定程度上减小这些参数 的值，这就是<strong>正则化的基本方法</strong>。</p>
+<p>我们决定要减少和的大小，我们要做的便是修改代价函数，在其中和 设置一点惩罚。这样做的话，我们在尝试最小化代价时也需要将这个惩罚纳入考虑中，并最终导致选择较小一些的和。 修改后的代价函数如下：</p>
+<p>$$<br>J(\theta)&#x3D; \frac{1}{2m}[\sum_{i&#x3D;1}^m(h_\theta(x^{(i)})-y^{(i)})^2+1000\theta_3^2+1000\theta_4^2]<br>$$</p>
+<p>类似的，假如我们有非常多的特征，我们并不知道其中哪些特征我们要惩罚，我们将对除\(\theta_0\)以外的所有的特征进行惩罚，并且让代价函数最优化的软件来选择这些惩罚的程度。这样的结果是得到了一个较为简单的能防止过拟合问题的假设：</p>
+<p>$$<br>J(\theta)&#x3D;\frac{1}{2m}[\sum_{i&#x3D;1}^{m}h_\theta(x^{(i)})-y^{(i)})^2+\lambda \sum_{j&#x3D;1}^{n}\theta_j^2]<br>$$</p>
+<p>如果我们令\(\lambda\)的值很大的话，为了使Cost Function 尽可能的小，所有的 \(\theta\)的值（不包括\(\theta_0\)）都会在一定程度上减小。 但若\(\lambda\)的值太大了，那么\(\theta\)（不包括\(\theta_0\)）都会趋近于0，这样我们所得到的只能是一条平行于轴的直线。 所以对于正则化，我们要取一个合理的\(\lambda\)的值，这样才能更好的应用正则化。 </p>
+<h1 id="正则化线性回归"><a href="#正则化线性回归" class="headerlink" title="正则化线性回归"></a>正则化线性回归</h1><p>正则化线性回归的代价函数为：</p>
+<p>$$<br>J(\theta)&#x3D;\frac{1}{2m}[\sum_{i&#x3D;1}^{m}h_\theta(x^{(i)})-y^{(i)})^2+\lambda \sum_{j&#x3D;1}^{n}\theta_j^2]<br>$$</p>
+<p>如果我们要使用梯度下降法令这个代价函数最小化，因为我们未对进行正则化，所以梯度下降算法将分两种情形：</p>
+<p>$$<br>\theta_0 :&#x3D; \theta_0 - \alpha\frac{1}{m}\sum_{i&#x3D;1}^{m}(h_\theta(x^{(i)})-y^{(i)})x_0^{(i)}<br>$$<br>$$<br>\theta_j :&#x3D; \theta_j - \alpha[\frac{1}{m}\sum_{i&#x3D;1}^{m}(h_\theta(x^{(i)})-y^{(i)})x_j^{(i)}+\frac{\lambda}{m}\theta_j]\ \ \ \ \ \ for\  j &#x3D; 1,2,3…<br>$$</p>
+<p>将上面的公式稍加整理，即可得到：<br>$$<br>\theta_j :&#x3D; \theta_j(1-\alpha\frac{\lambda}{m}) - \alpha\frac{1}{m}[\sum_{i&#x3D;1}^{m}(h_\theta(x^{(i)})-y^{(i)})x_j^{(i)}]<br>$$</p>
+<p>可以看出，正则化线性回归的梯度下降算法的变化在于，每次都在原有算法更新规则的基础上令值减少了一个额外的值。</p>
+<p>我们同样也可以利用正规方程来求解正则化线性回归模型，方法如下所示：</p>
+<p>$$<br>\theta &#x3D; \begin{pmatrix}<br>X^TX+\lambda\begin{bmatrix}<br>0&amp;\ &amp;\ &amp;\ &amp;\ \\<br>\ &amp;1 &amp;\ &amp;\ &amp;\ \\<br>\ &amp;\ &amp;1 &amp;\ &amp;\ \\<br>\ &amp;\ &amp;\ &amp;\ddots &amp;\ \\<br>\ &amp;\ &amp;\ &amp;\ &amp;1 \end{bmatrix}<br>\end{pmatrix}^{-1} X^Ty<br>$$</p>
+<h1 id="正则化的逻辑回归模型"><a href="#正则化的逻辑回归模型" class="headerlink" title="正则化的逻辑回归模型"></a>正则化的逻辑回归模型</h1><p>我们也给代价函数增加一个正则化的表达式，得到代价函数：<br>$$<br>J(\theta)&#x3D; -\frac{1}{m}[\sum_{i&#x3D;1}^{m}y^{(i)}log h_\theta(x^{(i)}) + (1-y^{(i)})log(1-h_\theta(x^{(i)}))]+\frac{\lambda}{2m}\sum_{j&#x3D;1}^{n}\theta_j^2<br>$$</p>
+<p>要最小化该代价函数，通过求导，得出梯度下降算法为：</p>
+<p>$$<br>\theta_0 :&#x3D; \theta_0 - \alpha\frac{1}{m}\sum_{i&#x3D;1}^m(h_\theta(x^{i})-y^{(i)})x_0^{(i)}<br>$$<br>$$<br>\theta_j :&#x3D; \theta_j - \alpha[\frac{1}{m}\sum_{i&#x3D;1}^m(h_\theta(x^{i})-y^{(i)})x_j^{(i)}+\frac{\lambda}{m}\theta_j]<br>$$<br>注：看上去同线性回归一样，但是知道\(h_\theta(x)&#x3D;g(\theta^TX)\) ，所以与线性回归不同。 Octave 中，我们依旧可以用 fminuc 函数来求解代价函数最小化的参数，值得注意的是参数\(\theta_0\)的更新规则与其他情况不同。</p>
+<p>下面是 octave 中使用 fminunc 函数的代码示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">function [jVal, gradient] = costFunction(theta)</span><br><span class="line"></span><br><span class="line">    jVal = [...code to compute J(theta)...];</span><br><span class="line"></span><br><span class="line">    gradient(1) = [...code to compute derivative of the partial derivative of cost function at theta_0];</span><br><span class="line"></span><br><span class="line">    gradient(2) = [...code to compute derivative of the partial derivative of cost function at theta_1];</span><br><span class="line">    .</span><br><span class="line">    .</span><br><span class="line">    .</span><br><span class="line">    gradient(n+1) = [...code to compute derivative of the partial derivative of cost function at theta_n];</span><br><span class="line">    </span><br><span class="line">end</span><br><span class="line">    </span><br><span class="line">options = optimset(&#x27;GradObj&#x27;, &#x27;on&#x27;, &#x27;MaxIter&#x27;, &#x27;100&#x27;);</span><br><span class="line">    </span><br><span class="line">initialTheta = zeros(n+1,1);</span><br><span class="line">    </span><br><span class="line">[optTheta, functionVal, exitFlag] = fminunc(@costFunction, initialTheta, options);</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" rel="tag"># 计算机</a>
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+              <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" rel="tag"># 人工智能</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/08/17/Machine%20Learning-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-6/" rel="prev" title="Machine Learning-学习笔记-06-Logistic Regression">
+      <i class="fa fa-chevron-left"></i> Machine Learning-学习笔记-06-Logistic Regression
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/08/19/Machine%20Learning-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-8/" rel="next" title="Machine Learning-学习笔记-08-exercise 2 summary">
+      Machine Learning-学习笔记-08-exercise 2 summary <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%87%E5%BA%A6%E6%8B%9F%E5%90%88%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">过度拟合的问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E4%BB%B7%E5%87%BD%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">代价函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E5%8C%96%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92"><span class="nav-number">3.</span> <span class="nav-text">正则化线性回归</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E5%8C%96%E7%9A%84%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.</span> <span class="nav-text">正则化的逻辑回归模型</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

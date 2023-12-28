@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Learning Objectives Optimization Architecture Data Consideration Training to Optimize ML Considerations (Regularization &amp; Overfitting)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Deep Learning-1-3 Optimization of Deep Neural Networks Overview">
+<meta property="og:url" content="http://example.com/2023/06/04/DL_01-03_NeuralNetworkOptimization%20-%20Copy/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="Learning Objectives Optimization Architecture Data Consideration Training to Optimize ML Considerations (Regularization &amp; Overfitting)">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/DL_01-03_01.png">
+<meta property="og:image" content="http://example.com/images/DL_01-03_02.png">
+<meta property="og:image" content="http://example.com/images/DL_01-03_03.png">
+<meta property="og:image" content="http://example.com/images/DL_01-03_04.png">
+<meta property="og:image" content="http://example.com/images/DL_01-03_05.png">
+<meta property="og:image" content="http://example.com/images/DL_01-03_06.png">
+<meta property="og:image" content="http://example.com/images/DL_01-03_07.png">
+<meta property="og:image" content="http://example.com/images/DL_01-03_08.png">
+<meta property="og:image" content="http://example.com/images/DL_01-03_09.png">
+<meta property="og:image" content="http://example.com/images/DL_01-03_10.png">
+<meta property="og:image" content="http://example.com/images/DL_01-03_11.png">
+<meta property="og:image" content="http://example.com/images/DL_01-03_12.png">
+<meta property="og:image" content="http://example.com/images/DL_01-03_13.png">
+<meta property="og:image" content="http://example.com/images/DL_01-03_14.png">
+<meta property="og:image" content="http://example.com/images/DL_01-03_15.png">
+<meta property="og:image" content="http://example.com/images/DL_01-03_16.png">
+<meta property="og:image" content="http://example.com/images/DL_01-03_17.png">
+<meta property="og:image" content="http://example.com/images/DL_01-03_18.png">
+<meta property="og:image" content="http://example.com/images/DL_01-03_19.png">
+<meta property="og:image" content="http://example.com/images/DL_01-03_20.png">
+<meta property="article:published_time" content="2023-06-04T22:14:22.000Z">
+<meta property="article:modified_time" content="2023-06-07T17:55:53.221Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="Deep Learning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/DL_01-03_01.png">
+
+<link rel="canonical" href="http://example.com/2023/06/04/DL_01-03_NeuralNetworkOptimization%20-%20Copy/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Deep Learning-1-3 Optimization of Deep Neural Networks Overview | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/06/04/DL_01-03_NeuralNetworkOptimization%20-%20Copy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Deep Learning-1-3 Optimization of Deep Neural Networks Overview
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-06-04 18:14:22" itemprop="dateCreated datePublished" datetime="2023-06-04T18:14:22-04:00">2023-06-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Learning-Objectives"><a href="#Learning-Objectives" class="headerlink" title="Learning Objectives"></a>Learning Objectives</h1><ul>
+<li>Optimization</li>
+<li>Architecture</li>
+<li>Data Consideration</li>
+<li>Training to Optimize</li>
+<li>ML Considerations (Regularization &amp; Overfitting)</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><p>Backpropagation, and automatic differentiation, allows us to optimize any function composed of differentiable blocks. </p>
+<ul>
+<li>There is no need to modify the learning algorithm depdent on what’s inside</li>
+<li>The complexity of the function is only limited by computation and memory</li>
+</ul>
+<p>A network with two or more hidden layers is often considered to be a deep model. Depth is important for several reasons:</p>
+<ol>
+<li>it is needed to structure a model to represent an inherently compositional world. We have object shapes, parts and scenes for example in Computer vision. </li>
+<li>Theoretical evidence also suggests it leads to parameter efficiency. For example, a two layer NN, you will need exponentially more nodes to learn this function.</li>
+<li>Gentle dimensionality reduction.</li>
+</ol>
+<p><img src="/../images/DL_01-03_01.png" alt="Overview"></p>
+<p>However, there are still many design decisions that must be made:</p>
+<ul>
+<li>How do you architect the mode to reflect the structure</li>
+<li>Data considerations such as normalizations and scaling.</li>
+<li>Training and optimization</li>
+<li>ML consideration; how to optimize through methods such as regularization in order to tame our model.</li>
+</ul>
+<h2 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h2><ol>
+<li>What modules or layers should we use?</li>
+<li>How are they shared, and how should the be connected</li>
+<li>How will the gradients flow</li>
+<li>Can they domain knowledge add architectural biases</li>
+</ol>
+<p>Examples of architectures:</p>
+<h3 id="Fully-Connect-NN"><a href="#Fully-Connect-NN" class="headerlink" title="Fully Connect NN"></a>Fully Connect NN</h3><p>Take an input, convert it to a vector, then feed it into a series of linear and nonlinear transformations. There are be hidden layers in the middle that are expected to extract more and more abstract features from the high dimensional raw input data. For deeper networks we will want to reduce the features&#x2F;size. In the end we have a layer that represents our class scores. each node will have an outptu that represents a score and these are combined to produce a probability. This is not very good for say images as the number of pixels is generally very high, and it ignores the spatial sctructure of the images. So we turn to CNNs</p>
+<h3 id="CNN-Convolutional-Neural-Networks"><a href="#CNN-Convolutional-Neural-Networks" class="headerlink" title="CNN-Convolutional Neural Networks:"></a>CNN-Convolutional Neural Networks:</h3><p>Rather than tie each node to each pixel, these will reflect a feature extractuor for small windows in the image and each local window will have these features extracted from it such as shapes corners, eyes and wheels. In the end we will features that represent where each object or entire objects are located in the image. Finally we will pass these features into a fully connected layer. Albeit this time it will be a much smaller than the previous approach.</p>
+<h3 id="RNN-Recurrent-Neural-Networks"><a href="#RNN-Recurrent-Neural-Networks" class="headerlink" title="RNN-Recurrent Neural Networks:"></a>RNN-Recurrent Neural Networks:</h3><p>another approach better suited for problems that have a sequential structure like NLP and sentences.</p>
+<p><img src="/../images/DL_01-03_02.png" alt="Architecture"></p>
+<h2 id="Data-Consideration"><a href="#Data-Consideration" class="headerlink" title="Data Consideration"></a>Data Consideration</h2><p>As in traditional machine learning, data is key, we will face the questions:</p>
+<ul>
+<li>How do we pre-process</li>
+<li>Should we normaile? or standardize.</li>
+<li>Can we augment our data? would adding noise reflect the real world?</li>
+</ul>
+<h2 id="Training-and-Optimization"><a href="#Training-and-Optimization" class="headerlink" title="Training and Optimization"></a>Training and Optimization</h2><p>Even given a good neural network architecture, we need a good optimization algorithm to find good weights</p>
+<ul>
+<li><strong>What optimizer should we use?</strong><ul>
+<li>We need a good optimization algo to find our weights. Gradient descent is popular but there are others that still use gradients. Different optimizaers may make more sense.</li>
+</ul>
+</li>
+<li><strong>How do we init our weights?</strong> <ul>
+<li>A bad initilization can lead to difficult learning and require a diff optimizer.</li>
+</ul>
+</li>
+<li><strong>What regularization should we use? How can we prevent overfitting?</strong></li>
+<li><strong>Loss function: which one do we use? do we design our own?</strong></li>
+</ul>
+<h2 id="Machine-Learning-Consideration"><a href="#Machine-Learning-Consideration" class="headerlink" title="Machine Learning Consideration"></a>Machine Learning Consideration</h2><p>The practice of ML is complex. For any application you must look at the trade-offs between the considerations above. Another trade-off is model capacity and the amount of data. Low capacity models can preform poorly when certain loss functions like sigmoid are used.</p>
+<p>Unfortunately, all this is done via experience … there is no good text book on all these.</p>
+<h1 id="Architecture-Considerations"><a href="#Architecture-Considerations" class="headerlink" title="Architecture Considerations"></a>Architecture Considerations</h1><p><strong>What modules to use, and how to connect them?</strong></p>
+<ul>
+<li>This is guided by the type of data being used and it’s characteristics. </li>
+<li>Lots of data types (modalities) already have good architectures. </li>
+<li>The flow of gradients is the top most consideration when analyzing layers. It is quite possible to have modules that cause a battleneck.</li>
+<li>Combinations of linear and non linear layers. <ul>
+<li>A combo of linear layers only has the same representational power as one linear layer. </li>
+<li>Non linear layers are crucial. Compositions of nonlinear layers enables complex transformations. </li>
+<li>Gradient flow depends heavily on the shape of the nonlinear modules.</li>
+</ul>
+</li>
+</ul>
+<p><img src="/../images/DL_01-03_03.png" alt="Architecture"></p>
+<p><strong>Several aspects that we can analyze:</strong></p>
+<ul>
+<li>The min&#x2F;max</li>
+<li>Correspondence between input and output statistics</li>
+<li>Gradients<ul>
+<li>at initialization: are they changing? if so how</li>
+<li>at the extremes of the function</li>
+</ul>
+</li>
+<li>Computational complexity</li>
+</ul>
+<h2 id="Sigmoid"><a href="#Sigmoid" class="headerlink" title="Sigmoid"></a>Sigmoid</h2><ul>
+<li>Min&#x3D;0; max&#x3D;1</li>
+<li>Output is always positive</li>
+<li>Saturates at both ends</li>
+<li>Gradients<ul>
+<li>vanish at each end ( converging to 0 - it’s almost flat )</li>
+<li>always positive</li>
+</ul>
+</li>
+<li>Computationally complexity high due to exponential term</li>
+</ul>
+<p><img src="/../images/DL_01-03_04.png" alt="Sigmoid"></p>
+<h2 id="tanh"><a href="#tanh" class="headerlink" title="tanh"></a>tanh</h2><ul>
+<li>min&#x3D;-1; max&#x3D;1; and we note that is centred</li>
+<li>Saturates at both ends (-1,1)</li>
+<li>Gradients: vanish at both ends ; always positive</li>
+<li>Medium compexity as tanh is not as simple as say multiplication</li>
+</ul>
+<p><img src="/../images/DL_01-03_05.png" alt="tanh"></p>
+<h2 id="ReLU"><a href="#ReLU" class="headerlink" title="ReLU"></a>ReLU</h2><ul>
+<li>Min&#x3D;0, Max&#x3D;infinity</li>
+<li>Output always positive</li>
+<li>Not saturated on the positive side</li>
+<li>Gradients: 0 when X &lt;&#x3D; 0 (aka dead ReLU); constant otherwise (doesn’t vanish which is good)</li>
+<li>Cheap: doesn’t come much easier than max function</li>
+</ul>
+<p><img src="/../images/DL_01-03_06.png" alt="ReLU"></p>
+<h2 id="Leaky-ReLU"><a href="#Leaky-ReLU" class="headerlink" title="Leaky ReLU"></a>Leaky ReLU</h2><ul>
+<li>Min&#x3D;-infinity, Max&#x3D;infinity</li>
+<li>Prevents dead ReLU;</li>
+<li>It has a learnable parameter (provides flexibility)</li>
+<li>No saturation on either side</li>
+<li>Still cheap to compute</li>
+</ul>
+<p><img src="/../images/DL_01-03_07.png" alt="Leaky ReLU"></p>
+<h2 id="Selecting-a-Non-Linearity"><a href="#Selecting-a-Non-Linearity" class="headerlink" title="Selecting a Non-Linearity"></a>Selecting a Non-Linearity</h2><p><strong>Which non-linearity should you select?</strong></p>
+<ul>
+<li>Unfortunately, no one activation function is best for all applications</li>
+<li>ReLU is often the best starting point and is very popular. <ul>
+<li>You may have noticed these are not differentiable. Turns out this is ok because there are few problematic points. only 0 is not differentiable.  Converges very quickly. </li>
+<li>Sometimes a leaky ReLU is a good thing and can make a difference.</li>
+</ul>
+</li>
+<li>Sigmoid is generally avoided, except in some cases where we need the values to fit the 0-1 range.</li>
+</ul>
+<h1 id="Initialization"><a href="#Initialization" class="headerlink" title="Initialization"></a>Initialization</h1><p>The parameters of our model must be initialized to something.</p>
+<p><strong>Initialization is extremely important!</strong></p>
+<ul>
+<li>Determined how statistics of outputs (given inputs) behave</li>
+<li>Determines how well gradients flow in the beginning of training (important)<ul>
+<li>If you initialize the weights to values that are in some way degenerate (close to a bad local minima) then this will lead to poor gradient flow.</li>
+<li>If the weights are initialized to be activated into statistically large and these large activations are fed into our nonlinearities (such as the tanh) then the algo will begin in the saturation range of the function.</li>
+</ul>
+</li>
+<li>Could limit use of full capacity of the model if done improperly</li>
+</ul>
+<h2 id="Constant-Weights"><a href="#Constant-Weights" class="headerlink" title="Constant Weights"></a>Constant Weights</h2><p>**Let’s consider an example. What happens when we use constant weights? **</p>
+<p>This would lead to a degenerate solution, as all weights will be updated with the same rule. they will move in the same direction and with the same step size. There are cases where this may be good, so it depends.</p>
+<h2 id="Small-Normally-Distributed-Random-Number"><a href="#Small-Normally-Distributed-Random-Number" class="headerlink" title="Small Normally Distributed Random Number"></a>Small Normally Distributed Random Number</h2><p><strong>A common approach is to use small normally distributed random number.</strong> Eg. $N(\mu&#x3D;0,\sigma&#x3D;0.01)$</p>
+<ul>
+<li>Smaller weights are preferred since no feature or input has a priori importance</li>
+<li>Keeps the model within the linear region of most activation functions</li>
+</ul>
+<p><img src="/../images/DL_01-03_08.png" alt="Initialization"></p>
+<p><strong>Deeper networks (with many layers) are more sensitive to initialization.</strong></p>
+<ul>
+<li>With a deep network, activations (outputs of nodes) get smaller. Standard deviation reduces signficantly.</li>
+<li>This leads to smaller values multiplied by upstream gradients.</li>
+<li>Larger values will lead to saturation. We want a balance between the layers but this proves to be more difficult as complexity increases.</li>
+</ul>
+<p><img src="/../images/DL_01-03_09.png" alt="Initialization"></p>
+<h2 id="Uniform-Distrinution"><a href="#Uniform-Distrinution" class="headerlink" title="Uniform Distrinution"></a>Uniform Distrinution</h2><p><strong>Ideally, we’d like to maintain the variance at the output to be similar to that of the input.</strong> This condition leads to a simple initialization rule, we sample from the uniform distribution:<br>$$<br>(-\frac{\sqrt6}{\sqrt {n_j+n_{j+1}}}, +\frac{\sqrt6}{\sqrt{n_j+n_{j+1}}})<br>$$<br>Where, $n_j$ is fan-in (number of input nodes), $n_{j+1}$ is fan-out (number of output nodes).</p>
+<p><img src="/../images/DL_01-03_10.png" alt="Initialization"></p>
+<p>Notice how the distribution is relatively equal across all the layers.</p>
+<p>In practice there is an even simpler form,$$N(0,1)*\sqrt{\frac{1}{n_j}}$$, This analysis holds for tanh and similar activations.</p>
+<p>For ReLU activations a similar analysis yields: $$N(0,1)*\sqrt{\frac{1}{n_j&#x2F;2}}$$</p>
+<h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><ul>
+<li>Initialization Matters</li>
+<li>It determines the activation (output) statistics and therefore gradient statistics</li>
+<li>If gradients are small learning is difficult if not impossible. Vanishing gradients become blockers to learning</li>
+<li>It’s important to reason about output gradient statistics and analyze them for new layers and architectures.</li>
+</ul>
+<h1 id="Normalization-Processing-and-Augmentation"><a href="#Normalization-Processing-and-Augmentation" class="headerlink" title="Normalization, Processing, and Augmentation"></a>Normalization, Processing, and Augmentation</h1><h2 id="Data-Processing"><a href="#Data-Processing" class="headerlink" title="Data Processing"></a>Data Processing</h2><p>In ML and DL data drives the learning of features and classifiers. </p>
+<ul>
+<li>Its characteristics are therefore extremely important.</li>
+<li>Always seek to understand your data is important before transforming. </li>
+<li>Relationships between output stats, layers such as non-linearities, and gradients is important.</li>
+</ul>
+<p>Just like initialization, normalization can improve gradient flow and learning. Typically methods include:</p>
+<ul>
+<li>Subtract the mean, divide by the standard deviation (sometimes a small epsilon is added for numerical stability)<ul>
+<li>can be done per dimension (indepepndently)</li>
+</ul>
+</li>
+<li>Whitenining methods such as PCA can be used but are not too common</li>
+</ul>
+<p><img src="/../images/DL_01-03_11.png" alt="Data Processing"></p>
+<p>Somtimes we will use a layer that can normalize the data across the neural network. For example:</p>
+<ul>
+<li>Given a minibatch od size BxD where B is the batch size</li>
+<li>Compute the mean and variance for each dimension d in the batch</li>
+<li>Normalize using this mean&#x2F;variance</li>
+</ul>
+<p>This will allow the network to determine it’s scaling, or normalizing, factors, giving it greater flexibility. This is called Batch Normalization. During inference, stored mean and variances calculated on training sets are used. Sufficient batch sizes must be used to get stable per-batch estimates during training.</p>
+<p><img src="/../images/DL_01-03_12.png" alt="Data Processing"></p>
+<p>Batch Normalization presents some interesting challenges: Sufficient batch sizes must be used to get stable per-batch estimates during training.</p>
+<ul>
+<li>This becomes especially true when using multi-GPU or multi-Machine training</li>
+<li>pytorch has a built in function to handle these situations, it estimates the batch statistics in these settings (torch.nn.SyncBatchNorm)</li>
+</ul>
+<p>Normalization is especially important before non-linearities. We want the input statistics to be well behaved such that they do not saturate the non-linearities. We do not want too low, or too high, or even unnormalized and unbalanced values, because they cause desaturation issues.</p>
+<h2 id="Optimizers"><a href="#Optimizers" class="headerlink" title="Optimizers"></a>Optimizers</h2><p>So far we have only talked about Steepest gradient descent, this section introduces other approaches. </p>
+<p>Deep learning often involves complex, compositional and nonlinear function. Consequently the loss landscape is often complex as a result. There is little direct theory and a lot of intuition needed to optimize these loss surfaces.</p>
+<h3 id="Some-Issues"><a href="#Some-Issues" class="headerlink" title="Some Issues"></a>Some Issues</h3><p>It used to be thought that existence of local minima is the sticking point in optimization. But it turns out this is not always true. In many cases though we can find local minima, but there may be other issues that arise and hinder our ability.</p>
+<p>Other issues include</p>
+<ul>
+<li>Noisy gradient estimates (due to taking MiniBatches)</li>
+<li>Saddle points</li>
+<li>III conditioned loss surface, where the curvature is high in one direction but not the other</li>
+</ul>
+<p>We generally use a subset of the data in each iteration to calulate the loss and the gradient. This is an unbiased estimator, but can have high variance.</p>
+<p>Several loss surface geometries can present difficulties for optimization:</p>
+<ul>
+<li>Several types of minima: local minima, plateaus, saddle points</li>
+<li>Saddles points are  those where the gradient of orthogonal directions are zero</li>
+</ul>
+<p><img src="/../images/DL_01-03_13.png" alt="Optimizers"></p>
+<h3 id="Momentum"><a href="#Momentum" class="headerlink" title="Momentum"></a>Momentum</h3><p>Steepest gradient descent is always searching for the steepest direction, and can become stuck at saddle points. One way to overcome this is to think of momentum. Imagine a ball rolling down a loss surface, and use momentum to pass flat surfaces.</p>
+<p>Recall our update rule from earlier:<br>$$<br>w_i&#x3D;w_{i-1}-\alpha\frac{\partial L}{\partial w_i}<br>$$<br>Consider update velocity (starts as 0, $\beta &#x3D; 0.99$):<br>$$<br>v_i&#x3D;\beta v_{i-1}+ \frac{\partial L}{\partial w_{i-1}}<br>$$</p>
+<p>Our new update rule:<br>$$<br>w_i&#x3D;w_{i-1}-\alpha v_i<br>$$</p>
+<p>Note that when $\beat&#x3D;0$, this is just Stochastic Gradient Descent (SGD)</p>
+<p>This is acutally used quite often in practice, and can help move you off areas with low gradients. Observe that the velocity term is an exponential moving average of the gradient.</p>
+<p>$$<br>v_i &#x3D; \beta v_{i-1} + \frac{\partial L}{\partial w_{i-1}}\<br>&#x3D; \beta (\beta v_{i-2} + \frac{\partial L}{\partial w_{i-2}}) + \frac{\partial L}{\partial w_{i-1}}\<br>&#x3D; \beta^2v_{i-2} + \beta \frac{\partial L}{\partial w_{i-2}} + \frac{\partial L}{\partial w_{i-1}}<br>$$</p>
+<p>This is actually part of a general class of accelerated gradient methods with theoretical analysis under some assumptions.</p>
+<h3 id="Nesterov-Momentum"><a href="#Nesterov-Momentum" class="headerlink" title="Nesterov Momentum"></a>Nesterov Momentum</h3><p>Nesterov Momentum: Rather than combining velocity with the current gradient, go along velocity first and then calculate the gradient at a new point.</p>
+<p>$$<br>\widehat{w_{i-1}}&#x3D;w_{i-1}+\beta v_{i-1}\<br>v_i&#x3D;\beta v_{i-1} + \frac{\partial L}{\partial \widehat{w_{i-1}}}\<br>w_i&#x3D;w_{i-1} - \alpha v_i<br>$$</p>
+<p>Of course there are various equivalent implementation, should you choose to google this you’ll find a few.</p>
+<h3 id="Hessian-and-Loss-Curvature"><a href="#Hessian-and-Loss-Curvature" class="headerlink" title="Hessian and Loss Curvature"></a>Hessian and Loss Curvature</h3><p>There are various mathematical ways to characterize the loss curve. Similar to Jacobians, Hessians use 2nd order derivatives that provide further information about the loss surface. </p>
+<p>However, these are computationally intensive. The ratio between the smallest and largest eigenvalue of a hessian is called a condition number. Condition Numbers tell us how different the curvature is along different dimensions.</p>
+<p>If it is high then SGD (Stichastic Gradient Descent) will make big steps in some dimensions and small steps in others. This will cause a lot of jumping and learning becomes sporadic and unpredictable.</p>
+<p><img src="/../images/DL_01-03_14.png" alt="Hessian and Loss Curvature"></p>
+<p>There are other second order optimization methods that divide steps by curvature, but are expensive to compute.</p>
+<h3 id="Pre-Parameter-Learning-Rate"><a href="#Pre-Parameter-Learning-Rate" class="headerlink" title="Pre-Parameter Learning Rate"></a>Pre-Parameter Learning Rate</h3><p>Idea here is to have a dynamic learning rate for each weight.</p>
+<p>Several flavors of optimization Algorithms:</p>
+<ul>
+<li>RMSProp</li>
+<li>Adagrad</li>
+<li>Adam</li>
+<li>…</li>
+</ul>
+<p>There is no one method that is the best in all cases. While SGD can achieve similar results it’ll require much more tuning.</p>
+<h4 id="Adagrad"><a href="#Adagrad" class="headerlink" title="Adagrad"></a>Adagrad</h4><p>Adaptive Subgradient Methods for Online Learning and Stochastic Optimization.</p>
+<p><strong>Idea</strong>: Use gradient statistics to reduce learning rate across iterations.</p>
+<p>This method uses a gradient accumulator $G_i$:<br>$$<br>G_i&#x3D;G_{i-1}+(\frac{\partial L}{\partial w_{i-1}})^2\<br>w_i&#x3D;w_{i-1}-\frac{\alpha}{\sqrt{G_i+\epsilon}}\frac{\partial L}{\partial w_{i-1}}<br>$$</p>
+<p>Directions with high curvature will have higher gradients, and learning rate will reduce.</p>
+<h4 id="RMSProp"><a href="#RMSProp" class="headerlink" title="RMSProp"></a>RMSProp</h4><p>One shortcoming to Adagrad is that the accumulator continues to grow, meaning that the denominator grows large, which will push the learning rate towards 0. So what do we do? Well we can apply the idea of a weighted&#x2F;moving average rather than a simple additive accumulator. </p>
+<p><img src="/../images/DL_01-03_15.png" alt="RMSProp"></p>
+<h4 id="Adam"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</h4><p>Another Approach that is very popular is Adam, and combines aspects from both of the above.</p>
+<p><img src="/../images/DL_01-03_16.png" alt="Adam"></p>
+<p>One drawback is that this performs poorly near small values, and can become instable. So we apply a Time Varying bias, to get the version that is used most often in practice.</p>
+<h3 id="Behavior-of-Optimizers"><a href="#Behavior-of-Optimizers" class="headerlink" title="Behavior of Optimizers"></a>Behavior of Optimizers</h3><p>It’s important to note that all these optimizers act differently depending on the loss landscape&#x2F;sruface. </p>
+<p>They will exhibit different behaviours such as overshooting, Stagnating, etc. </p>
+<p>Plain SGD+Momentim can generalize better than adaptive methods but require more tuning.</p>
+<h3 id="Learning-Rate-Schedules"><a href="#Learning-Rate-Schedules" class="headerlink" title="Learning Rate Schedules"></a>Learning Rate Schedules</h3><p>First order optimization methods use learning rate. Theoretical results rely on annealed learning rate.</p>
+<p>Several Typical Schedules:</p>
+<ul>
+<li>Graduate Student GD - By Observation</li>
+<li>Step scheduler - Reduce the learning rate every n epochs</li>
+<li>Exponential scheduler</li>
+<li>Cosine Scheduler - Learning rate decays according to a cosine drive function</li>
+</ul>
+<h1 id="Regularization"><a href="#Regularization" class="headerlink" title="Regularization"></a>Regularization</h1><p>This is a crucial aspect needed in DL as well as ML. Some examples are:</p>
+<ol>
+<li>L1 Norm - Penalizes Large weights and encourages sparsity and smaller weights<br>$$<br>L&#x3D;|y-Wx_i|^2+\lambda |W|<br>$$</li>
+<li>L2 Norm - Behaves similar to the L1 but it does so in a different way<br>$$<br>L&#x3D;|y-Wx_i|^2+\lambda |W|^2<br>$$</li>
+<li>Elastic L1&#x2F;L2:<br>$$<br>L&#x3D;|y-Wx_i|^2+\alpha |W|^2 + \beta |W|<br>$$</li>
+</ol>
+<h2 id="Dropout-Regularization"><a href="#Dropout-Regularization" class="headerlink" title="Dropout Regularization"></a>Dropout Regularization</h2><p>A <strong>problem</strong> that is commonly encountered is that a Network often will learn to rely heavily on a few strong features that work very well. This often results in overfitting as the model is not representative of the data.</p>
+<p>To prevent this we employ drop-out regularization: For each node, keep it’s output with probability p. Activations of deactivated nodes are essentially zero. This can mask out a particular node in each iteration. In practice this can be done by implementing a mask calculated at each iteration. </p>
+<p><img src="/../images/DL_01-03_17.png" alt="Dropout Regu"></p>
+<ul>
+<li>During training, each node has an expected $𝒑 * 𝒇𝒂𝒏_𝒊𝒏$ nodes.</li>
+<li>During testing you wouldn’t want to drop any nodes. All nodes are activated.</li>
+<li>This violates a basic principle in model building, namely the training and testing data should have similar input&#x2F;output distributions.</li>
+</ul>
+<p><strong>Solutions</strong><br>During test time, scale outputs (or equivalently weights) by 𝒑</p>
+<ul>
+<li>i.e. $W_{test}&#x3D;pW$</li>
+<li>Alternatively we could scale by 1&#x2F;p at training time</li>
+</ul>
+<p><strong>Why does this work?</strong></p>
+<ul>
+<li>The model should not relay too heavily on a particular feature<ul>
+<li>If it does it has probability (1-p) of losing that feature in an iteration</li>
+</ul>
+</li>
+<li>Training $2^n$ network<ul>
+<li>Each configuration is a network</li>
+<li>Most are trained with 1 or 2 mini-batches of data</li>
+</ul>
+</li>
+</ul>
+<h1 id="Data-Augmentation"><a href="#Data-Augmentation" class="headerlink" title="Data Augmentation"></a>Data Augmentation</h1><p>In this section we will look at Data Augmentation techniques to prevent overfitting. The idea is simple: we apply a series of transformations to the data. This is essentially free, and increases the data. Of course we must not change the data, or it’s meaning. ie flipping an image is fine. We want a range of tranformation that mirror what happens in the real world. What about a random crop of an image? This is also fine as it mirrors the real world, we’ve reduced the data but we haven’t really changed it. In fact using this technique might also increase the robustness of your model. Another method similar to this is cut-mix where portions of an image are cut out.</p>
+<p>A more sophistated approach is color jitter, performed by adding&#x2F;subtracting from the values in the red, green, or blue channels. Other transforms include, Translation, Rotation, Scale, Shearing. Of course you can also mix and combine these different techniques. These transforms server to increase your dataset using manipulations of the original.</p>
+<p>Another (oddly named) approach is the CowMix variation. This is when an image is masked with a cow hide pattern and then some noise is added. The noise is optional as you can also use the mask to blend two im</p>
+<h1 id="The-Process-of-Training-Neural-Networks"><a href="#The-Process-of-Training-Neural-Networks" class="headerlink" title="The Process of Training Neural Networks"></a>The Process of Training Neural Networks</h1><p>Let’s now turn our attention to the training and monitoring of our Neural Network.</p>
+<ul>
+<li>Trianing deep neural networks is an art form</li>
+<li>Lots of things matter (together). The key is to find a combination that works</li>
+<li><strong>Key Principle</strong>: Monitoring everything to understand what is going on!<ul>
+<li>Loss and accuracy curves</li>
+<li>Gradient statistics&#x2F;characterisitcs</li>
+<li>Other aspects of computation graphs</li>
+</ul>
+</li>
+</ul>
+<h2 id="Proper-Methodology"><a href="#Proper-Methodology" class="headerlink" title="Proper Methodology"></a>Proper Methodology</h2><p>Analyzing what is happening always begin with good methodology.</p>
+<ul>
+<li>Separate your data into: <strong>Training, Validation, Test set</strong><ul>
+<li>Never look at the test data until the training is complete</li>
+<li>Meaning your hyperparameters and all other considerations should be locked down</li>
+</ul>
+</li>
+<li>Use <strong>Cross Validation</strong> to decide on hyperparameters if the amount of data is an issue</li>
+</ul>
+<h2 id="Sanity-Checking"><a href="#Sanity-Checking" class="headerlink" title="Sanity Checking"></a>Sanity Checking</h2><p>Check the bounds of your loss function</p>
+<ul>
+<li><p>E.g. Cross entropy should be within  [0,∞]</p>
+</li>
+<li><p>Check initial loss at small random weight values</p>
+<ul>
+<li>E.g.  −log(p) for cross entropy where  p&#x3D;0.5</li>
+</ul>
+</li>
+<li><p>Start without regularization and check to see that the loss goes up when added</p>
+</li>
+<li><p><strong>Key Principle</strong>: Simplify the dataset to make sure your model can properly (over)-fit before appyling regularization<br>small datasets can easily be fit - if this doesn’t happen then your model is bad</p>
+</li>
+</ul>
+<h2 id="Loss-and-Not-a-Number-NaN"><a href="#Loss-and-Not-a-Number-NaN" class="headerlink" title="Loss and Not a Number (NaN)"></a>Loss and Not a Number (NaN)</h2><p>Change of loss is indicative of the rate&#x2F;speed of learning. Always plot and monitor learning curves: Iterations v.s. Loss. This reveals issues:</p>
+<ol>
+<li>A tiny loss change implies too small of a learning rate.<ul>
+<li>It might still converge but you’ll be waiting a while</li>
+</ul>
+</li>
+<li>Loss (and then weights) turn to NaNs imply too high of a learning rate.<ul>
+<li>This results in a learning rate resembling a quadratic function</li>
+<li>Might indicating bouncing away from a local minima</li>
+<li>This may also be caused by division by 0, so be careful.</li>
+</ul>
+</li>
+</ol>
+<p><img src="/../images/DL_01-03_18.png" alt="Loss and Not a Number (NaN)"></p>
+<h2 id="Overfitting"><a href="#Overfitting" class="headerlink" title="Overfitting"></a>Overfitting</h2><p>Of course classic machine learning signs of under&#x2F;over fitting still apply!</p>
+<ul>
+<li><strong>Over Fitting</strong>: Validation loss&#x2F;accuracy starts to get worse after a while. In other words, gap between training and held out data is increasing</li>
+<li><strong>Under Fitting</strong>: Validation loss very close to training loss, or both are high. Training set performance is poor and model is simply not very powerful.</li>
+<li><strong>Note:</strong> You can have higher training loss than validation loss<ul>
+<li>Validation loss has no regularization, this can be problematic</li>
+<li>Validation loss is typically measured at the end of an epoch</li>
+</ul>
+</li>
+</ul>
+<h2 id="Hyper-Parameter-Tuning"><a href="#Hyper-Parameter-Tuning" class="headerlink" title="Hyper-Parameter Tuning"></a>Hyper-Parameter Tuning</h2><p>Lots of hyperparamters to tune (NB the weights are NOT hyperparamters). Hyperparameters gen refer to the more design decisions that go into the construction of the network.</p>
+<ul>
+<li>Learning Rate, Weight Decay, are crucial</li>
+<li>Momentum</li>
+<li>Number of layers and number of nodes</li>
+</ul>
+<p>Even a good idea will fail if not tuned properly!</p>
+<p>Typically you should start with a coarse search:</p>
+<ul>
+<li>ie {0.1, 0.05, 0.03, 0.01, 0.003, 0.001, 0.0005, 0.0001}</li>
+<li>Then perform a finer search around the values that perform well</li>
+</ul>
+<p>There are automated methods that are decent, but intuition (and even randomness) can do well given enough of a tuning budget.</p>
+<p><strong>Interdependence of Hyperparameters can be troublesome!</strong> Examples:</p>
+<ul>
+<li>Batch Norm and drop out are often not needed together, they can make things even worse!</li>
+<li>Learning rate should be proproptional to batch size. Increase the learning rate for larger batch sizes<ul>
+<li>Gradients are more reliable and smoother</li>
+</ul>
+</li>
+</ul>
+<h2 id="Relationship-Between-Loss-and-Other-Metrics"><a href="#Relationship-Between-Loss-and-Other-Metrics" class="headerlink" title="Relationship Between Loss and Other Metrics"></a>Relationship Between Loss and Other Metrics</h2><p>Remember that DL we are optimizing a loss function that is differentiable. However what we care about are the metrics surrounding the model which we cannot optimize (lack of derivatives).</p>
+<ul>
+<li>Accuracy</li>
+<li>Precision &amp; Recall</li>
+<li>Other specialized metrics</li>
+</ul>
+<p>The relationship between these and the loss curve can be complex!</p>
+<p><img src="/../images/DL_01-03_19.png" alt="Example"></p>
+<p>Here’s another example that looks at True Positive Recall (TPR) &amp; False Positive Recall (FPR)</p>
+<p><img src="/../images/DL_01-03_20.png" alt="Example"></p>
+<p>Finally we can obtain a curve by varying the probability threshold. The area under the curve (AUC) is a common single number metric used to summarize.</p>
+<p>Mapping between these and the loss however is not so simple or straight forward.</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/Deep-Learning/" rel="tag"># Deep Learning</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/05/23/DL_01-02_NeuralNetworkBasics/" rel="prev" title="Deep Learning-1-2 Neural Networks">
+      <i class="fa fa-chevron-left"></i> Deep Learning-1-2 Neural Networks
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/06/07/DL_02-01_ConvolutionalNeuralNetworks/" rel="next" title="Deep Learning-2-1 Convolution and Pooling Layers">
+      Deep Learning-2-1 Convolution and Pooling Layers <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Learning-Objectives"><span class="nav-number">1.</span> <span class="nav-text">Learning Objectives</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Overview"><span class="nav-number">2.</span> <span class="nav-text">Overview</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Architecture"><span class="nav-number">2.1.</span> <span class="nav-text">Architecture</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Fully-Connect-NN"><span class="nav-number">2.1.1.</span> <span class="nav-text">Fully Connect NN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CNN-Convolutional-Neural-Networks"><span class="nav-number">2.1.2.</span> <span class="nav-text">CNN-Convolutional Neural Networks:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RNN-Recurrent-Neural-Networks"><span class="nav-number">2.1.3.</span> <span class="nav-text">RNN-Recurrent Neural Networks:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Data-Consideration"><span class="nav-number">2.2.</span> <span class="nav-text">Data Consideration</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Training-and-Optimization"><span class="nav-number">2.3.</span> <span class="nav-text">Training and Optimization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Machine-Learning-Consideration"><span class="nav-number">2.4.</span> <span class="nav-text">Machine Learning Consideration</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Architecture-Considerations"><span class="nav-number">3.</span> <span class="nav-text">Architecture Considerations</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Sigmoid"><span class="nav-number">3.1.</span> <span class="nav-text">Sigmoid</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tanh"><span class="nav-number">3.2.</span> <span class="nav-text">tanh</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReLU"><span class="nav-number">3.3.</span> <span class="nav-text">ReLU</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Leaky-ReLU"><span class="nav-number">3.4.</span> <span class="nav-text">Leaky ReLU</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Selecting-a-Non-Linearity"><span class="nav-number">3.5.</span> <span class="nav-text">Selecting a Non-Linearity</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Initialization"><span class="nav-number">4.</span> <span class="nav-text">Initialization</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Constant-Weights"><span class="nav-number">4.1.</span> <span class="nav-text">Constant Weights</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Small-Normally-Distributed-Random-Number"><span class="nav-number">4.2.</span> <span class="nav-text">Small Normally Distributed Random Number</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Uniform-Distrinution"><span class="nav-number">4.3.</span> <span class="nav-text">Uniform Distrinution</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Summary"><span class="nav-number">4.4.</span> <span class="nav-text">Summary</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Normalization-Processing-and-Augmentation"><span class="nav-number">5.</span> <span class="nav-text">Normalization, Processing, and Augmentation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Data-Processing"><span class="nav-number">5.1.</span> <span class="nav-text">Data Processing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Optimizers"><span class="nav-number">5.2.</span> <span class="nav-text">Optimizers</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Some-Issues"><span class="nav-number">5.2.1.</span> <span class="nav-text">Some Issues</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Momentum"><span class="nav-number">5.2.2.</span> <span class="nav-text">Momentum</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Nesterov-Momentum"><span class="nav-number">5.2.3.</span> <span class="nav-text">Nesterov Momentum</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hessian-and-Loss-Curvature"><span class="nav-number">5.2.4.</span> <span class="nav-text">Hessian and Loss Curvature</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pre-Parameter-Learning-Rate"><span class="nav-number">5.2.5.</span> <span class="nav-text">Pre-Parameter Learning Rate</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Adagrad"><span class="nav-number">5.2.5.1.</span> <span class="nav-text">Adagrad</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RMSProp"><span class="nav-number">5.2.5.2.</span> <span class="nav-text">RMSProp</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Adam"><span class="nav-number">5.2.5.3.</span> <span class="nav-text">Adam</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Behavior-of-Optimizers"><span class="nav-number">5.2.6.</span> <span class="nav-text">Behavior of Optimizers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Learning-Rate-Schedules"><span class="nav-number">5.2.7.</span> <span class="nav-text">Learning Rate Schedules</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Regularization"><span class="nav-number">6.</span> <span class="nav-text">Regularization</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dropout-Regularization"><span class="nav-number">6.1.</span> <span class="nav-text">Dropout Regularization</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Data-Augmentation"><span class="nav-number">7.</span> <span class="nav-text">Data Augmentation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-Process-of-Training-Neural-Networks"><span class="nav-number">8.</span> <span class="nav-text">The Process of Training Neural Networks</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Proper-Methodology"><span class="nav-number">8.1.</span> <span class="nav-text">Proper Methodology</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sanity-Checking"><span class="nav-number">8.2.</span> <span class="nav-text">Sanity Checking</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Loss-and-Not-a-Number-NaN"><span class="nav-number">8.3.</span> <span class="nav-text">Loss and Not a Number (NaN)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Overfitting"><span class="nav-number">8.4.</span> <span class="nav-text">Overfitting</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hyper-Parameter-Tuning"><span class="nav-number">8.5.</span> <span class="nav-text">Hyper-Parameter Tuning</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Relationship-Between-Loss-and-Other-Metrics"><span class="nav-number">8.6.</span> <span class="nav-text">Relationship Between Loss and Other Metrics</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

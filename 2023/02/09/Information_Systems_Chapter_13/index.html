@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Learning Objectives Describe the concept of e-business and various e-business models Identify e-business models, enablers, and impacts Explain search engine optimization Discuss the main business-to-b">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Information System 13- Information for Electronic Business">
+<meta property="og:url" content="http://example.com/2023/02/09/Information_Systems_Chapter_13/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="Learning Objectives Describe the concept of e-business and various e-business models Identify e-business models, enablers, and impacts Explain search engine optimization Discuss the main business-to-b">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-02-09T15:46:00.000Z">
+<meta property="article:modified_time" content="2023-02-10T17:54:02.395Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Information Systems">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2023/02/09/Information_Systems_Chapter_13/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Information System 13- Information for Electronic Business | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/09/Information_Systems_Chapter_13/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Information System 13- Information for Electronic Business
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-02-09 10:46:00" itemprop="dateCreated datePublished" datetime="2023-02-09T10:46:00-05:00">2023-02-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Information-Systems/" itemprop="url" rel="index"><span itemprop="name">Information Systems</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Learning-Objectives"><a href="#Learning-Objectives" class="headerlink" title="Learning Objectives"></a><strong>Learning Objectives</strong></h1><ul>
+<li>Describe the concept of e-business and various e-business models</li>
+<li>Identify e-business models, enablers, and impacts</li>
+<li>Explain search engine optimization</li>
+<li>Discuss the main business-to-business (B2B) e-business enablers</li>
+<li>Identify the major trends related to e-business</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="Introduction-to-E-Business"><a href="#Introduction-to-E-Business" class="headerlink" title="Introduction to E-Business"></a>Introduction to E-Business</h1><p>What is e-business exactly? There are many definitions, but another way to look at it is as a digital market.</p>
+<p><strong>E-Business Terminology</strong></p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Electronic funds transfer</td>
+<td>Conducting financial transactions such as payments and remittances electronically</td>
+</tr>
+<tr>
+<td>Electronic data interchange</td>
+<td>Transferring documents between organizations electronically</td>
+</tr>
+<tr>
+<td>Internet commerce</td>
+<td>Conducting business using the Internet (for example, email, the Web, or file transfer)</td>
+</tr>
+<tr>
+<td>Electronic commerce</td>
+<td>Conducting business transactions with customers, suppliers, and externl partners utilizing the Internet, electronic data interchange, or private networks</td>
+</tr>
+<tr>
+<td>Electronic government</td>
+<td>Interacting or conducting transactions with government agencies electronically</td>
+</tr>
+<tr>
+<td>Electronic business</td>
+<td>Conducting electronic commerce as well as executing internal business processes that facilitate conducting business, such as production and inventory management, electronically</td>
+</tr>
+</tbody></table>
+<h2 id="Types-of-E-business"><a href="#Types-of-E-business" class="headerlink" title="Types of E-business"></a>Types of E-business</h2><ul>
+<li>Business-to-Consumer (B2C)</li>
+<li>Business-to-Business (B2B)</li>
+<li>Consumer-to-Consumer (C2C) – ebay</li>
+<li>Government-to-Constituent (G2C) – pay taxes online</li>
+</ul>
+<h1 id="E-Business-Models"><a href="#E-Business-Models" class="headerlink" title="E-Business Models"></a>E-Business Models</h1><p>Another way to classify e-businesses is with respect to their business model.</p>
+<h2 id="What-is-a-Business-Model"><a href="#What-is-a-Business-Model" class="headerlink" title="What is a Business Model?"></a>What is a Business Model?</h2><p>A <strong>business model</strong> represents the way the organization functions and creates value. In other words, it is how an organization makes money.</p>
+<h2 id="E-Business-Models-1"><a href="#E-Business-Models-1" class="headerlink" title="E-Business Models"></a>E-Business Models</h2><ul>
+<li>Online Retailing – offers product or services for sale. BestBuy.com; Staples.com</li>
+<li>Infomediary – offers specialized information to consumers. Travel: Kayak.com</li>
+<li>Content Providers – offers consumers content or relevant information and receiving money for ads or downloads. Tripadvisor.com</li>
+<li>Exchanges – offers a location for buyers and sellers to transact online. eBay.com, marketplace</li>
+<li>Online Community (Social Media) – offers individuals with similar interests and&#x2F;or goals meeting place to interact with one another. Facebook.com</li>
+<li>E-business Infrastructure Provider – offers infrastructure hardware, software, or services to other organizations for e-business. PayPal.com, GoDaddy.com (domain and Web hosting)</li>
+</ul>
+<h1 id="E-Business-Enablers"><a href="#E-Business-Enablers" class="headerlink" title="E-Business Enablers"></a>E-Business Enablers</h1><h2 id="Technological-Enablers"><a href="#Technological-Enablers" class="headerlink" title="Technological Enablers"></a>Technological Enablers</h2><p>There are several technological requirements that must be met for consumers to successfully acquire goods or services online:</p>
+<ul>
+<li>An easy-to-navigate website or smartphone application</li>
+<li>Consumers have sufficient network bandwidth to access e-businesses’ content</li>
+<li><strong>Interoperability</strong> - access with a wide variety of platform, PCs, Macs, Laptops, smartphones, etc.</li>
+</ul>
+<h2 id="Critical-Mass"><a href="#Critical-Mass" class="headerlink" title="Critical Mass"></a>Critical Mass</h2><p>In e-business, attaining critical mass means that there are sufficient buyers to sustain the business of vendors and sufficient vendors to attract buyers to the Internet.</p>
+<ul>
+<li>Network effects or network economics<ul>
+<li>Value in scarcity: a function of a good’s limited availability</li>
+<li>Value in plentitude: value of a network is function of number of connected nodes – more vendors there are on the Internet, the more interesting it is for you to shop online.</li>
+</ul>
+</li>
+</ul>
+<h1 id="E-Business-Impacts"><a href="#E-Business-Impacts" class="headerlink" title="E-Business Impacts"></a>E-Business Impacts</h1><p>Two specific terms used to refer to two of the impacts of e-business are <strong>channel compression</strong> and <strong>channel expansion</strong>.</p>
+<ul>
+<li><p>Channel Compression – Channel compression is an impact on the downstream portion of the supply chain.</p>
+</li>
+<li><p>Channel compression refers to situations when the distribution chain is shortened by eliminating some or all of these intermediaries between the focal firm (product producer) and the end consumer.</p>
+</li>
+<li><p>Channel Expansion – Channel expansion offers the reverse impact.</p>
+</li>
+<li><p>Channel expansion is the addition of intermediaries in an industry whose purpose is to aggregate and provide information or brokering functionalities.</p>
+</li>
+<li><p>Kayak.com or online real estate website can reduce search costs and the information asymmetries</p>
+</li>
+</ul>
+<h1 id="Design-for-E-Business"><a href="#Design-for-E-Business" class="headerlink" title="Design for E-Business"></a>Design for E-Business</h1><p>Many important design features that can make e-business website sucessful.</p>
+<ul>
+<li>security and privacy</li>
+<li>ease of use of the system</li>
+<li>the overall look</li>
+<li>nontechnological features: return policies, shipping policies, communication tools.</li>
+</ul>
+<h1 id="Business-to-Business-B2B"><a href="#Business-to-Business-B2B" class="headerlink" title="Business-to-Business (B2B)"></a>Business-to-Business (B2B)</h1><p>Difference between B2C and B2B e-business </p>
+<ul>
+<li>The type of players involved</li>
+<li>The size of the market involved</li>
+<li>B2B involves two or more organizations </li>
+<li>B2B is often relationship based</li>
+</ul>
+<h2 id="B2B-E-Business-Enablers"><a href="#B2B-E-Business-Enablers" class="headerlink" title="B2B E-Business Enablers"></a>B2B E-Business Enablers</h2><p>B2B e-business involves the sharing of electronic documents, funds, and&#x2F;or information between organizations for transactions to occur. There are many ways to implement this, which are summarized in the following table.</p>
+<table>
+<thead>
+<tr>
+<th><!-- --></th>
+<th><!-- --></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Electronic data interchange (EDI)</td>
+<td>Electronic exchange of information between two or more organizations using a standard format.</td>
+</tr>
+<tr>
+<td>Supply chain management (SCM)</td>
+<td>Allows organizations to manage the movement of materials or products from provision to production to consumption. SCM involves collaboration between partners both upstream and downstream from the focal organization.</td>
+</tr>
+<tr>
+<td>E-marketplaces</td>
+<td>Also known as an exchange. Allows vending companies and buying companies to “meet” electronically to conduct transactions.</td>
+</tr>
+</tbody></table>
+<p>EDI – extensible markup language (XML) becomes a popular way of conducting B2B transactions.</p>
+<p><strong>Exchanges</strong> – An exchange allows vendors or sellers to meet electronically.</p>
+<ul>
+<li>Consortia: limited number of buyers or sellers are allowed to use a marketplace (private market).</li>
+<li>Neutral: large number of buyers and sellers exist.</li>
+<li>Seller-oriented (forward auction): many buyers bid on a seller’s products.</li>
+<li>Buyer-oriented (reverse auction): many sellers offer their products to a single buyer.</li>
+</ul>
+<p>Failure factor: insufficient number of buyers and sellers. </p>
+<h1 id="Search-Engine-Optimization"><a href="#Search-Engine-Optimization" class="headerlink" title="Search Engine Optimization"></a>Search Engine Optimization</h1><p>Series of practices an organization can use to improve their visibility, or optimize, how their web pages or website show up on the search engine results pages.</p>
+<ul>
+<li>Not a one-time effort – search engines change their requirement often</li>
+<li>Include key words in prominent places – meta tags, headings</li>
+<li>Focus on intended audience – clearly define the keywords, what the targeted audience thinks when they search online</li>
+</ul>
+<p>Types:</p>
+<ul>
+<li>Organic optimization – optimize keywords, improve ranking by in-links, inbound links etc.</li>
+<li>Sponsored links – pay for the placement</li>
+<li>Keyword bidding – another form of paying for a better ranking. Pay-per-click (PPC). The company that bids for the keywords and the company that bids the highest will show up higher in the results.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Information-Systems/" rel="tag"># Information Systems</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/02/08/ML4T_02-08_EfficientMarketHypothesis/" rel="prev" title="Machine Learning for Trading--2-8 Efficient Markets Hypothesis">
+      <i class="fa fa-chevron-left"></i> Machine Learning for Trading--2-8 Efficient Markets Hypothesis
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/02/09/ML4T_02-09_TheFundamentalLawOfActivePortfolioManagement/" rel="next" title="Machine Learning for Trading--2-9 The Fundamental Law Of Active Portfolio Management">
+      Machine Learning for Trading--2-9 The Fundamental Law Of Active Portfolio Management <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Learning-Objectives"><span class="nav-number">1.</span> <span class="nav-text">Learning Objectives</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction-to-E-Business"><span class="nav-number">2.</span> <span class="nav-text">Introduction to E-Business</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Types-of-E-business"><span class="nav-number">2.1.</span> <span class="nav-text">Types of E-business</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#E-Business-Models"><span class="nav-number">3.</span> <span class="nav-text">E-Business Models</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#What-is-a-Business-Model"><span class="nav-number">3.1.</span> <span class="nav-text">What is a Business Model?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#E-Business-Models-1"><span class="nav-number">3.2.</span> <span class="nav-text">E-Business Models</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#E-Business-Enablers"><span class="nav-number">4.</span> <span class="nav-text">E-Business Enablers</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Technological-Enablers"><span class="nav-number">4.1.</span> <span class="nav-text">Technological Enablers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Critical-Mass"><span class="nav-number">4.2.</span> <span class="nav-text">Critical Mass</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#E-Business-Impacts"><span class="nav-number">5.</span> <span class="nav-text">E-Business Impacts</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Design-for-E-Business"><span class="nav-number">6.</span> <span class="nav-text">Design for E-Business</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Business-to-Business-B2B"><span class="nav-number">7.</span> <span class="nav-text">Business-to-Business (B2B)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#B2B-E-Business-Enablers"><span class="nav-number">7.1.</span> <span class="nav-text">B2B E-Business Enablers</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Search-Engine-Optimization"><span class="nav-number">8.</span> <span class="nav-text">Search Engine Optimization</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="What is Q Learning Procedure Update Rule Two Finer Points The Trading Problem: Actions Creating the State Discretizing Q-Learning Recap">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Machine Learning for Trading--3-6 Q-Learning">
+<meta property="og:url" content="http://example.com/2023/03/02/ML4T_03-06_Q-Learning/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="What is Q Learning Procedure Update Rule Two Finer Points The Trading Problem: Actions Creating the State Discretizing Q-Learning Recap">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/ML4T-0306_01.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0306_02.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0306_03.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0306_04.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0306_05.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0306_06.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0306_07.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0306_08.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0306_09.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0306_10.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0306_11.png">
+<meta property="og:image" content="http://example.com/images/ML4T-0306_12.png">
+<meta property="article:published_time" content="2023-03-03T02:54:22.000Z">
+<meta property="article:modified_time" content="2023-04-26T20:16:04.160Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="ML4T">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/ML4T-0306_01.png">
+
+<link rel="canonical" href="http://example.com/2023/03/02/ML4T_03-06_Q-Learning/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Machine Learning for Trading--3-6 Q-Learning | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/03/02/ML4T_03-06_Q-Learning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Machine Learning for Trading--3-6 Q-Learning
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-03-02 21:54:22" itemprop="dateCreated datePublished" datetime="2023-03-02T21:54:22-05:00">2023-03-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Machine-Learning-for-Trading/" itemprop="url" rel="index"><span itemprop="name">Machine Learning for Trading</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ul>
+<li>What is Q</li>
+<li>Learning Procedure</li>
+<li>Update Rule</li>
+<li>Two Finer Points</li>
+<li>The Trading Problem: Actions</li>
+<li>Creating the State</li>
+<li>Discretizing</li>
+<li>Q-Learning Recap</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="What-is-Q"><a href="#What-is-Q" class="headerlink" title="What is Q"></a>What is Q</h1><p>We know at a high level what Q-learning is, but what is Q? Q can either be written as a function,Q(s,a), or a table, Q[s,a]. In this class, we think of Q as a table. Regardless of the implementation, Q provides a measure of the value of taking an action, a, in a state, s.</p>
+<p>The value that Q returns is actually the sum of two rewards: the immediate reward of taking a in s plus the discounted reward, the reward received for future actions. As a result, Q is not greedy; that is, it does not only consider the reward of acting now but also considers the value of actions down the road.</p>
+<h2 id="How-to-use-Q"><a href="#How-to-use-Q" class="headerlink" title="How to use Q"></a>How to use Q</h2><p>Remember that what we do in any particular state depends on the policy, π. Formally, π is a function that receives a state, s, as input and produces an action, a, as output.</p>
+<p>We can leverage a Q-table to determine π. For a particular state, s, we can consult the Q-table and, across all possible actions, A, return the particular action, a, such that Q[s,a] is as large possible. Formally,</p>
+<p>$$\pi(s)&#x3D;argmax_a(Q[s,a]),a∈A$$</p>
+<p>If we run Q-learning for long enough, we find that π(s) eventually converges to the optimal policy, which we denote as $π^{*}(s)$. Similarly, the optimal Q-table is $Q^{*}[s,a]$.</p>
+<p><img src="/../images/ML4T-0306_01.png" alt="RL Problem"></p>
+<h1 id="Learning-Prodecure"><a href="#Learning-Prodecure" class="headerlink" title="Learning Prodecure"></a>Learning Prodecure</h1><p>Recall how we partition our data for a machine learning problem: we need a larger training set and a somewhat smaller testing set. Since we are looking at stock features over time - our data set is a time series - we have to ensure that the dates in the training set precede those in the test set.</p>
+<p>We then iterate through each time step in our training set. We evaluate a row of data to get our state, s. We then consult our policy, π, for that s to get an action, a. We execute that action and observe the resulting state, s′, and our reward, r.</p>
+<p>For each training example, we produce an experience tuple, containing s, a, s′, and r. We use this tuple to update our Q-table, which effectively updates our policy.</p>
+<p>Updating our Q-table requires us to have some semblance of a Q-table in place when we begin training. Usually, we initialize a Q-table with small random numbers, although various other initialization setups exist.</p>
+<p>After we have finished iterating through our training data, we take the policy that we learned and apply it to the testing data. We mark down the performance and then repeat the entire process until the policy converges.</p>
+<p><img src="/../images/ML4T-0306_02.png" alt="Learning Prodecure"></p>
+<h1 id="Update-Rule"><a href="#Update-Rule" class="headerlink" title="Update Rule"></a>Update Rule</h1><p>There are two components to the update rule. The first part concerns the current Q-value for the seen state and taken action:Q[s,a]. The second part concerns an improved estimate, E, of the Q-value. To combine the two, we introduce a new variable: α.</p>
+<p>$$Q′[s,a]&#x3D;(1-\alpha)*Q[s,a]+\alpha*E$$</p>
+<p>We refer to α as the learning rate. It can take on any value between 0 and 1; typically, we use 0.2. Smaller values of α place more weight on the current Q-value, whereas larger values of α put more emphasis on E. We can think about this in another way: larger values of α make our robot learn more quickly than smaller values.</p>
+<p>When we talk about the improved estimate, E, for the Q-value, we are talking about the sum of the current reward, r, and the future rewards, f. Remember that we have to discount future rewards, which we do with γ.</p>
+<p>$$Q′[s,a]&#x3D;(1-\alpha)*Q[s,a]+\alpha*(r+\gamma * f)$$</p>
+<p>If we think about the future rewards, f, what we are looking for is the Q-value for the new state, s′. That is, the future reward for taking action a in state s is that action, a′, that maximizes the Q-value with regard to state s′.</p>
+<p>$$Q′[s,a]&#x3D;(1-\alpha)*Q[s,a]+\alpha*(r+\gamma * Q[s, argmax_{a′}(Q[s′,a′]))$$</p>
+<p><img src="/../images/ML4T-0306_03.png" alt="Update Rule"></p>
+<h1 id="Two-Finner-Points"><a href="#Two-Finner-Points" class="headerlink" title="Two Finner Points"></a>Two Finner Points</h1><p>The success of Q-learning depends to a large extent on exploration. Exploration helps us learn about the possible states we can encounter as well as the potential actions we can take. We can use randomness to introduce exploration into our learning.</p>
+<p>Instead of always selecting the action with the highest Q-value for a given state, we can, with some probability, decide to choose a random action. In this way, we can explore actions that our policy does not advise us to take to see if, potentially, they result in a higher reward.</p>
+<p>A typical way to implement random exploration is to set the probability of choosing a random action to about 0.3 initially; then, over each iteration, we decay that probability steadily until we effectively don’t choose random actions at all.</p>
+<p><img src="/../images/ML4T-0306_04.png" alt="Two Finner Points"></p>
+<h1 id="The-Trading-Problem-Actions"><a href="#The-Trading-Problem-Actions" class="headerlink" title="The Trading Problem: Actions"></a>The Trading Problem: Actions</h1><p>Now that we have a basic understanding of Q-learning, let’s see how we can turn the stock trading problem into a problem that Q-learning can solve. To do that, we need to define our actions, states, and rewards.</p>
+<p>The model that we build is going to advise us to take one of three actions: buy, sell, or do nothing. Presumably, it is going to tell us to do nothing most of the time, with a few buys and sells scattered here and there.</p>
+<p><img src="/../images/ML4T-0306_05.png" alt="The Trading Problem: Actions"></p>
+<h2 id="The-Trading-Problem-Rewards-Quiz"><a href="#The-Trading-Problem-Rewards-Quiz" class="headerlink" title="The Trading Problem: Rewards Quiz"></a>The Trading Problem: Rewards Quiz</h2><p>The rewards that our learner reaps should relate in some way to the returns of our strategy. There are at least two different ways that we can think about rewards.</p>
+<p>On the one hand, we can think about the reward for a position as the daily return of a stock held in our portfolio. On the other hand, we can think about the reward for a position being zero until we exit the position, at which point the reward is the cumulative return of that position.</p>
+<p>Which of these approaches results in a faster convergence to the optimal policy?</p>
+<p><img src="/../images/ML4T-0306_06.png" alt="Quiz"></p>
+<p><img src="/../images/ML4T-0306_07.png" alt="Quiz"></p>
+<p> If we reward a little bit each day, the learner can learn much more quickly because it receives much more frequent rewards.</p>
+<h2 id="The-Trading-Problem-State-Quiz"><a href="#The-Trading-Problem-State-Quiz" class="headerlink" title="The Trading Problem: State Quiz"></a>The Trading Problem: State Quiz</h2><p>Consider the following factors and select which should be part of the state that we examine when selecting an appropriate action.</p>
+<p><img src="/../images/ML4T-0306_08.png" alt="Quiz"></p>
+<p><img src="/../images/ML4T-0306_09.png" alt="Quiz"></p>
+<p>Neither adjusted close nor SMA alone are useful components of the state because they don’t particularly mean much as absolute values.</p>
+<p>However, the ratio of adjusted close to SMA can be a valuable piece of state. For example, a positive ratio indicates that the close is larger than the SMA, which may be a sell signal. Additionally, other technical and fundamental indicators such as Bollinger Bands and P&#x2F;E ratio can be essential parts of our state.</p>
+<h1 id="Creating-the-State"><a href="#Creating-the-State" class="headerlink" title="Creating the State"></a>Creating the State</h1><p>In Q-learning, we need to be able to represent our state as an integer; that way, we can use it to index into our Q-table, which is of finite dimension. Converting our state to an integer requires two steps.</p>
+<p>First, we must discretize each factor, which essentially involves mapping a continuous value to an integer. Second, we must combine all of our discretized factors into a single integer that represents the overall state. </p>
+<p><img src="/../images/ML4T-0306_10.png" alt="Creating the State"></p>
+<h1 id="Discretizing"><a href="#Discretizing" class="headerlink" title="Discretizing"></a>Discretizing</h1><p>Discretization is a process by which we convert a real number into an integer across a limited scale. For example, for a particular factor, we might observe hundreds of different real values from 0 to 25. Discretization allows us to map those values onto a standardized scale of integers from, say, 0 to 9.</p>
+<p>Let’s look at how we might discretize a set of data. The first thing we need to do is determine how many buckets we need. For example, if we want to map all values onto a number between 0 and 9, we need 10 buckets.</p>
+<p>Next, we determine the size of our buckets, which is simply the total number of data elements divided by the number of buckets. For example, with 10 buckets and 100 data elements, our bucket size is 10.</p>
+<p>Finally, we sort the data and determine the threshold for each bucket based on the step size. For example, with 10 buckets and 100 sorted data elements, our threshold for the discretized value, 1, is the tenth element, our threshold for the discretized value, 2, is the twentieth element, and so on.</p>
+<p>A consequence of this approach is that when the data are sparse, the thresholds are set far apart. When the data is very dense, the thresholds end up being very close together.</p>
+<p><img src="/../images/ML4T-0306_11.png" alt="Discretizing"></p>
+<h1 id="Q-Learning-Recap"><a href="#Q-Learning-Recap" class="headerlink" title="Q-Learning Recap"></a>Q-Learning Recap</h1><p><img src="/../images/ML4T-0306_12.png" alt="Q-Learning Recap"></p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/ML4T/" rel="tag"># ML4T</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/03/01/ML4T_03-05_ReinforcementLearning/" rel="prev" title="Machine Learning for Trading--3-5 Reinforcement Learning">
+      <i class="fa fa-chevron-left"></i> Machine Learning for Trading--3-5 Reinforcement Learning
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/03/03/ML4T_03-07_Dyna/" rel="next" title="Machine Learning for Trading--3-7 Dyna">
+      Machine Learning for Trading--3-7 Dyna <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#What-is-Q"><span class="nav-number">1.</span> <span class="nav-text">What is Q</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#How-to-use-Q"><span class="nav-number">1.1.</span> <span class="nav-text">How to use Q</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Learning-Prodecure"><span class="nav-number">2.</span> <span class="nav-text">Learning Prodecure</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Update-Rule"><span class="nav-number">3.</span> <span class="nav-text">Update Rule</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Two-Finner-Points"><span class="nav-number">4.</span> <span class="nav-text">Two Finner Points</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-Trading-Problem-Actions"><span class="nav-number">5.</span> <span class="nav-text">The Trading Problem: Actions</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#The-Trading-Problem-Rewards-Quiz"><span class="nav-number">5.1.</span> <span class="nav-text">The Trading Problem: Rewards Quiz</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-Trading-Problem-State-Quiz"><span class="nav-number">5.2.</span> <span class="nav-text">The Trading Problem: State Quiz</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Creating-the-State"><span class="nav-number">6.</span> <span class="nav-text">Creating the State</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Discretizing"><span class="nav-number">7.</span> <span class="nav-text">Discretizing</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Q-Learning-Recap"><span class="nav-number">8.</span> <span class="nav-text">Q-Learning Recap</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

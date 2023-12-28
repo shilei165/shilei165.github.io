@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Shi.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Shi.png">
+  <link rel="mask-icon" href="/images/logo-Shi.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Learning Objectives Why sequence models Notation Recurrent neural network model Language model and sequence generation Vanishing gradients with RNNs Gated Recurrent Unit (GRU) Long Short Term Momory (">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Deep Learning-3-1 Recurrent Neural Networks">
+<meta property="og:url" content="http://example.com/2023/06/29/DL_03-01_RecurrentNeuralNetworks/index.html">
+<meta property="og:site_name" content="Dr. Shi&#39;s Blog">
+<meta property="og:description" content="Learning Objectives Why sequence models Notation Recurrent neural network model Language model and sequence generation Vanishing gradients with RNNs Gated Recurrent Unit (GRU) Long Short Term Momory (">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/DL_03-01_01.png">
+<meta property="og:image" content="http://example.com/images/DL_03-01_02.png">
+<meta property="og:image" content="http://example.com/images/DL_03-01_03.png">
+<meta property="og:image" content="http://example.com/images/DL_03-01_04.png">
+<meta property="og:image" content="http://example.com/images/DL_03-01_05.png">
+<meta property="og:image" content="http://example.com/images/DL_03-01_06.png">
+<meta property="og:image" content="http://example.com/images/DL_03-01_07.png">
+<meta property="og:image" content="http://example.com/images/DL_03-01_08.png">
+<meta property="og:image" content="http://example.com/images/DL_03-01_09.png">
+<meta property="og:image" content="http://example.com/images/DL_03-01_10.png">
+<meta property="og:image" content="http://example.com/images/DL_03-01_11.png">
+<meta property="article:published_time" content="2023-06-29T22:14:22.000Z">
+<meta property="article:modified_time" content="2023-06-30T01:38:36.393Z">
+<meta property="article:author" content="Dr. Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="Deep Learning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/DL_03-01_01.png">
+
+<link rel="canonical" href="http://example.com/2023/06/29/DL_03-01_RecurrentNeuralNetworks/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Deep Learning-3-1 Recurrent Neural Networks | Dr. Shi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dr. Shi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-top">
+
+    <a href="/top/" rel="section"><i class="signal fa-fw"></i>top</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/06/29/DL_03-01_RecurrentNeuralNetworks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar-1.gif">
+      <meta itemprop="name" content="Dr. Shi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dr. Shi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Deep Learning-3-1 Recurrent Neural Networks
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-06-29 18:14:22" itemprop="dateCreated datePublished" datetime="2023-06-29T18:14:22-04:00">2023-06-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">技术杂谈</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%B0%88/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Learning-Objectives"><a href="#Learning-Objectives" class="headerlink" title="Learning Objectives"></a>Learning Objectives</h1><ul>
+<li>Why sequence models</li>
+<li>Notation</li>
+<li>Recurrent neural network model</li>
+<li>Language model and sequence generation</li>
+<li>Vanishing gradients with RNNs</li>
+<li>Gated Recurrent Unit (GRU)</li>
+<li>Long Short Term Momory (LSTM)</li>
+<li>Bidirectional RNN</li>
+<li>Deep RNNs</li>
+</ul>
+<span id="more"></span>
+<hr>
+<h1 id="Why-sequence-models"><a href="#Why-sequence-models" class="headerlink" title="Why sequence models"></a>Why sequence models</h1><p>Examples of sequence data:</p>
+<ul>
+<li>Speech recognition</li>
+<li>Music generation</li>
+<li>Sentiment classification</li>
+<li>DNA sequence analysis</li>
+<li>Machine translation</li>
+<li>Video activity recognition</li>
+<li>Named entity recognition</li>
+</ul>
+<h1 id="Notation"><a href="#Notation" class="headerlink" title="Notation"></a>Notation</h1><p>For a motivation, in the problem of Named Entity Recognition (NER), we have the following notation:</p>
+<ul>
+<li>$x$ is the input sentence, such as: <code>Harry Potter and Hermione Granger invented a new spell</code>.</li>
+<li>$y$ is the output, in this case: <code>1 1 0 1 1 0 0 0 0</code>.</li>
+<li>$x^{&lt;t&gt;}$ denote the word in the index t and $y^{&lt;t&gt;}$ is the correspondent output.</li>
+<li>In the i-th input example, $x^{(i)&lt;t&gt;}$ is t-th word and $T^{x(i)}$ is the length of the i-th example.</li>
+<li>$T_y$ is the length of the output. In NER, we have $T_x &#x3D; T_y$.</li>
+</ul>
+<p>Words representation introduced in this video is the One-Hot representation.</p>
+<ul>
+<li>First, you have a dictionary which words appear in a certain order.</li>
+<li>Second, for a particular word, we create a new vector with <code>1</code> in position of the word in the dictionary and <code>0</code> everywhere else.</li>
+</ul>
+<p>For a word not in your vocabulary, we need create a new token or a new fake word called unknown word denoted by <code>&lt;UNK&gt;</code>.</p>
+<h1 id="Recurrent-Neural-Network-Model"><a href="#Recurrent-Neural-Network-Model" class="headerlink" title="Recurrent Neural Network Model"></a>Recurrent Neural Network Model</h1><p>If we build a neural network to learn the mapping from $x$ to $y$ using the one-hot representation for each word as input, it might not work well. There are two main problems:</p>
+<ol>
+<li>Inputs and outputs can be different lengths in different examples. not every example has the same input length $T_x$ or the same output length $T_y$. Even with a maximum length, zero-padding every input up to the maximum length doesn’t seem like a good representation.</li>
+<li>For a naive neural network architecture, it doesn’t share features learned across different positions of texts.</li>
+</ol>
+<h2 id="Recurrent-Neural-Networks"><a href="#Recurrent-Neural-Networks" class="headerlink" title="Recurrent Neural Networks:"></a>Recurrent Neural Networks:</h2><ul>
+<li>A recurrent neural network does not have either of these disadvantages.</li>
+<li>At each time step, the recurrent neural network that passes on as activation to the next time step for it to use.</li>
+<li>The recurrent neural network scans through the data from left to right. The parameters it uses for each time step are shared.</li>
+<li>One limitation of unidirectional neural network architecture is that the prediction at a certain time uses inputs or uses information from the inputs earlier in the sequence but not information later in the sequence.<ul>
+<li><code>He said, &quot;Teddy Roosevelt was a great president.&quot;</code></li>
+<li><code>He said, &quot;Teddy bears are on sale!&quot;</code></li>
+<li>You can’t tell the difference if you look only at the first three words.!</li>
+</ul>
+</li>
+</ul>
+<p><img src="/../images/DL_03-01_01.png" alt="RNN"></p>
+<p>Instead of carrying around two parameter matrices $W_{aa}$ and $W_{ax}$, we can simplifying the notation by compressing them into just one parameter matrix $W_a$.</p>
+<p><img src="/../images/DL_03-01_02.png" alt="RNN"></p>
+<h2 id="Backpropagation-through-time"><a href="#Backpropagation-through-time" class="headerlink" title="Backpropagation through time"></a>Backpropagation through time</h2><p>In the backpropagation procedure the most significant messaage or the most significant recursive calculation is which goes from right to left, that is, backpropagation through time.</p>
+<h2 id="Different-types-of-RNNs"><a href="#Different-types-of-RNNs" class="headerlink" title="Different types of RNNs"></a>Different types of RNNs</h2><p>There are different types of RNN:</p>
+<ul>
+<li>One to One</li>
+<li>One to Many</li>
+<li>Many to One</li>
+<li>Many to Many</li>
+</ul>
+<p><img src="/../images/DL_03-01_03.png" alt="Different types of RNNs"></p>
+<h1 id="Language-model-and-sequence-generation"><a href="#Language-model-and-sequence-generation" class="headerlink" title="Language model and sequence generation"></a>Language model and sequence generation</h1><p>So what a language model does is to tell you what is the probability of a particular sentence.</p>
+<p>For example, we have two sentences from speech recognition application:</p>
+<table>
+<thead>
+<tr>
+<th>Sentence</th>
+<th>Probability</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>The apple and pair salad.</td>
+<td>𝑃(The apple and pair salad)&#x3D;$3.2 \times 10^{-13}$</td>
+</tr>
+<tr>
+<td>The apple and pear salad.</td>
+<td>𝑃(The apple and pear salad)&#x3D;$5.7\times 10^{-10}$</td>
+</tr>
+</tbody></table>
+<p>For language model it will be useful to represent a sentence as output y rather than inputs x. So what the language model does is to estimate the probability of a particular sequence of words $𝑃(y&lt;1&gt;, y&lt;2&gt;, …, y&lt;T_y&gt;)$.</p>
+<h2 id="How-to-build-a-language-model"><a href="#How-to-build-a-language-model" class="headerlink" title="How to build a language model?"></a>How to build a language model?</h2><p><code>Cats average 15 hours of sleep a day &lt;EOS&gt;</code> Totally 9 words in this sentence.</p>
+<ul>
+<li>The first thing you would do is to tokenize this sentence.</li>
+<li>Map each of these words to one-hot vectors or indices in vocabulary.<ul>
+<li>Maybe need to add extra token for end of sentence as <code>&lt;EOS&gt;</code> or unknown words as <code>&lt;UNK&gt;</code>.</li>
+<li>Omit the period. if you want to treat the period or other punctuation as explicit token, then you can add the period to you vocabulary as well.</li>
+</ul>
+</li>
+<li>Set the inputs $x^{&lt;t&gt;}$ &#x3D; $y^{&lt;t-1&gt;}$&#96;.</li>
+<li>What <code>a&lt;1&gt;</code> does is it will make a softmax prediction to try to figure out what is the probability of the first words <code>y&lt;1&gt;</code>. That is what is the probability of any word in the dictionary. Such as, what’s the chance that the first word is Aaron?</li>
+<li>Until the end, it will predict the chance of <code>&lt;EOS&gt;</code>.</li>
+<li>Define the cost function. The overall loss is just the sum over all time steps of the loss associated with the individual predictions.</li>
+</ul>
+<p><img src="/../images/DL_03-01_04.png" alt="How to build a language model"></p>
+<p><strong>If you train this RNN on a large training set, we can do:</strong></p>
+<ul>
+<li>Given an initial set of words, use the model to predict the chance of the next word.</li>
+<li>Given a new sentence <code>y&lt;1&gt;,y&lt;2&gt;,y&lt;3&gt;</code>, use it to figure out the chance of this sentence: <code>p(y&lt;1&gt;,y&lt;2&gt;,y&lt;3&gt;) = p(y&lt;1&gt;) * p(y&lt;2&gt;|y&lt;1&gt;) * p(y&lt;3&gt;|y&lt;1&gt;,y&lt;2&gt;)</code></li>
+</ul>
+<h2 id="Sampling-novel-sequences"><a href="#Sampling-novel-sequences" class="headerlink" title="Sampling novel sequences"></a>Sampling novel sequences</h2><p>After you train a sequence model, one way you can informally get a sense of what is learned is to have it sample novel sequences.</p>
+<h3 id="How-to-generate-a-randomly-chosen-sentence-from-your-RNN-language-model"><a href="#How-to-generate-a-randomly-chosen-sentence-from-your-RNN-language-model" class="headerlink" title="How to generate a randomly chosen sentence from your RNN language model:"></a>How to generate a randomly chosen sentence from your RNN language model:</h3><ul>
+<li>In the first time step, sample what is the first word you want your model to generate: randomly sample according to the softmax distribution.<ul>
+<li>What the softmax distribution gives you is it tells the chance of the first word is ‘a’, the chance of the first word is ‘Aaron’, the chance of the first word is ‘Zulu’, or the chance of the first word refers to <code>&lt;UNK&gt;</code> or <code>&lt;EOS&gt;</code>. All these probabilities can form a vector.</li>
+<li>Take the vector and use <code>np.random.choice</code> to sample according to distribution defined by this vector probabilities. That lets you sample the first word.</li>
+</ul>
+</li>
+<li>In the second time step, remember in the last section, <code>y&lt;1&gt;</code> is expected as input. Here take <code>ŷ&lt;1&gt;</code> you just sampled and pass it as input to the second step. Then use <code>np.random.choice</code> to sample <code>ŷ&lt;2&gt;</code>. Repeat this process until you generate an <code>&lt;EOS&gt;</code> token.</li>
+<li>If you want to make sure that your algorithm never generate <code>&lt;UNK&gt;</code>, just reject any sample that come out as <code>&lt;UNK&gt;</code> and keep resampling from vocabulary until you get a word that’s not <code>&lt;UNK&gt;</code>.</li>
+</ul>
+<h3 id="Character-level-language-model"><a href="#Character-level-language-model" class="headerlink" title="Character level language model:"></a>Character level language model:</h3><p>If you build a character level language model rather than a word level language model, then your sequence y1, y2, y3, would be the individual characters in your training data, rather than the individual words in your training data. Using a character level language model has some pros and cons. As computers gets faster there are more and more applications where people are, at least in some special cases, starting to look at more character level models.</p>
+<p><strong>Advantages:</strong></p>
+<ul>
+<li>You don’t have to worry about <code>&lt;UNK&gt;</code>.</li>
+</ul>
+<p><strong>Disadvantages:</strong></p>
+<ul>
+<li>The main disadvantage of the character level language model is that you end up with much longer sequences.</li>
+<li>And so character language models are not as good as word level language models at capturing long range dependencies between how the the earlier parts of the sentence also affect the later part of the sentence.</li>
+<li>More computationally expensive to train.</li>
+</ul>
+<h1 id="Vanishing-gradients-with-RNNs"><a href="#Vanishing-gradients-with-RNNs" class="headerlink" title="Vanishing gradients with RNNs"></a>Vanishing gradients with RNNs</h1><ul>
+<li>One of the problems with a basic RNN algorithm is that it runs into vanishing gradient problems.</li>
+<li>Language can have very long-term dependencies, for example:<ul>
+<li>The <strong>cat</strong>, which already ate a bunch of food that was delicious …, <strong>was</strong> full.</li>
+<li>The <strong>cats</strong>, which already ate a bunch of food that was delicious, and apples, and pears, …, <strong>were</strong> full.</li>
+</ul>
+</li>
+<li>The basic RNN we’ve seen so far is not very good at capturing very long-term dependencies. It’s difficult for the output to be strongly influenced by an input that was very early in the sequence.</li>
+<li>When doing backprop, the gradients should not just decrease exponentially, they may also increase exponentially with the number of layers going through.</li>
+<li>Exploding gradients are easier to spot because the parameters just blow up and you might often see NaNs, or not a numbers, meaning results of a numerical overflow in your neural network computation.<ul>
+<li>One solution to that is apply gradient clipping: it is bigger than some threshold, re-scale some of your gradient vector so that is not too big.</li>
+</ul>
+</li>
+<li>Vanishing gradients is much harder to solve and it will be the subject of GRU or LSTM.</li>
+</ul>
+<h1 id="Gated-Recurrent-Unit-GRU"><a href="#Gated-Recurrent-Unit-GRU" class="headerlink" title="Gated Recurrent Unit (GRU)"></a>Gated Recurrent Unit (GRU)</h1><p>Gate Recurrent Unit is one of the ideas that has enabled RNN to become much better at capturing very long range dependencies and has made RNN much more effective.</p>
+<p>A visualization of the RNN unit of the hidden layer of the RNN in terms of a picture:</p>
+<p><img src="/../images/DL_03-01_05.png" alt="Gated Recurrent Unit (GRU)"></p>
+<ul>
+<li>The GRU unit is going to have a new variable called c, which stands for memory cell.</li>
+<li><code>c̃&lt;t&gt;</code> is a candidate for replacing <code>c&lt;t&gt;</code>.</li>
+<li>Since a sigmoid function is applied to calculate Γu, at most of the time Γu is either close to 0 or 1. For intuition, think of Γu as being either zero or one most of the time. In practice gamma won’t be exactly zero or one.</li>
+<li>Because Γu can be so close to zero, can be 0.000001 or even smaller than that, it doesn’t suffer from much of a vanishing gradient problem</li>
+<li>Because when Γu is so close to zero this becomes essentially <code>c&lt;t&gt; = c&lt;t-1&gt;</code> and the value of c is maintained pretty much exactly even across many many time-steps. So this can help significantly with the vanishing gradient problem and therefore allow a neural network to go on even very long range dependencies.</li>
+<li>In the full version of GRU, there is another gate Γr. You can think of r as standing for relevance. So this gate Γr tells you how relevant is <code>c&lt;t-1&gt;</code> to computing the next candidate for <code>c&lt;t&gt;</code>.</li>
+</ul>
+<p><img src="/../images/DL_03-01_06.png" alt="Gated Recurrent Unit (GRU)"></p>
+<h1 id="Long-Short-Term-Memory-LSTM"><a href="#Long-Short-Term-Memory-LSTM" class="headerlink" title="Long Short Term Memory (LSTM)"></a>Long Short Term Memory (LSTM)</h1><ul>
+<li>For the LSTM we will no longer have the case that <code>a&lt;t&gt;</code> is equal to <code>c&lt;t&gt;</code>.</li>
+<li>And we’re not using relevance gate Γr. Instead, LSTM has update, forget and output gates, Γu, Γf and Γo respectively.</li>
+</ul>
+<p><img src="/../images/DL_03-01_07.png" alt="LSTM"></p>
+<p>One cool thing about this you’ll notice is that this red line at the top that shows how, so long as you set the forget and the update gate appropriately, it is relatively easy for the LSTM to have some value <code>c&lt;0&gt;</code> and have that be passed all the way to the right to have your, maybe, <code>c&lt;3&gt;</code> equals <code>c&lt;0&gt;</code>. And this is why the LSTM, as well as the GRU, is very good at memorizing certain values even for a long time, for certain real values stored in the memory cell even for many, many timesteps.</p>
+<p><img src="/../images/DL_03-01_08.png" alt="LSTM"></p>
+<p><strong>One common variation of LSTM:</strong></p>
+<ul>
+<li>Peephole connection: instead of just having the gate values be dependent only on <code>a&lt;t-1&gt;</code>, <code>x&lt;t&gt;</code>, sometimes, people also sneak in there the values <code>c&lt;t-1&gt;</code> as well.</li>
+</ul>
+<p><strong>GRU vs. LSTM:</strong></p>
+<ul>
+<li>The advantage of the GRU is that it’s a simpler model and so it is actually easier to build a much bigger network, it only has two gates, so computationally, it runs a bit faster. So, it scales the building somewhat bigger models.</li>
+<li>The LSTM is more powerful and more effective since it has three gates instead of two. If you want to pick one to use, LSTM has been the historically more proven choice. Most people today will still use the LSTM as the default first thing to try.</li>
+</ul>
+<p><strong>Implementation tips:</strong></p>
+<ul>
+<li><p>forget gate <code>Γf</code></p>
+<ul>
+<li>The forget gate <code>Γf&lt;t&gt;</code> has the same dimensions as the previous cell state <code>c&lt;t-1&gt;</code>.</li>
+<li>This means that the two can be multiplied together, element-wise.</li>
+<li>Multiplying the tensors <code>Γf&lt;t&gt;</code> is like applying a mask over the previous cell state.</li>
+<li>If a single value in <code>Γf&lt;t&gt;</code> is 0 or close to 0, then the product is close to 0.<ul>
+<li>This keeps the information stored in the corresponding unit in <code>c&lt;t-1&gt;</code> from being remembered for the next time step.</li>
+</ul>
+</li>
+<li>Similarly, if one value is close to 1, the product is close to the original value in the previous cell state.<ul>
+<li>The LSTM will keep the information from the corresponding unit of <code>c&lt;t-1&gt;</code>, to be used in the next time step.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>candidate value <code>c̃&lt;t&gt;</code></p>
+<ul>
+<li>The candidate value is a tensor containing information from the current time step that may be stored in the current cell state <code>c&lt;t&gt;</code>.</li>
+<li>Which parts of the candidate value get passed on depends on the update gate.</li>
+<li>The candidate value is a tensor containing values that range from -1 to 1. (tanh function)</li>
+<li>The tilde “~” is used to differentiate the candidate <code>c̃&lt;t&gt;</code> from the cell state <code>c&lt;t&gt;</code>.</li>
+</ul>
+</li>
+<li><p>update gate <code>Γu</code></p>
+</li>
+<li><p>The update gate decides what parts of a “candidate” tensor <code>c̃&lt;t&gt;</code> are passed onto the cell state <code>c&lt;t&gt;</code>.</p>
+</li>
+<li><p>The update gate is a tensor containing values between 0 and 1.</p>
+<ul>
+<li>When a unit in the update gate is close to 1, it allows the value of the candidate <code>c̃&lt;t&gt;</code> to be passed onto the hidden state <code>c&lt;t&gt;</code>.</li>
+<li>When a unit in the update gate is close to 0, it prevents the corresponding value in the candidate from being passed onto the hidden state.</li>
+</ul>
+</li>
+<li><p>cell state <code>c&lt;t&gt;</code></p>
+<ul>
+<li>The cell state is the “memory” that gets passed onto future time steps.</li>
+<li>The new cell state <code>c&lt;t&gt;</code> is a combination of the previous cell state and the candidate value.</li>
+</ul>
+</li>
+<li><p>output gate <code>Γo</code></p>
+<ul>
+<li>The output gate decides what gets sent as the prediction (output) of the time step.</li>
+<li>The output gate is like the other gates. It contains values that range from 0 to 1.</li>
+</ul>
+</li>
+<li><p>hidden state <code>a&lt;t&gt;</code></p>
+<ul>
+<li>The hidden state gets passed to the LSTM cell’s next time step.</li>
+<li>It is used to determine the three gates (<code>Γf</code>, <code>Γu</code>, <code>Γo</code>) of the next time step.</li>
+<li>The hidden state is also used for the prediction <code>y&lt;t&gt;</code>.</li>
+</ul>
+</li>
+</ul>
+<h1 id="Bidirectional-RNN"><a href="#Bidirectional-RNN" class="headerlink" title="Bidirectional RNN"></a>Bidirectional RNN</h1><p><img src="/../images/DL_03-01_09.png" alt="Bidirectional RNN"></p>
+<ul>
+<li>Bidirectional RNN lets you at a point in time to take information from both earlier and later in the sequence.</li>
+<li>This network defines a Acyclic graph</li>
+<li>The forward prop has part of the computation going from left to right and part of computation going from right to left in this diagram.</li>
+<li>So information from <code>x&lt;1&gt;</code>, <code>x&lt;2&gt;</code>, <code>x&lt;3&gt;</code> are all taken into account with information from <code>x&lt;4&gt;</code> can flow through a backward four to a backward three to Y three. So this allows the prediction at time three to take as input both information from the past, as well as information from the present which goes into both the forward and the backward things at this step, as well as information from the future.</li>
+<li>Blocks can be not just the standard RNN block but they can also be GRU blocks or LSTM blocks. In fact, BRNN with LSTM units is commonly used in NLP problems.</li>
+</ul>
+<p><img src="/../images/DL_03-01_10.png" alt="Bidirectional RNN"></p>
+<p><strong>Disadvantage:</strong><br>The disadvantage of the bidirectional RNN is that you do need the entire sequence of data before you can make predictions anywhere. </p>
+<p>So, for example, if you’re building a speech recognition system, then the BRNN will let you take into account the entire speech utterance but if you use this straightforward implementation, you need to wait for the person to stop talking to get the entire utterance before you can actually process it and make a speech recognition prediction. For a real type speech recognition applications, they’re somewhat more complex modules as well rather than just using the standard bidirectional RNN as you’ve seen here.</p>
+<h1 id="Deep-RNNs"><a href="#Deep-RNNs" class="headerlink" title="Deep RNNs"></a>Deep RNNs</h1><ul>
+<li>For learning very complex functions sometimes is useful to stack multiple layers of RNNs together to build even deeper versions of these models.</li>
+<li>The blocks don’t just have to be standard RNN, the simple RNN model. They can also be GRU blocks LSTM blocks.</li>
+<li>And you can also build deep versions of the bidirectional RNN.</li>
+</ul>
+<p><img src="/../images/DL_03-01_11.png" alt="Deep RNNs"></p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Dr. Shi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Dr. Shi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+              <a href="/tags/Deep-Learning/" rel="tag"># Deep Learning</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/06/10/DL_02-03_Visualization/" rel="prev" title="Deep Learning-2-3 Visualization">
+      <i class="fa fa-chevron-left"></i> Deep Learning-2-3 Visualization
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/06/29/DL_03-02_NLPandWordEmbeddings/" rel="next" title="Deep Learning-3-2 Natual Language Processing & Word Embeddings">
+      Deep Learning-3-2 Natual Language Processing & Word Embeddings <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Learning-Objectives"><span class="nav-number">1.</span> <span class="nav-text">Learning Objectives</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Why-sequence-models"><span class="nav-number">2.</span> <span class="nav-text">Why sequence models</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Notation"><span class="nav-number">3.</span> <span class="nav-text">Notation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Recurrent-Neural-Network-Model"><span class="nav-number">4.</span> <span class="nav-text">Recurrent Neural Network Model</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Recurrent-Neural-Networks"><span class="nav-number">4.1.</span> <span class="nav-text">Recurrent Neural Networks:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Backpropagation-through-time"><span class="nav-number">4.2.</span> <span class="nav-text">Backpropagation through time</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Different-types-of-RNNs"><span class="nav-number">4.3.</span> <span class="nav-text">Different types of RNNs</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Language-model-and-sequence-generation"><span class="nav-number">5.</span> <span class="nav-text">Language model and sequence generation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#How-to-build-a-language-model"><span class="nav-number">5.1.</span> <span class="nav-text">How to build a language model?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sampling-novel-sequences"><span class="nav-number">5.2.</span> <span class="nav-text">Sampling novel sequences</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#How-to-generate-a-randomly-chosen-sentence-from-your-RNN-language-model"><span class="nav-number">5.2.1.</span> <span class="nav-text">How to generate a randomly chosen sentence from your RNN language model:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Character-level-language-model"><span class="nav-number">5.2.2.</span> <span class="nav-text">Character level language model:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Vanishing-gradients-with-RNNs"><span class="nav-number">6.</span> <span class="nav-text">Vanishing gradients with RNNs</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Gated-Recurrent-Unit-GRU"><span class="nav-number">7.</span> <span class="nav-text">Gated Recurrent Unit (GRU)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Long-Short-Term-Memory-LSTM"><span class="nav-number">8.</span> <span class="nav-text">Long Short Term Memory (LSTM)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Bidirectional-RNN"><span class="nav-number">9.</span> <span class="nav-text">Bidirectional RNN</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Deep-RNNs"><span class="nav-number">10.</span> <span class="nav-text">Deep RNNs</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dr. Shi"
+      src="/images/avatar-1.gif">
+  <p class="site-author-name" itemprop="name">Dr. Shi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">248</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dr. Shi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
